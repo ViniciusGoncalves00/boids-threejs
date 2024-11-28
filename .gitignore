@@ -4,7 +4,6 @@ static
 **/migrations/**
 !**/migrations/__init__.py
 **/__pycache__/**
-**/bundle-*.js
 
 # Fixtures
 fixtures
@@ -22,7 +21,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+# dist/
 downloads/
 eggs/
 .eggs/

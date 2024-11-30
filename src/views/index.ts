@@ -15,7 +15,7 @@ window.Alpine = Alpine;
 
 document.addEventListener("DOMContentLoaded", () => {
   Alpine.start();
-  const domain = new Domain();
+  const domain = new Domain(100, 50, 100, 10, 5, 10);
   const sceneManager = SceneManager.GetInstance();
   const renderer = sceneManager.Renderer;
   const camera = sceneManager.Camera;

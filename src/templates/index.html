@@ -11,14 +11,18 @@
     <title>Boids</title>
   </head>
   <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
-    <div class="fixed w-screen h-screen flex flex-col items-center justify-between pointer-events-none">
+    <div class="fixed w-full h-screen flex flex-col items-center justify-between pointer-events-none">
       <div class="w-full h-[90%]"></div>
-      <div class="w-full h-[10%] flex items-center justify-center p-4">
+      <div class="w-full h-[80px] flex items-center justify-center p-4">
         <div class="w-full h-full bg-primary flex items-center justify-around pointer-events-auto">
-          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">content</button>
-          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">content</button>
-          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">content</button>
-          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">content</button>
+          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">camera mode</button>
+          <div class="w-[2px] h-[80%] bg-primary_text z-10"></div>
+          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">properties</button>
+          <div class="w-[2px] h-[80%] bg-primary_text z-10"></div>
+          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">configuration</button>
+          <div class="w-[2px] h-[80%] bg-primary_text z-10"></div>
+          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">visualization</button>
+          <div class="w-[2px] h-[80%] bg-primary_text z-10"></div>
           <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2" @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'custom_light' : 'custom_dark'); document.documentElement.setAttribute('data-theme', darkMode ? 'custom_light' : 'custom_dark')">darkMode</button>
         </div>
       </div>

@@ -1,0 +1,24 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+#three-canvas {
+  display: block;
+  margin: 0 auto;
+}
+
+[data-theme='custom_light']
+{
+  --primary: 250, 250, 250;
+  --primary_highlight: 255, 255, 255;
+  --primary_text: 20, 20, 20;
+  --primary_highlight_text: 20, 20, 20;
+}
+
+[data-theme='custom_dark']
+{
+    --primary: 27, 27, 27;
+    --primary_highlight: 25, 25, 25;
+    --primary_text: 255, 255, 255;
+    --primary_highlight_text: 250, 250, 250;
+}

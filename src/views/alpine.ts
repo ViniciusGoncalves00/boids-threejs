@@ -1,7 +1,5 @@
-import Alpine from "alpinejs";
+// import Alpine from "alpinejs";
 
-Alpine.data("threeState", () => ({
-  message: "Hello, Three.js with Alpine!",
-}));
-
-Alpine.start();
+// Alpine.data("threeState", () => ({
+//   // message: "Hello, Three.js with Alpine!",
+// }));

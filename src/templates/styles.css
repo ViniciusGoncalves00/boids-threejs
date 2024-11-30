@@ -11,14 +11,14 @@
 {
   --primary: 250, 250, 250;
   --primary_highlight: 255, 255, 255;
-  --primary_text: 20, 20, 20;
-  --primary_highlight_text: 20, 20, 20;
+  --primary_text: 90, 90, 90;
+  --primary_highlight_text: 30, 30, 30;
 }
 
 [data-theme='custom_dark']
 {
-    --primary: 27, 27, 27;
-    --primary_highlight: 25, 25, 25;
+    --primary: 40, 40, 40;
+    --primary_highlight: 30, 30, 30;
     --primary_text: 255, 255, 255;
     --primary_highlight_text: 250, 250, 250;
 }

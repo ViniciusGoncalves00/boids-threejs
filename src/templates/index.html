@@ -11,21 +11,170 @@
     <title>Boids</title>
   </head>
   <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
-    <div class="fixed w-full h-screen flex flex-col items-center justify-between pointer-events-none">
-      <div class="w-full h-[90%]"></div>
-      <div class="w-full h-[80px] flex items-center justify-center p-4">
-        <div class="w-full h-full bg-primary flex items-center justify-around pointer-events-auto">
-          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">camera mode</button>
-          <div class="w-[2px] h-[80%] bg-primary_text z-10"></div>
-          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">properties</button>
-          <div class="w-[2px] h-[80%] bg-primary_text z-10"></div>
-          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">configuration</button>
-          <div class="w-[2px] h-[80%] bg-primary_text z-10"></div>
-          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">visualization</button>
-          <div class="w-[2px] h-[80%] bg-primary_text z-10"></div>
-          <button class="w-[100%] h-full text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2" @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'custom_light' : 'custom_dark'); document.documentElement.setAttribute('data-theme', darkMode ? 'custom_light' : 'custom_dark')">darkMode</button>
+    <div class="fixed w-full h-screen flex flex-col items-center justify-end pointer-events-none"> <!--screen-->
+        <div class="w-full h-[256px] flex items-center justify-center pl-[16px] pr-[16px] pb-[16px]"> <!--inferior-->
+          <div class="w-full h-full flex items-center justify-around pointer-events-auto">
+            <div x-data="domainmenu" class="w-[100%] h-full flex flex-col-reverse justify-start">
+              <button @click="open = !open" class="w-[100%] h-[80px] bg-primary text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">DOMAIN</button>
+              <div x-show="open" @click.outside="open = false" :class="{ 'pointer-events-none': !open }" class="w-[100%] bg-primary text-primary_text p-[8px] overflow-y-scroll">
+                <div class="w-full">
+                  <button class="w-[100%] h-[32px] flex items-center justify-center">APPLY</button>
+                  <div class="w-[100%] h-[32px] flex items-center justify-center">SIZE</div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>size X</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>size Y</div>
+                    <input 
+                      type="range"
+                      id="value-slider"
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>size Z</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex items-center justify-center">PARTITION</div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>Partition X</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>Partition Y</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>Partition Z</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="h-full flex flex-col items-center justify-end">
+              <div class="h-[80px] z-10 flex items-center">
+                <div class="w-[1px] h-[80%] bg-primary_text"></div>
+              </div>
+            </div>
+
+            <div x-data="domainmenu" class="w-[100%] h-full flex flex-col-reverse justify-start">
+              <button @click="open = !open" class="w-[100%] h-[80px] bg-primary text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">VISUALIZATION</button>
+              <div x-show="open" @click.outside="open = false" :class="{ 'pointer-events-none': !open }" class="w-[100%] bg-primary text-primary_text p-[8px] overflow-y-scroll">
+                <div class="w-full">
+                  <button class="w-[100%] h-[32px] flex items-center justify-center">APPLY</button>
+                  <div class="w-[100%] h-[32px] flex items-center justify-center">SIZE</div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>size X</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>size Y</div>
+                    <input 
+                      type="range"
+                      id="value-slider"
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>size Z</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex items-center justify-center">PARTITION</div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>Partition X</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>Partition Y</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                  <div class="w-[100%] h-[32px] flex flex-col items-center justify-between">
+                    <div>Partition Z</div>
+                    <input 
+                      type="range"
+                      id="value-slider" 
+                      min="0" 
+                      max="100" 
+                      step="1" 
+                      value="50">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="h-full flex flex-col items-center justify-end">
+              <div class="h-[80px] z-10 flex items-center">
+                <div class="w-[1px] h-[80%] bg-primary_text"></div>
+              </div>
+            </div>
+
+            <div x-data="domainmenu" class="w-[100%] h-full flex flex-col-reverse justify-start">
+              <button class="w-[100%] h-[80px] bg-primary text-primary_text hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2" @click="darkMode = !darkMode; localStorage.setItem('theme', darkMode ? 'custom_light' : 'custom_dark'); document.documentElement.setAttribute('data-theme', darkMode ? 'custom_light' : 'custom_dark')">darkMode</button>
+            </div>
+
+            
+          </div>
         </div>
-      </div>
     </div>
     <canvas id="canvas"></canvas>
   </body>

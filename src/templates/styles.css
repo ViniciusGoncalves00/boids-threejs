@@ -11,14 +11,42 @@
 {
   --primary: 250, 250, 250;
   --primary_highlight: 255, 255, 255;
+  --secondary: 245, 245, 245;
   --primary_text: 90, 90, 90;
   --primary_highlight_text: 30, 30, 30;
 }
 
 [data-theme='custom_dark']
 {
-    --primary: 40, 40, 40;
-    --primary_highlight: 30, 30, 30;
-    --primary_text: 255, 255, 255;
-    --primary_highlight_text: 250, 250, 250;
+  --primary: 40, 40, 40;
+  --primary_highlight: 30, 30, 30;
+  --secondary: 20, 20, 20;
+  --primary_text: 255, 255, 255;
+  --primary_highlight_text: 250, 250, 250;
+}
+
+@font-face {
+  font-family: "Roboto Condensed", serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+  src: url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap") format("truetype");
+}
+
+@font-face {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+  src: url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap") format("truetype");
+}
+
+.button-menu
+{
+  @apply h-full flex items-center justify-center text-primary_text text-sm font-RobotoCondensed focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
+}
+
+.button-options
+{
+  @apply w-[512px] h-full flex flex-col items-center justify-center text-primary_text font-normal
 }

@@ -13,9 +13,11 @@ declare global {
 
 window.Alpine = Alpine;
 
+let domain : Domain | null = null;
+
 document.addEventListener("DOMContentLoaded", () => {
   Alpine.start();
-  const domain = new Domain(100, 50, 100, 10, 5, 10);
+  domain = Domain.GetInstance()
   const sceneManager = SceneManager.GetInstance();
   const renderer = sceneManager.Renderer;
   const camera = sceneManager.Camera;

@@ -16,61 +16,68 @@
   <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
     <div class="fixed w-full h-screen flex flex-col items-center justify-end drop-shadow-custom-shadow-1 z-10 pointer-events-none"> <!--screen-->
       <div x-data="options" class="w-full flex flex-col items-center justify-end p-[8px]">
-        <div x-show="open" class="w-full h-[64px] bg-secondary/75 flex items-center justify-center p-[8px]"> <!--inferior carrousel-->
-          <div class="w-full h-full flex items-center justify-around overflow-x-auto pointer-events-auto">
-            <div x-data="slider({ label: 'size x'})" class="button-options">
-              <div x-text="label"></div>
-              <input 
-                      type="range"
-                      :min="min"
-                      :max="max"
-                      :step="step"
-                      x-model="value">
+        <div x-show="open" class="w-full h-[48px] bg-secondary/75 flex items-center justify-center p-[8px]"> <!--inferior carrousel-->
+          <div class="w-full h-full flex items-center justify-around pointer-events-auto">
+            <button @click="apply()" class="w-[128px] button-menu">APPLY</button>
+    
+            <div class="button-options">
+                <div>Size X</div>
+                <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    step="1" 
+                    x-model="sizeX">
             </div>
-            <div x-data="slider({ label: 'size y'})" class="button-options">
-              <div x-text="label"></div>
-              <input 
-                      type="range"
-                      :min="min"
-                      :max="max"
-                      :step="step"
-                      x-model="value">
+        
+            <div class="button-options">
+                <div>Size Y</div>
+                <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    step="1" 
+                    x-model="sizeY">
             </div>
-            <div x-data="slider({ label: 'size z'})" class="button-options">
-              <div x-text="label"></div>
-              <input 
-                      type="range"
-                      :min="min"
-                      :max="max"
-                      :step="step"
-                      x-model="value">
+        
+            <div class="button-options">
+                <div>Size Z</div>
+                <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    step="1" 
+                    x-model="sizeZ">
             </div>
-            <div x-data="slider({ label: 'partition x'})" class="button-options">
-              <div x-text="label"></div>
-              <input 
-                      type="range"
-                      :min="min"
-                      :max="max"
-                      :step="step"
-                      x-model="value">
+        
+            <div class="button-options">
+                <div>Partition X</div>
+                <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    step="1" 
+                    x-model="partitionX">
             </div>
-            <div x-data="slider({ label: 'partition y'})" class="button-options">
-              <div x-text="label"></div>
-              <input 
-                      type="range"
-                      :min="min"
-                      :max="max"
-                      :step="step"
-                      x-model="value">
+        
+            <div class="button-options">
+                <div>Partition Y</div>
+                <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    step="1" 
+                    x-model="partitionY">
             </div>
-            <div x-data="slider({ label: 'partition z'})" class="button-options">
-              <div x-text="label"></div>
-              <input 
-                      type="range"
-                      :min="min"
-                      :max="max"
-                      :step="step"
-                      x-model="value">
+        
+            <div class="button-options">
+                <div>Partition Z</div>
+                <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    step="1" 
+                    x-model="partitionZ">
             </div>
           </div>
         </div>

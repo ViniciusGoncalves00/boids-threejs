@@ -4,6 +4,8 @@ import { SceneManager } from "../views/scenemanager";
 
 export class Domain
 {
+    private static _instance : Domain; 
+
     private _sizeX : number = 0;
     private _sizeY : number = 0;
     private _sizeZ : number = 0;
@@ -22,10 +24,20 @@ export class Domain
 
     public Nodes: Node[][][] = [];
 
-    public constructor(sizeX : number, sizeY : number, sizeZ : number, partitionsAmountX : number, partitionsAmountY : number, partitionsAmountZ : number)
+    private constructor(sizeX : number, sizeY : number, sizeZ : number, partitionsAmountX : number, partitionsAmountY : number, partitionsAmountZ : number)
     {
         this.SetDomainSize(sizeX, sizeY, sizeZ)
         this.SetPartitionsAmount(partitionsAmountX, partitionsAmountY, partitionsAmountZ)
+    }
+
+    public static GetInstance() : Domain
+    {
+        if(this._instance == null)
+        {
+            this._instance = new Domain(100,100,100,10,10,10);
+        }
+
+        return this._instance;
     }
 
     public SetDomainSize(x : number, y : number, z : number)

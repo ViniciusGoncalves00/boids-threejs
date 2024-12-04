@@ -29,11 +29,3 @@ Alpine.data("slider",({ label = "size", min = 0, max = 10, step = 1, value = 5 }
         }
     )
 );
-
-// Alpine.store('domain', {
-//     Apply(sizeX : number, sizeY : number, sizeZ : number, partitionsAmountX : number, partitionsAmountY : number, partitionsAmountZ : number) {
-//         const domain = Domain.GetInstance();
-//         domain.SetDomainSize(sizeX, sizeY, sizeZ);
-//         domain.SetPartitionsAmount(partitionsAmountX, partitionsAmountY, partitionsAmountZ);
-//     }
-// })

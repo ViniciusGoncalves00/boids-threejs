@@ -13,25 +13,23 @@ declare global {
 
 window.Alpine = Alpine;
 
-let domain : Domain | null = null;
-
 document.addEventListener("DOMContentLoaded", () => {
   Alpine.start();
-  domain = Domain.GetInstance()
+  const domain = Domain.GetInstance()
   const sceneManager = SceneManager.GetInstance();
   const renderer = sceneManager.Renderer;
   const camera = sceneManager.Camera;
   const scene = sceneManager.Scene;
   
-  const cube = addCube(scene);
+  // const cube = addCube(scene);
   
-  function animate(): void {
-    requestAnimationFrame(animate);
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-    renderer.render(scene, camera);
-  }
-  animate();
+  // function animate(): void {
+  //   requestAnimationFrame(animate);
+  //   cube.rotation.x += 0.01;
+  //   cube.rotation.y += 0.01;
+  //   renderer.render(scene, camera);
+  // }
+  // animate();
 
   if (localStorage.getItem('theme') === 'custom_light')
   {

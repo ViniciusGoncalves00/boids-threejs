@@ -11,10 +11,10 @@ Alpine.data("options", () => ({
     partitionY: 10,
     partitionZ: 10,
     
-    Apply(sizeX : number, sizeY : number, sizeZ : number, partitionsAmountX : number, partitionsAmountY : number, partitionsAmountZ : number) {
+    apply() {
         const domain = Domain.GetInstance();
-        domain.SetDomainSize(sizeX, sizeY, sizeZ);
-        domain.SetPartitionsAmount(partitionsAmountX, partitionsAmountY, partitionsAmountZ);
+        domain.SetDomainSize(this.sizeX, this.sizeY, this.sizeZ);
+        domain.SetPartitionsAmount(this.partitionX, this.partitionY, this.partitionZ);
     }
 }));
 

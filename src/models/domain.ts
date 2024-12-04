@@ -23,6 +23,7 @@ export class Domain
     public maxZ : number = 0;
 
     public Nodes: Node[][][] = [];
+    public LineSegments: THREE.LineSegments[] = [];
 
     private constructor(sizeX : number, sizeY : number, sizeZ : number, partitionsAmountX : number, partitionsAmountY : number, partitionsAmountZ : number)
     {
@@ -60,10 +61,18 @@ export class Domain
 
     private Update()
     {
+        const sceneManager = SceneManager.GetInstance();
+        
         const nodeSizeX = this._sizeX / this._partitionsX; 
         const nodeSizeY = this._sizeY / this._partitionsY; 
         const nodeSizeZ = this._sizeZ / this._partitionsZ; 
 
+        this.LineSegments.forEach(element => {
+            sceneManager.Scene.remove(element)
+        });
+        
+        this.LineSegments = []
+        this.Nodes = []
         this.Nodes = Array.from({ length: this._partitionsX }, () =>
             Array.from({ length: this._partitionsY }, () =>
                 Array.from({ length: this._partitionsZ }, () => new Node(nodeSizeX, nodeSizeY, nodeSizeZ))
@@ -72,7 +81,7 @@ export class Domain
 
         const geometry = new THREE.BoxGeometry( nodeSizeX, nodeSizeY, nodeSizeZ);
         const edges = new THREE.EdgesGeometry( geometry ); 
-        const sceneManager = SceneManager.GetInstance();
+        
 
         for (let x = 0; x < this._partitionsX; x++)
         {
@@ -86,6 +95,7 @@ export class Domain
                     line.position.z = (z - this._partitionsZ / 2) * nodeSizeZ + nodeSizeZ / 2;
                     
                     sceneManager.Scene.add(line);
+                    this.LineSegments.push(line)
                 }
             }
         }

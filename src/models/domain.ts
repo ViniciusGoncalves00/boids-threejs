@@ -4,7 +4,8 @@ import { Boid } from "./boid";
 
 export class Domain
 {
-    private static _instance : Domain; 
+    private static _instance : Domain;
+    private _sceneManager : SceneManager;
 
     private _sizeX : number = 0;
     private _sizeY : number = 0;
@@ -14,28 +15,26 @@ export class Domain
     private _partitionsY : number = 0;
     private _partitionsZ : number = 0;
 
-    public minX : number = 0;
-    public minY : number = 0;
-    public minZ : number = 0;
+    public MinX : number = 0;
+    public MinY : number = 0;
+    public MinZ : number = 0;
 
-    public maxX : number = 0;
-    public maxY : number = 0;
-    public maxZ : number = 0;
+    public MaxX : number = 0;
+    public MaxY : number = 0;
+    public MaxZ : number = 0;
 
     public Nodes: (THREE.LineSegments | null)[][][] = [];
 
-    public Boid : Boid;
+    public Boid : Boid | null = null;
 
     private constructor(sizeX : number, sizeY : number, sizeZ : number, partitionsAmountX : number, partitionsAmountY : number, partitionsAmountZ : number)
     {
+        this._sceneManager = SceneManager.GetInstance();
+
         this.SetDomainSize(sizeX, sizeY, sizeZ)
         this.SetPartitionsAmount(partitionsAmountX, partitionsAmountY, partitionsAmountZ)
 
-        const geometry = new THREE.ConeGeometry();
-        const mesh = new THREE.Mesh(geometry)
-        this.Boid = new Boid(mesh)
-        SceneManager.GetInstance().Scene.add(mesh)
-        this.UpdateBoids()
+        // this.UpdateBoids()
     }
 
     public static GetInstance() : Domain
@@ -54,6 +53,13 @@ export class Domain
         this._sizeY = y;
         this._sizeZ = z;
 
+        this.MinX = -x
+        this.MaxX = x
+        this.MinY = -y
+        this.MaxY = y
+        this.MinZ = -z
+        this.MaxZ = z
+
         this.UpdateDomain()
     }
 
@@ -66,10 +72,8 @@ export class Domain
         this.UpdateDomain()
     }
 
-    private UpdateDomain()
+    private UpdateDomain = () =>
     {
-        const sceneManager = SceneManager.GetInstance();
-        
         const nodeSizeX = this._sizeX / this._partitionsX; 
         const nodeSizeY = this._sizeY / this._partitionsY; 
         const nodeSizeZ = this._sizeZ / this._partitionsZ; 
@@ -78,7 +82,7 @@ export class Domain
             {
                 if (node instanceof THREE.LineSegments)
                     {
-                        sceneManager.Scene.remove(node)
+                        this._sceneManager.Scene.remove(node)
                     }
             }
         );
@@ -105,34 +109,40 @@ export class Domain
                     line.position.y = y * nodeSizeY + nodeSizeY / 2;
                     line.position.z = (z - this._partitionsZ / 2) * nodeSizeZ + nodeSizeZ / 2;
                     
-                    sceneManager.Scene.add(line);
+                    this._sceneManager.Scene.add(line);
                     this.Nodes[x][y][z] = line;
                 }
             }
         }
     }
 
-    private UpdateBoids()
-    {
-        requestAnimationFrame(this.UpdateBoids);
+    // private UpdateBoids = () =>
+    // {
+    //     if(this.Boid == null)
+    //     {
+    //         const geometry = new THREE.ConeGeometry();
+    //         const boidMesh = new THREE.Mesh(geometry)
+    //         this.Boid = new Boid(boidMesh)
+    //         SceneManager.GetInstance().Scene.add(boidMesh)
+    //     }
+
+    //     requestAnimationFrame(this.UpdateBoids);
         
-        const x = Math.floor(this.Boid.Mesh.position.x / this._partitionsX);
-        const y = Math.floor(this.Boid.Mesh.position.y / this._partitionsY);
-        const z = Math.floor(this.Boid.Mesh.position.z / this._partitionsZ);
+    //     const x = Math.floor(this.Boid.Mesh.position.x / this._partitionsX);
+    //     const y = Math.floor(this.Boid.Mesh.position.y / this._partitionsY);
+    //     const z = Math.floor(this.Boid.Mesh.position.z / this._partitionsZ);
 
-        const mesh = this.Nodes[x][y][z]
+    //     const mesh = this.Nodes[x][y][z]
 
-        this.Nodes.flat(1).forEach(node =>
-            {
-                if (node instanceof THREE.LineSegments && node == mesh)
-                    {
-                        node.material = new THREE.LineBasicMaterial({ color: 0x001000 })
-                    }
-            }
-        );
+    //     this.Nodes.flat(1).forEach(node =>
+    //         {
+    //             if (node instanceof THREE.LineSegments && node == mesh)
+    //                 {
+    //                     node.material = new THREE.LineBasicMaterial({ color: 0x001000 })
+    //                 }
+    //         }
+    //     );
 
-        const sceneManager = SceneManager.GetInstance()
-
-        sceneManager.Renderer.render(sceneManager.Scene, sceneManager.Camera);
-    }
+    //     this._sceneManager.Renderer.render(this._sceneManager.Scene, this._sceneManager.Camera);
+    // }
 }

@@ -20,7 +20,7 @@ Alpine.data("options", () => ({
     }
 }));
 
-Alpine.store("simulation", () => ({
+Alpine.store("simulation", {
     instantiate()
     {
         const domain = Domain.GetInstance();
@@ -28,7 +28,7 @@ Alpine.store("simulation", () => ({
         const boidMesh = new THREE.Mesh(geometry)
         const boid = new Boid(boidMesh)
         SceneManager.GetInstance().Scene.add(boidMesh)
-        domain.Boids.push()
+        domain.Boids.push(boid)
     },
     refresh()
     {
@@ -39,7 +39,7 @@ Alpine.store("simulation", () => ({
         });
         domain.Boids = []
     }
-}))
+})
 
 Alpine.data("slider",({ label = "size", min = 0, max = 10, step = 1, value = 5 }) =>
     (

@@ -40,7 +40,7 @@ export class Domain
     {
         if(this._instance == null)
         {
-            this._instance = new Domain(100,100,100,10,10,10);
+            this._instance = new Domain(100,100,100,5,5,5);
         }
 
         return this._instance;
@@ -100,7 +100,7 @@ export class Domain
                 {
                     const line = new THREE.LineSegments(edges, material);
                     line.position.x = (x - this._partitionsX / 2) * nodeSizeX + nodeSizeX / 2;
-                    line.position.y = y * nodeSizeY + nodeSizeY / 2;
+                    line.position.y = (y - this._partitionsY / 2) * nodeSizeY + nodeSizeY / 2;
                     line.position.z = (z - this._partitionsZ / 2) * nodeSizeZ + nodeSizeZ / 2;
                     
                     this._sceneManager.Scene.add(line);

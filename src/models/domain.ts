@@ -25,14 +25,13 @@ export class Domain
 
     public Nodes: (THREE.LineSegments | null)[][][] = [];
 
-    public Boid : Boid | null = null;
+    public Boids : Boid[] = [];
 
     private constructor(sizeX : number, sizeY : number, sizeZ : number, partitionsAmountX : number, partitionsAmountY : number, partitionsAmountZ : number)
     {
         this._sceneManager = SceneManager.GetInstance();
 
-        this.SetDomainSize(sizeX, sizeY, sizeZ)
-        this.SetPartitionsAmount(partitionsAmountX, partitionsAmountY, partitionsAmountZ)
+        this.SetDomainProperties(sizeX, sizeY, sizeZ, partitionsAmountX, partitionsAmountY, partitionsAmountZ)
 
         // this.UpdateBoids()
     }
@@ -47,11 +46,15 @@ export class Domain
         return this._instance;
     }
 
-    public SetDomainSize(x : number, y : number, z : number)
+    public SetDomainProperties(x : number, y : number, z : number, p_x : number, p_y : number, p_z : number)
     {
         this._sizeX = x;
         this._sizeY = y;
         this._sizeZ = z;
+
+        this._partitionsX = p_x;
+        this._partitionsY = p_y;
+        this._partitionsZ = p_z;
 
         this.MinX = -x
         this.MaxX = x
@@ -63,22 +66,13 @@ export class Domain
         this.UpdateDomain()
     }
 
-    public SetPartitionsAmount(x : number, y : number, z : number)
-    {
-        this._partitionsX = x;
-        this._partitionsY = y;
-        this._partitionsZ = z;
-
-        this.UpdateDomain()
-    }
-
     private UpdateDomain = () =>
     {
         const nodeSizeX = this._sizeX / this._partitionsX; 
         const nodeSizeY = this._sizeY / this._partitionsY; 
         const nodeSizeZ = this._sizeZ / this._partitionsZ; 
 
-        this.Nodes.flat(1).forEach(node =>
+        this.Nodes.flat(Infinity).forEach(node =>
             {
                 if (node instanceof THREE.LineSegments)
                     {

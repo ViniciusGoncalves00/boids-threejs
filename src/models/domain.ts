@@ -92,6 +92,14 @@ export class Domain
         const edges = new THREE.EdgesGeometry( geometry ); 
         const material = new THREE.LineBasicMaterial({ color: 0xffffff })
 
+        const partitionCenterX = this._partitionsX / 2
+        const partitionCenterY = this._partitionsY / 2
+        const partitionCenterZ = this._partitionsZ / 2
+        
+        const centerX = nodeSizeX / 2
+        const centerY = nodeSizeY / 2
+        const centerZ = nodeSizeZ / 2
+
         for (let x = 0; x < this._partitionsX; x++)
         {
             for (let y = 0; y < this._partitionsY; y++)
@@ -99,9 +107,9 @@ export class Domain
                 for (let z = 0; z < this._partitionsZ; z++)
                 {
                     const line = new THREE.LineSegments(edges, material);
-                    line.position.x = (x - this._partitionsX / 2) * nodeSizeX + nodeSizeX / 2;
-                    line.position.y = (y - this._partitionsY / 2) * nodeSizeY + nodeSizeY / 2;
-                    line.position.z = (z - this._partitionsZ / 2) * nodeSizeZ + nodeSizeZ / 2;
+                    line.position.x = (x - partitionCenterX) * nodeSizeX + centerX;
+                    line.position.y = (y - partitionCenterY) * nodeSizeY + centerY;
+                    line.position.z = (z - partitionCenterZ) * nodeSizeZ + centerZ;
                     
                     this._sceneManager.Scene.add(line);
                     this.Nodes[x][y][z] = line;

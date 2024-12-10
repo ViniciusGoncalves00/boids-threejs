@@ -46,7 +46,7 @@
   @apply h-full flex items-center justify-center text-primary_text text-sm font-RobotoCondensed focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
 }
 
-.button-options
+.slider
 {
-  @apply w-[512px] h-full flex flex-col items-center justify-center text-primary_text font-normal
+  @apply w-[192px] h-full flex flex-col items-center justify-center text-primary_text text-center font-normal
 }

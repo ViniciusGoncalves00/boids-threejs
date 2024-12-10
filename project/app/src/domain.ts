@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { SceneManager } from "../views/scenemanager";
+import { SceneManager } from "./scenemanager";
 import { Boid } from "./boid";
 
 export class Domain

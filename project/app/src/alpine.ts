@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import Alpine from "alpinejs";
-import { Domain } from "../models/domain";
-import { Boid } from "../models/boid";
+import { Domain } from "./domain";
+import { Boid } from "./boid";
 import { SceneManager } from "./scenemanager";
 
 

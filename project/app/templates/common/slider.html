@@ -1,0 +1,17 @@
+<div class="slider pl-[16px] pr-[16px] pt-[4px] pb-[4px]" x-data="{ value: model }">
+    <div class="w-[100%]" x-text="label"></div>
+    <div class="w-[100%]">
+        <input 
+            type="range" 
+            :min="min" 
+            :max="max" 
+            :step="step" 
+            x-model="value" 
+            class="w-full">
+    </div>
+    <div class="w-[100%] flex items-center justify-between">
+        <div x-text="min"></div>
+        <div x-text="value"></div>
+        <div x-text="max"></div>
+    </div>
+</div>

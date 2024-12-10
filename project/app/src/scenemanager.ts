@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { resizeRenderer, Grid } from "../models/utils";
+import { resizeRenderer, Grid } from "./utils";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export class SceneManager

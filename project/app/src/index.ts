@@ -1,7 +1,7 @@
-import { addCube } from "../models/three-setup";
-import { Domain } from "../models/domain";
+import { addCube } from "./three-setup";
+import { Domain } from "./domain";
 import { SceneManager } from "./scenemanager";
-import "../templates/styles.css";
+import "./styles.css";
 import Alpine from "alpinejs";
 import "./alpine";
 

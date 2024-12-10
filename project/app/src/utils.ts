@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { SceneManager } from "../views/scenemanager";
+import { SceneManager } from "./scenemanager";
 
 export function resizeRenderer(renderer: THREE.WebGLRenderer, camera: THREE.Camera): void {
     const width = window.innerWidth;

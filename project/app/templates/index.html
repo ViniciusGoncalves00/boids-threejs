@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles.css" />
-    <script defer src="../../dist/bundle.js"></script>
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <script defer src="../../static/bundle.js"></script>
     <title>Boids</title>
   </head>
   <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
@@ -30,68 +30,32 @@
           </div>
         </div>
 
-        <div x-show="open" class="w-full h-[48px] bg-secondary/80 flex items-center justify-center p-[8px]"> <!--inferior carrousel-->
-          <div class="w-full h-full flex items-center justify-around pointer-events-auto">
+        <div x-show="open" class="w-full h-[128px] bg-secondary/80 flex items-center justify-center p-[8px]"> <!--inferior carrousel-->
+          <div class="w-full h-full flex items-center justify-around p-[8px] overflow-x-scroll pointer-events-auto">
             <button @click="apply()" class="w-[128px] button-menu">APPLY</button>
+
+            <div x-data="{min: 0, max: 100, step: 10, model: 50, label: 'Size X'}">
+              {% include "./common/slider.html" %}
+            </div>
     
-            <div class="button-options">
-                <div>Size X</div>
-                <input 
-                    type="range" 
-                    min="0" 
-                    max="100" 
-                    step="10" 
-                    x-model="sizeX">
+            <div x-data="{min: 0, max: 100, step: 10, model: 50, label: 'Size Y'}">
+              {% include "./common/slider.html" %}
             </div>
         
-            <div class="button-options">
-                <div>Size Y</div>
-                <input 
-                    type="range" 
-                    min="0" 
-                    max="100" 
-                    step="10" 
-                    x-model="sizeY">
+            <div x-data="{min: 0, max: 100, step: 10, model: 50, label: 'Size Z'}">
+              {% include "./common/slider.html" %}
             </div>
         
-            <div class="button-options">
-                <div>Size Z</div>
-                <input 
-                    type="range" 
-                    min="0" 
-                    max="100" 
-                    step="10" 
-                    x-model="sizeZ">
+            <div x-data="{min: 0, max: 10, step: 1, model: 5, label: 'Partition X'}">
+              {% include "./common/slider.html" %}
+            </div>
+    
+            <div x-data="{min: 0, max: 10, step: 1, model: 5, label: 'Partition Y'}">
+              {% include "./common/slider.html" %}
             </div>
         
-            <div class="button-options">
-                <div>Partition X</div>
-                <input 
-                    type="range" 
-                    min="1" 
-                    max="10" 
-                    step="1" 
-                    x-model="partitionX">
-            </div>
-        
-            <div class="button-options">
-                <div>Partition Y</div>
-                <input 
-                    type="range" 
-                    min="1" 
-                    max="10" 
-                    step="1" 
-                    x-model="partitionY">
-            </div>
-        
-            <div class="button-options">
-                <div>Partition Z</div>
-                <input 
-                    type="range" 
-                    min="1" 
-                    max="10" 
-                    step="1" 
-                    x-model="partitionZ">
+            <div x-data="{min: 0, max: 10, step: 1, model: 5, label: 'Partition Z'}">
+              {% include "./common/slider.html" %}
             </div>
           </div>
         </div>

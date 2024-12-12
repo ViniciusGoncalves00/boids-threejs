@@ -2,7 +2,7 @@ import { Domain } from "../../domain";
 
 export class DomainStore implements IVisible, IAppliable
 {
-    visible: boolean = true;
+    visible: boolean = false;
 
     private sizeX:number = 50;
     private sizeY:number = 50;

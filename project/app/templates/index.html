@@ -6,6 +6,7 @@
     <style>
       body { margin: 0; }
     </style>
+    <script src="https://unpkg.com/htmx.org"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -14,9 +15,11 @@
     <title>Boids</title>
   </head>
   <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
-    <div class="fixed w-full h-screen flex flex-col items-center justify-end drop-shadow-custom-shadow-1 z-10 pointer-events-none"> <!--screen-->
-      <div class="w-full flex flex-col items-center justify-end p-[8px]">
-        <div class="bg-primary flex items-center justify-center m-4"> <!--inferior buttons-->
+    <div class="fixed w-full h-screen flex flex-col items-center justify-end z-10 pointer-events-none"> <!--screen-->
+      <div></div> <!--top area-->
+      <div></div> <!--middle area-->
+      <div class="w-full flex flex-col items-center justify-end p-[8px]"> <!--inferior area-->
+        <div class="bg-primary flex items-center justify-center m-4"> <!--simulation buttons-->
           <div class="flex items-center justify-around pointer-events-auto">
             <button @click="$store.simulation.refresh" class="button-menu">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
@@ -29,17 +32,18 @@
             </button>
           </div>
         </div>
-        <div x-show="$store.DomainStore.IsVisible()" class="w-full">{% include "./common/domain.html" %}</div>
-        <div x-show="$store.PropertiesStore.IsVisible()" class="w-full">{% include "./common/properties.html" %}</div>
-        <div class="w-full h-[64px] bg-primary flex items-center justify-center"> <!--inferior buttons-->
-          <div class="w-full h-full flex items-center justify-around pointer-events-auto">
-            <button @click="$store.DomainStore.ToggleVisibility()" class="button-menu w-[25%]">DOMAIN</button>
-            <button @click="$store.PropertiesStore.ToggleVisibility()" class="button-menu w-[25%]">PROPERTIES</button>
-            <button class="button-menu w-[25%]">CAMERA</button>
-            <button class="button-menu w-[25%]">CONFIG</button>
+        <div x-data="{open: false}" @click.outside="open = false" class="fixed flex flex-col w-full"> <!--menus buttons-->
+          <div x-show="open" id="data-div" class="w-full"></div>
+          <div class="w-full h-[64px] bg-primary flex items-center justify-center">
+            <div x-data="" class="w-full h-full flex items-center justify-around pointer-events-auto">
+              <button class="button-menu w-[25%]" @click="open = true" hx-get="/fetch-data/1/" hx-target="#data-div" hx-swap="innerHTML">DOMAIN</button>
+              <button class="button-menu w-[25%]" @click="open = true" hx-get="/fetch-data/2/" hx-target="#data-div" hx-swap="innerHTML">BOIDS</button>
+              <button class="button-menu w-[25%]" @click="open = true" hx-get="/fetch-data/3/" hx-target="#data-div" hx-swap="innerHTML">CAMERA</button>
+              <button class="button-menu w-[25%]" @click="open = true" hx-get="/fetch-data/4/" hx-target="#data-div" hx-swap="innerHTML">CONFIG</button>
+            </div>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
     <canvas id="canvas"></canvas>
   </body>

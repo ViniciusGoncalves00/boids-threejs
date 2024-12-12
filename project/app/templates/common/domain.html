@@ -1,29 +1,29 @@
 <div class="w-full bg-secondary/80 flex flex-col items-center justify-center p-[4px]"> <!--inferior carrousel-->
     <div class="w-full h-full flex items-center justify-around pointer-events-auto">
       <div x-data="{min: 0, max: 100, step: 1, model: 50, label: 'Size X'}">
-        {% include "./slider.html" %}
+        {% include "common/slider.html" %}
       </div>
 
       <div x-data="{min: 0, max: 100, step: 1, model: 50, label: 'Size Y'}">
-        {% include "./slider.html" %}
+        {% include "common/slider.html" %}
       </div>
   
       <div x-data="{min: 0, max: 100, step: 1, model: 50, label: 'Size Z'}">
-        {% include "./slider.html" %}
+        {% include "common/slider.html" %}
       </div>
 
       <button @click="apply()" class="w-[128px] h-[32px] button-menu">APPLY</button>
   
       <div x-data="{min: 0, max: 10, step: 1, model: 5, label: 'Partition X'}">
-        {% include "./slider.html" %}
+        {% include "common/slider.html" %}
       </div>
 
       <div x-data="{min: 0, max: 10, step: 1, model: 5, label: 'Partition Y'}">
-        {% include "./slider.html" %}
+        {% include "common/slider.html" %}
       </div>
   
       <div x-data="{min: 0, max: 10, step: 1, model: 5, label: 'Partition Z'}">
-        {% include "./slider.html" %}
+        {% include "common/slider.html" %}
       </div>
     </div>
   </div>

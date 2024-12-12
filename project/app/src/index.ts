@@ -31,12 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // }
   // animate();
 
-  if (localStorage.getItem('theme') === 'custom_light')
-  {
-      document.documentElement.setAttribute('data-theme', 'custom_light');
-  }
-  else
-  {
-      document.documentElement.setAttribute('data-theme', 'custom_dark');
-  }
+  document.documentElement.setAttribute('data-theme', 'custom_light');
+
+  // if (localStorage.getItem('theme') === 'custom_light')
+  // {
+  //     document.documentElement.setAttribute('data-theme', 'custom_light');
+  // }
+  // else
+  // {
+  //     document.documentElement.setAttribute('data-theme', 'custom_dark');
+  // }
 });

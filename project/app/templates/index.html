@@ -16,10 +16,19 @@
   </head>
   <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
     <div class="fixed w-full h-screen flex flex-col items-center justify-end z-10 pointer-events-none"> <!--screen-->
-      <div class="w-full bg-primary h-[64px]"></div> <!--superior area-->
-      <div class="w-full flex-grow"></div> <!--middle area-->
+      <div class="w-full h-[64px] bg-primary"></div> <!--superior area-->
+      <div class="w-full flex flex-grow justify-between p-[8px]">
+        <div class="w-[256px] h-full flex flex-col-reverse">
+          {% include "common/simulation.html" %}
+        </div> <!--middle left area-->
+        <div class="w-[256px] h-full flex-grow">
+        </div> <!--middle middle area-->
+        <div class="w-[256px] h-full flex flex-col-reverse">
+          {% include "common/events.html" %}
+        </div> <!--middle right area-->
+      </div> <!--middle area-->
       <div class="w-full flex flex-col items-center justify-end p-[8px]"> <!--inferior area-->
-        <div class="bg-primary flex items-center justify-center m-4"> <!--simulation buttons-->
+        {% comment %} <div class="bg-primary flex items-center justify-center m-[16px]"> 
           <div class="flex items-center justify-around pointer-events-auto">
             <button @click="$store.simulation.refresh" class="button-menu">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
@@ -31,8 +40,8 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>
             </button>
           </div>
-        </div>
-        <div x-data="{open: false}" @click.outside="open = false" class="fixed flex flex-col w-full"> <!--menus buttons-->
+        </div> <!--simulation buttons--> {% endcomment %}
+        <div x-data="{open: false}" @click.outside="open = false" class="w-full flex flex-col"> <!--menus buttons-->
           <div x-show="open" id="data-div" class="w-full"></div>
           <div class="w-full h-[64px] bg-primary flex items-center justify-center">
             <div x-data="" class="w-full h-full flex items-center justify-around pointer-events-auto">

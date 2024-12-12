@@ -1,0 +1,4 @@
+interface IAppliable
+{
+    Aplly(): void;
+}

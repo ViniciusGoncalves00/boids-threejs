@@ -9,13 +9,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../src/styles.css" />
     <script defer src="../../static/bundle.js"></script>
     <title>Boids</title>
   </head>
   <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
     <div class="fixed w-full h-screen flex flex-col items-center justify-end drop-shadow-custom-shadow-1 z-10 pointer-events-none"> <!--screen-->
-      <div x-data="options" class="w-full flex flex-col items-center justify-end p-[8px]">
+      <div class="w-full flex flex-col items-center justify-end p-[8px]">
         <div class="bg-primary flex items-center justify-center m-4"> <!--inferior buttons-->
           <div class="flex items-center justify-around pointer-events-auto">
             <button @click="$store.simulation.refresh" class="button-menu">
@@ -29,42 +29,14 @@
             </button>
           </div>
         </div>
-
-        <div x-show="open" class="w-full h-[128px] bg-secondary/80 flex items-center justify-center p-[8px]"> <!--inferior carrousel-->
-          <div class="w-full h-full flex items-center justify-around p-[8px] overflow-x-scroll pointer-events-auto">
-            <button @click="apply()" class="w-[128px] button-menu">APPLY</button>
-
-            <div x-data="{min: 0, max: 100, step: 10, model: 50, label: 'Size X'}">
-              {% include "./common/slider.html" %}
-            </div>
-    
-            <div x-data="{min: 0, max: 100, step: 10, model: 50, label: 'Size Y'}">
-              {% include "./common/slider.html" %}
-            </div>
-        
-            <div x-data="{min: 0, max: 100, step: 10, model: 50, label: 'Size Z'}">
-              {% include "./common/slider.html" %}
-            </div>
-        
-            <div x-data="{min: 0, max: 10, step: 1, model: 5, label: 'Partition X'}">
-              {% include "./common/slider.html" %}
-            </div>
-    
-            <div x-data="{min: 0, max: 10, step: 1, model: 5, label: 'Partition Y'}">
-              {% include "./common/slider.html" %}
-            </div>
-        
-            <div x-data="{min: 0, max: 10, step: 1, model: 5, label: 'Partition Z'}">
-              {% include "./common/slider.html" %}
-            </div>
-          </div>
-        </div>
+        <div x-show="$store.DomainStore.IsVisible()" class="w-full">{% include "./common/domain.html" %}</div>
+        <div x-show="$store.PropertiesStore.IsVisible()" class="w-full">{% include "./common/properties.html" %}</div>
         <div class="w-full h-[64px] bg-primary flex items-center justify-center"> <!--inferior buttons-->
           <div class="w-full h-full flex items-center justify-around pointer-events-auto">
-            <button @click="open = !open" class="button-menu w-[25%]">VISUAL</button>
-            <button @click="open = !open" class="button-menu w-[25%]">DOMAIN</button>
-            <button @click="open = !open" class="button-menu w-[25%]">CAMERA</button>
-            <button @click="open = !open" class="button-menu w-[25%]">CONFIG</button>
+            <button @click="$store.DomainStore.ToggleVisibility()" class="button-menu w-[25%]">DOMAIN</button>
+            <button @click="$store.PropertiesStore.ToggleVisibility()" class="button-menu w-[25%]">PROPERTIES</button>
+            <button class="button-menu w-[25%]">CAMERA</button>
+            <button class="button-menu w-[25%]">CONFIG</button>
           </div>
         </div>
       </div>

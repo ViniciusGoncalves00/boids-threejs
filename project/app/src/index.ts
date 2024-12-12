@@ -3,7 +3,7 @@ import { Domain } from "./domain";
 import { SceneManager } from "./scenemanager";
 import "./styles.css";
 import Alpine from "alpinejs";
-import "./alpine";
+import "./store/Store";
 
 declare global {
   interface Window {

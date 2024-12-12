@@ -1,6 +1,7 @@
-<div class="slider m-[4px]" x-data="{ value: model }">
+<div class="slider m-[2px]" x-data="{ value: model }">
     <div class="w-[100%] text-[14px] lowercase" x-text="label"></div>
-    <div class="w-[100%] h-[20px]">
+    <div class="w-[100%] h-[16px] text-[14px] lowercase flex items-center justify-between space-x-[4px]">
+        <div x-text="min"></div>
         <input 
             type="range" 
             :min="min" 
@@ -8,10 +9,6 @@
             :step="step" 
             x-model="value" 
             class="w-full">
-    </div>
-    <div class="w-[100%] flex items-center justify-between text-[14px] lowercase">
-        <div x-text="min"></div>
-        <div x-text="value"></div>
         <div x-text="max"></div>
     </div>
 </div>

@@ -16,8 +16,8 @@
   </head>
   <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
     <div class="fixed w-full h-screen flex flex-col items-center justify-end z-10 pointer-events-none"> <!--screen-->
-      <div></div> <!--top area-->
-      <div></div> <!--middle area-->
+      <div class="w-full bg-primary h-[64px]"></div> <!--superior area-->
+      <div class="w-full flex-grow"></div> <!--middle area-->
       <div class="w-full flex flex-col items-center justify-end p-[8px]"> <!--inferior area-->
         <div class="bg-primary flex items-center justify-center m-4"> <!--simulation buttons-->
           <div class="flex items-center justify-around pointer-events-auto">

@@ -1,16 +1,16 @@
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 class Simulation(models.Model):
-    sizeX = models.FloatField(validators=[MinValueValidator(0.0)], default=0)
-    sizeY = models.FloatField(validators=[MinValueValidator(0.0)], default=0)
-    sizeZ = models.FloatField(validators=[MinValueValidator(0.0)], default=0)
-    partitionsX = models.FloatField(validators=[MinValueValidator(0.0)], default=0)
-    partitionsY = models.FloatField(validators=[MinValueValidator(0.0)], default=0)
-    partitionsZ = models.FloatField(validators=[MinValueValidator(0.0)], default=0)
-    separation = models.FloatField(validators=[MinValueValidator(0.0)], default=0)
-    alignment = models.FloatField(validators=[MinValueValidator(0.0)], default=0)
-    cohesion = models.FloatField(validators=[MinValueValidator(0.0)], default=0)
+    sizeX = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], default=0)
+    sizeY = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], default=0)
+    sizeZ = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], default=0)
+    partitionsX = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], default=0)
+    partitionsY = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], default=0)
+    partitionsZ = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], default=0)
+    separation = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], default=0)
+    alignment = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], default=0)
+    cohesion = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], default=0)
     
     def get_size(self) -> tuple[float, float, float]:
         return [self.sizeX, self.sizeY, self.sizeZ]

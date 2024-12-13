@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import Index
-from .views import domain_view
+from .views.domain import Domain
+from .views.properties import Properties
+
 
 urlpatterns = [
     path('', Index.Index.as_view(), name='index'),
-    path('fetch-data/<int:button_id>/', domain_view.fetch_data, name='fetch_data'),
-    # path('', DomainView.as_view(), name='menu'),
+    path('common/domain.html', Domain.as_view(), name='domain'),
+    path('common/properties.html', Properties.as_view(), name='properties'),
 ]

@@ -45,10 +45,10 @@
           <div x-show="open" id="data-div" class="w-full"></div>
           <div class="w-full h-[64px] bg-primary flex items-center justify-center">
             <div x-data="" class="w-full h-full flex items-center justify-around pointer-events-auto">
-              <button class="button-menu w-[25%]" @click="open = true" hx-get="/fetch-data/1/" hx-target="#data-div" hx-swap="innerHTML">DOMAIN</button>
-              <button class="button-menu w-[25%]" @click="open = true" hx-get="/fetch-data/2/" hx-target="#data-div" hx-swap="innerHTML">BOIDS</button>
-              <button class="button-menu w-[25%]" @click="open = true" hx-get="/fetch-data/3/" hx-target="#data-div" hx-swap="innerHTML">CAMERA</button>
-              <button class="button-menu w-[25%]" @click="open = true" hx-get="/fetch-data/4/" hx-target="#data-div" hx-swap="innerHTML">CONFIG</button>
+              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/fetch-data/1/" hx-target="#data-div" hx-swap="innerHTML">DOMAIN</button>
+              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/fetch-data/2/" hx-target="#data-div" hx-swap="innerHTML">BOIDS</button>
+              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/fetch-data/3/" hx-target="#data-div" hx-swap="innerHTML">CAMERA</button>
+              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/fetch-data/4/" hx-target="#data-div" hx-swap="innerHTML">CONFIG</button>
             </div>
           </div>
         </div>

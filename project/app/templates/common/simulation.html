@@ -1,40 +1,15 @@
-<div class="w-full max-h-[256px] bg-primary p-[8px] pointer-events-auto">
-    <div class="w-full h-full bg-primary_highlight overflow-y-scroll">
-        <div>SIMULATION</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
-        <div>simulation</div>
+<div x-data="{open : false}" class="w-full max-h-[256px] bg-primary p-[8px] flex flex-col pointer-events-auto">
+    <div x-show="open" class="w-full h-full overflow-y-scroll">
+        {% include "common/simulation_field.html" %}
+        {% include "common/simulation_field.html" %}
+        {% include "common/simulation_field.html" %}
+        {% include "common/simulation_field.html" %}
+        {% include "common/simulation_field.html" %}
+        {% include "common/simulation_field.html" %}
+        {% include "common/simulation_field.html" %}
+        {% include "common/simulation_field.html" %}
+        {% include "common/simulation_field.html" %}
+        {% include "common/simulation_field.html" %}
     </div>
+    <button @click="open = !open">SIMULATIONS</button>
 </div>

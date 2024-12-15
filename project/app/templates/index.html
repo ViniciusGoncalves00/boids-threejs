@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body { margin: 0; }
+    </style>
+    <script src="https://unpkg.com/htmx.org"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../src/styles.css" />
+    <script defer src="../../static/bundle.js"></script>
+    <title>Boids</title>
+  </head>
+  <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
+    <div class="fixed w-full h-screen flex flex-col items-center justify-end z-10 pointer-events-none"> <!--screen-->
+      <div class="w-full h-[64px] bg-primary"></div> <!--superior area-->
+      <div class="w-full flex flex-grow justify-between p-[8px]">
+        <div class="w-[256px] h-full flex flex-col-reverse">
+          {% include "common/simulations.html" %}
+        </div> <!--middle left area-->
+        <div class="w-[256px] h-full flex-grow">
+        </div> <!--middle middle area-->
+        <div class="w-[256px] h-full flex flex-col-reverse">
+          {% include "common/events.html" %}
+        </div> <!--middle right area-->
+      </div> <!--middle area-->
+      <div class="w-full flex flex-col items-center justify-end p-[8px]"> <!--inferior area-->
+        {% comment %} <div class="bg-primary flex items-center justify-center m-[16px]"> 
+          <div class="flex items-center justify-around pointer-events-auto">
+            <button @click="$store.simulation.refresh" class="button-menu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+              </svg>
+            </button>
+            <button @click="$store.simulation.instantiate" class="button-menu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>
+            </button>
+          </div>
+        </div> <!--simulation buttons--> {% endcomment %}
+        <div x-data="{open: false, simulationId: $store.CurrentSimulation.id}" @click.outside="open = false" class="w-full flex flex-col"> <!--menus buttons-->
+          <div x-show="open" id="data-div" class="w-full"></div>
+          <div class="w-full h-[64px] bg-primary flex items-center justify-center">
+            <div x-data="" class="w-full h-full flex items-center justify-around pointer-events-auto">
+              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/common/domain.html" :hx-vals="JSON.stringify({ simulation_id: $store.CurrentSimulation.id })" hx-target="#data-div" hx-swap="innerHTML">DOMAIN</button>
+              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/common/properties.html" :hx-vals="JSON.stringify({ simulation_id: $store.CurrentSimulation.id })" hx-target="#data-div" hx-swap="innerHTML">BOIDS</button>
+              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/common/domain.html" :hx-vals="JSON.stringify({ simulation_id: $store.CurrentSimulation.id })" hx-target="#data-div" hx-swap="innerHTML">CAMERA</button>
+              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/common/domain.html" :hx-vals="JSON.stringify({ simulation_id: $store.CurrentSimulation.id })" hx-target="#data-div" hx-swap="innerHTML">CONFIG</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+    <canvas id="canvas"></canvas>
+  </body>
+</html>

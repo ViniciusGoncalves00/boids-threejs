@@ -1,0 +1,29 @@
+<div class="w-full bg-secondary/80 flex flex-col items-center justify-center p-[4px]"> <!--inferior carrousel-->
+    <div class="w-full h-full flex items-center justify-around pointer-events-auto">
+      <div x-data="{min: 0, max: 100, step: 1, model: {{ simulation.sizeX }}, label: 'Size X'}">
+        {% include "common/slider.html" %}
+      </div>
+
+      <div x-data="{min: 0, max: 100, step: 1, model: {{ simulation.sizeY }}, label: 'Size Y'}">
+        {% include "common/slider.html" %}
+      </div>
+  
+      <div x-data="{min: 0, max: 100, step: 1, model: {{ simulation.sizeZ }}, label: 'Size Z'}">
+        {% include "common/slider.html" %}
+      </div>
+
+      <button @click="apply()" class="w-[128px] h-[32px] button-menu">APPLY</button>
+  
+      <div x-data="{min: 0, max: 10, step: 1, model: {{ simulation.partitionsX }}, label: 'Partition X'}">
+        {% include "common/slider.html" %}
+      </div>
+
+      <div x-data="{min: 0, max: 10, step: 1, model: {{ simulation.partitionsY }}, label: 'Partition Y'}">
+        {% include "common/slider.html" %}
+      </div>
+  
+      <div x-data="{min: 0, max: 10, step: 1, model: {{ simulation.partitionsZ }}, label: 'Partition Z'}">
+        {% include "common/slider.html" %}
+      </div>
+    </div>
+  </div>

@@ -1,7 +1,8 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.db import models
 
 class Simulation(models.Model):
+    name = models.CharField(max_length=40, blank=False, validators=[RegexValidator(r"^[A-Za-z0-9_ ]+")], default="unnamed_simulation")
     sizeX = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], default=0)
     sizeY = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], default=0)
     sizeZ = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], default=0)
@@ -20,6 +21,7 @@ class Simulation(models.Model):
     
     def serialize(self) -> dict:
         return {
+            "name": self.name,
             "sizeX": self.sizeX,
             "sizeY": self.sizeY,
             "sizeZ": self.sizeZ,

@@ -9,10 +9,7 @@ class Domain(View):
     
     def get(self, request: HttpRequest) -> HttpResponse:
         simulation_id = request.GET.get('simulation_id')
-        
-        if not simulation_id:
-            return HttpResponse("<p>Simulation ID not provided</p>", status=400)
-        
+
         try:
             simulation = Simulation.objects.get(pk=simulation_id)
             context = {"simulation": simulation.serialize()}

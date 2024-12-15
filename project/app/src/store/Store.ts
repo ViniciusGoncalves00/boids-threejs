@@ -20,6 +20,12 @@ function InitializeStore() {
         }
     );
 
+    Alpine.store("CurrentSimulation",
+        {
+            id: null
+        }
+    )
+
     // Alpine.store("Stores",
     //     {
     //         stores:

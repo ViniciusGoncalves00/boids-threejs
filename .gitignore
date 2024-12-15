@@ -1,6 +1,6 @@
 volume
 node_modules
-static
+# static
 **/migrations/**
 !**/migrations/__init__.py
 **/__pycache__/**

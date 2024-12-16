@@ -1,4 +1,4 @@
 interface IAppliable
 {
-    Aplly(): void;
+    Apply(): void;
 }

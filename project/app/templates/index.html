@@ -41,7 +41,7 @@
             </button>
           </div>
         </div> <!--simulation buttons--> {% endcomment %}
-        <div x-data="{open: false, simulationId: $store.CurrentSimulation.id}" @click.outside="open = false" class="w-full flex flex-col"> <!--menus buttons-->
+        <div x-data="{open: false}" @click.outside="open = false" class="w-full flex flex-col"> <!--menus buttons-->
           <div x-show="open" id="data-div" class="w-full"></div>
           <div class="w-full h-[64px] bg-primary flex items-center justify-center">
             <div x-data="" class="w-full h-full flex items-center justify-around pointer-events-auto">

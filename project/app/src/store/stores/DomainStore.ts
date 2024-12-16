@@ -21,7 +21,7 @@ export class DomainStore implements IVisible, IAppliable
         this.visible = !this.visible;
     }
     
-    Aplly(): void
+    Apply(): void
     {
             const domain = Domain.GetInstance();
             domain.SetDomainProperties(this.sizeX, this.sizeY, this.sizeZ, this.partitionX, this.partitionY, this.partitionZ);

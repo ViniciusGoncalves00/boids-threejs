@@ -43,9 +43,12 @@
 
 .button-menu
 {
-  @apply h-full flex items-center justify-center text-primary_text text-sm font-RobotoCondensed focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
+  @apply h-full flex items-center justify-center text-primary_text text-sm font-RobotoCondensed bg-primary focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
 }
-
+.button-icon
+{
+  @apply text-primary_text bg-primary focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
+}
 .slider
 {
   @apply w-[192px] h-full flex flex-col items-center justify-center text-primary_text text-center font-normal

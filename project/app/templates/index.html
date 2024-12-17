@@ -19,8 +19,8 @@
       <div id="superior" class="w-full h-[64px] bg-primary p-[8px] pointer-events-auto">
         <div class="w-full h-full"></div>
       </div>
-      <div id="middle" class="w-full grow flex justify-start pointer-events-auto">
-        <div id="middle-left" class="w-[256px] h-full p-[8px]">
+      <div id="middle" class="w-full grow flex justify-start pointer-events-none">
+        <div id="middle-left" class="w-[256px] h-full p-[8px] pointer-events-auto">
           <div x-data="{open: false}" class="w-full h-full flex justify-between drop-shadow-custom-shadow-2">
             <div class="w-[48px] h-full bg-primary flex flex-col items-center justify-start drop-shadow-custom-shadow-1">
               {% include "templates/left_buttons.html" %}
@@ -28,7 +28,7 @@
             <div id="left-menu" x-show="open" class="h-full grow bg-primary"></div>
           </div>
         </div>
-        <div id="middle-center" class="h-full grow flex flex-col justify-between p-[8px]">
+        <div id="middle-center" class="h-full grow flex flex-col justify-between p-[8px] pointer-events-none">
           <div id="middle-center-superior" class="w-full h-[32px] drop-shadow-custom-shadow-2 flex items-center justify-center">
             {% include "templates/events.html" %}
           </div>
@@ -37,7 +37,7 @@
             {% include "templates/run_controls.html" %}
           </div>
         </div>
-        <div id="middle-right" class="w-[256px] h-full p-[8px]">
+        <div id="middle-right" class="w-[256px] h-full p-[8px] pointer-events-auto">
           <div x-data="{open: false}" class="w-full h-full flex justify-end drop-shadow-custom-shadow-2">
             <div id="left-menu" x-show="open" class="h-full grow bg-primary"></div>
             <div class="w-[48px] h-full bg-primary flex flex-col items-center justify-start">

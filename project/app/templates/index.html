@@ -14,7 +14,7 @@
     <script defer src="../../static/bundle.js"></script>
     <title>Boids</title>
   </head>
-  <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
+  {% comment %} <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
     <div class="fixed w-full h-screen flex flex-col items-center justify-end z-10 pointer-events-none"> <!--screen-->
       <div class="w-full h-[64px] bg-primary"></div> <!--superior area-->
       <div class="w-full flex flex-grow justify-between p-[8px]">
@@ -55,5 +55,29 @@
       </div> 
     </div>
     <canvas id="canvas"></canvas>
+  </body> {% endcomment %}
+  <body>
+    <div id="screen" class="fixed w-screen h-screen z-10 flex flex-col justify-between">
+      <div id="superior" class="w-full h-[64px] bg-green-700 p-[8px]">
+        <div class="w-full h-full bg-green-300"></div>
+      </div>
+      <div id="middle" class="w-full h-[calc(100%-128px)] bg-green-400 flex justify-between">
+        <div id="middle-left" class="w-[192px] h-full bg-green-600 p-[8px]">
+          <div class="w-full h-full bg-green-300"></div>
+        </div>
+        <div id="middle-center" class="h-full grow flex flex-col justify-between bg-green-500 p-[8px]">
+          <div id="middle-center-superior" class="w-full h-[64px] bg-red-700"></div>
+          <div id="middle-center-middle" class="w-full grow bg-red-500"></div>
+          <div id="middle-center-inferior" class="w-full h-[64px] bg-red-700"></div>
+        </div>
+        <div id="middle-right" class="w-[192px] h-full bg-green-600 p-[8px]">
+          <div class="w-full h-full bg-green-300"></div>
+        </div>
+      </div>
+      <div id="inferior" class="w-full h-[64px] bg-green-700 p-[8px]">
+        <div class="w-full h-full bg-green-300"></div>
+      </div>
+    </div>
+    <canvas id="canvas" class="fixed z-0"></canvas>
   </body>
 </html>

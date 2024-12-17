@@ -22,15 +22,10 @@
       <div id="middle" class="w-full grow flex justify-start pointer-events-auto">
         <div id="middle-left" class="w-[256px] h-full p-[8px]">
           <div x-data="{open: false}" class="w-full h-full flex justify-between drop-shadow-custom-shadow-2">
-            <div class="w-[48px] h-full bg-secondary flex flex-col items-center justify-start space-y-[8px]">
-              <button @click="open = !open" class="button-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-bar-right" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8m-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5"/>
-                </svg>
-              </button>
-              {% include "templates/general_controls.html" %}
+            <div class="w-[48px] h-full bg-primary flex flex-col items-center justify-start drop-shadow-custom-shadow-1">
+              {% include "templates/left_buttons.html" %}
             </div>
-            <div x-show="open" class="h-full grow bg-primary"></div>
+            <div id="left-menu" x-show="open" class="h-full grow bg-primary"></div>
           </div>
         </div>
         <div id="middle-center" class="h-full grow flex flex-col justify-between p-[8px]">
@@ -44,14 +39,9 @@
         </div>
         <div id="middle-right" class="w-[256px] h-full p-[8px]">
           <div x-data="{open: false}" class="w-full h-full flex justify-end drop-shadow-custom-shadow-2">
-            <div x-show="open" class="h-full grow bg-primary"></div>
-            <div class="w-[48px] h-full bg-secondary flex flex-col items-center justify-start space-y-[8px]">
-              <button @click="open = !open" class="button-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5M10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5"/>
-                </svg>
-              </button>
-              {% include "templates/general_controls.html" %}
+            <div id="left-menu" x-show="open" class="h-full grow bg-primary"></div>
+            <div class="w-[48px] h-full bg-primary flex flex-col items-center justify-start">
+              {% include "templates/right_buttons.html" %}
             </div>
           </div>
         </div>

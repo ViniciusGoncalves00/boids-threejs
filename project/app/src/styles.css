@@ -60,7 +60,7 @@
 
 @layer components {
   .btn-hover {
-    @apply relative text-gray-700 transition duration-200 ease-in-out;
+    @apply relative transition duration-200 ease-in-out;
   }
 
   .btn-hover::after {

@@ -1,2 +1,124 @@
-<div class="">
+<div class="h-full w-full flex flex-col items-start justify-start">
+    <div id="domain-size" x-data="{open: true}" class="w-full flex flex-col">
+        <div class="w-full h-[24px] flex items-center justify-start">
+            <button @click="open = false" x-show="open">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+                </svg>
+            </button>
+            <button @click="open = true" x-show="!open">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                </svg>
+            </button>
+            <div class="w-full px-[8px]">size</div>
+        </div>
+        {% include "templates/horizontal_line.html" %}
+        <div x-show="open" class="w-full flex flex-col items-start justify-start pl-[24px] my-[8px] space-y-[4px]">
+            <div class="h-[24px] w-full flex items-center justify-between">
+                <div class="h-full w-[96px] flex items-center justify-start">Min</div>
+                <div class="h-full w-[calc(100%-96px)] flex items-center justify-between">
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] flex items-center justify-center">x</div>
+                        <input class="h-full w-[calc(100%-24px)] border-[1px] border-black/20" type="number"></input>
+                    </div>
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] flex items-center justify-center">y</div>
+                        <input class="h-full w-[calc(100%-24px)] border-[1px] border-black/20" type="number"></input>
+                    </div>          
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] flex items-center justify-center">z</div>
+                        <input class="h-full w-[calc(100%-24px)] border-[1px] border-black/20" type="number"></input>
+                    </div>
+                </div>
+            </div>
+            <div class="h-[24px] w-full flex items-center justify-between">
+                <div class="h-full w-[96px] flex items-center justify-start">Max</div>
+                <div class="h-full w-[calc(100%-96px)] flex items-center justify-between">
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] flex items-center justify-center">x</div>
+                        <input class="h-full w-[calc(100%-24px)] border-[1px] border-black/20" type="number"></input>
+                    </div>
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] flex items-center justify-center">y</div>
+                        <input class="h-full w-[calc(100%-24px)] border-[1px] border-black/20" type="number"></input>
+                    </div>          
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] flex items-center justify-center">z</div>
+                        <input class="h-full w-[calc(100%-24px)] border-[1px] border-black/20" type="number"></input>
+                    </div>
+                </div>
+            </div>
+            <button class="h-[24px] w-full bg-primary hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2 flex items-center justify-center">submit</button>
+        </div>
+    </div>
+
+    <div id="domain-partitions" x-data="{open: true}" class="w-full flex flex-col">
+        <div class="w-full h-[24px] flex items-center justify-start">
+            <button @click="open = false" x-show="open">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+                </svg>
+            </button>
+            <button @click="open = true" x-show="!open">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                </svg>
+            </button>
+            <div class="w-full px-[8px]">partitions</div>
+        </div>
+        {% include "templates/horizontal_line.html" %}
+        <div x-show="open" class="w-full flex flex-col items-start justify-start pl-[24px] my-[8px] space-y-[4px]">
+            <div class="h-[24px] w-full flex items-center justify-between">
+                <div class="h-full w-[96px] flex items-center justify-start">Min</div>
+                <div class="h-full w-[calc(100%-96px)] flex items-center justify-between">
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] flex items-center justify-center">x</div>
+                        <input class="h-full w-[calc(100%-24px)] border-[1px] border-black/20" type="number"></input>
+                    </div>
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] flex items-center justify-center">y</div>
+                        <input class="h-full w-[calc(100%-24px)] border-[1px] border-black/20" type="number"></input>
+                    </div>          
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] flex items-center justify-center">z</div>
+                        <input class="h-full w-[calc(100%-24px)] border-[1px] border-black/20" type="number"></input>
+                    </div>
+                </div>
+            </div>
+            <button class="h-[24px] w-full bg-primary hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2 flex items-center justify-center">submit</button>
+        </div>
+    </div>
+
+    <div id="boids-behaviours" x-data="{open: true}" class="w-full flex flex-col">
+        <div class="w-full h-[24px] flex items-center justify-start">
+            <button @click="open = false" x-show="open">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+                </svg>
+            </button>
+            <button @click="open = true" x-show="!open">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                </svg>
+            </button>
+            <div class="w-full px-[8px]">Behaviour</div>
+        </div>
+        {% include "templates/horizontal_line.html" %}
+        <div x-show="open" class="w-full flex flex-col items-start justify-start pl-[24px] my-[8px] space-y-[4px]">
+            <div class="h-[24px] w-full flex items-center justify-between">
+                <div class="h-full w-[96px] flex items-center justify-start">Separation</div>
+                <input class="h-full w-[calc(100%-96px)] flex items-center justify-between border-[1px] border-black/20"></input>
+            </div>
+            <div class="h-[24px] w-full flex items-center justify-between">
+                <div class="h-full w-[96px] flex items-center justify-start">Alignment</div>
+                <input class="h-full w-[calc(100%-96px)] items-center justify-between border-[1px] border-black/20"></input>
+            </div>
+            <div class="h-[24px] w-full flex items-center justify-between">
+                <div class="h-full w-[96px] flex items-center justify-start">Cohesion</div>
+                <input class="h-full w-[calc(100%-96px)] flex items-center justify-between border-[1px] border-black/20"></input>
+            </div>
+            <button class="h-[24px] w-full bg-primary hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2 flex items-center justify-center">submit</button>
+        </div>
+    </div>
 </div>

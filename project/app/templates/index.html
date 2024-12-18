@@ -26,7 +26,7 @@
               {% include "templates/left_buttons.html" %}
             </div>
             <div id="left-menu" x-show="open" class="w-full h-full bg-primary p-[16px]">
-              {% include "templates/domain.html" %}
+              {% include "groups/domain/domain.html" %}
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
         <div id="middle-right" class="w-[384px] h-full p-[8px] pointer-events-auto">
           <div x-data="{open: false}" class="w-full h-full flex justify-end drop-shadow-custom-shadow-2">
             <div id="right-menu" x-show="open" class="w-full h-full bg-primary p-[16px]">
-              {% include "templates/domain.html" %}
+              {% include "groups/domain/domain.html" %}
             </div>
             <div class="w-[48px] h-full bg-primary flex flex-col items-center justify-start drop-shadow-custom-shadow-1">
               {% include "templates/right_buttons.html" %}

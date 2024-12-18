@@ -1,31 +1,34 @@
 <div class="h-full w-full flex flex-col items-start justify-start">
     <div id="domain-size" x-data="{open: true}" class="w-full flex flex-col">
         {% include "common/fields/dropdown.html" with label="Domain" %}
-        {% include "templates/horizontal_line.html" %}
-        <div x-show="open" class="w-full flex flex-col items-start justify-start pl-[24px] my-[8px] space-y-[4px]">
+        {% comment %} {% include "templates/horizontal_line.html" %} {% endcomment %}
+        <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
             {% include "common/fields/input_coordinates.html" with label="mininum" first_label="x" second_label="y" third_label="z" %}
             {% include "common/fields/input_coordinates.html" with label="maximum" first_label="x" second_label="y" third_label="z" %}
             {% include "common/fields/submit.html"%}
         </div>
+        {% include "templates/horizontal_line.html" %}
     </div>
 
     <div id="domain-partitions" x-data="{open: true}" class="w-full flex flex-col">
         {% include "common/fields/dropdown.html" with label="Partitions" %}
-        {% include "templates/horizontal_line.html" %}
-        <div x-show="open" class="w-full flex flex-col items-start justify-start pl-[24px] my-[8px] space-y-[4px]">
+        {% comment %} {% include "templates/horizontal_line.html" %} {% endcomment %}
+        <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
             {% include "common/fields/input_coordinates.html" with label="amount" first_label="w" second_label="h" third_label="d" %}
             {% include "common/fields/submit.html"%}
         </div>
+        {% include "templates/horizontal_line.html" %}
     </div>
 
     <div id="boids-behaviours" x-data="{open: true}" class="w-full flex flex-col">
         {% include "common/fields/dropdown.html" with label="Behaviour" %}
-        {% include "templates/horizontal_line.html" %}
-        <div x-show="open" class="w-full flex flex-col items-start justify-start pl-[24px] my-[8px] space-y-[4px]">
+        {% comment %} {% include "templates/horizontal_line.html" %} {% endcomment %}
+        <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
             {% include "common/fields/input.html" with label="Separation" text="" value="" %}
             {% include "common/fields/input.html" with label="Alignment" text="" value="" %}
             {% include "common/fields/input.html" with label="Cohesion" text="" value="" %}
             {% include "common/fields/submit.html"%}
         </div>
+        {% include "templates/horizontal_line.html" %}
     </div>
 </div>

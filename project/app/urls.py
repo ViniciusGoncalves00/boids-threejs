@@ -7,7 +7,6 @@ from .views.simulations import SimulationsView
 
 urlpatterns = [
     path('', Index.Index.as_view(), name='index'),
-    re_path(r'^common/groups/domain.html/?$', Domain.as_view(), name='domain'),
     re_path(r'^common/domain/(?P<simulation_id>\d+)/?$', Domain.as_view(), name='domain'),
     path('common/properties.html', Properties.as_view(), name='properties'),
     path('common/simulations.html', SimulationsView.as_view(), name='simulations'),

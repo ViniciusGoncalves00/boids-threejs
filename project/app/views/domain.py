@@ -5,11 +5,9 @@ from django.views.generic import View
 from ..models.simulation import Simulation
 
 class Domain(View):
-    template = "common/groups/domain.html"
+    template = "groups/domain.html"
     
-    def get(self, request: HttpRequest) -> HttpResponse:
-        simulation_id = request.GET.get('simulation_id')
-
+    def get(self, request: HttpRequest, simulation_id: int) -> HttpResponse:
         try:
             simulation = Simulation.objects.get(pk=simulation_id)
             context = {"simulation": simulation.serialize()}

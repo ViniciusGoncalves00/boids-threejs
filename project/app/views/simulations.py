@@ -1,10 +1,10 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.views.generic import View
+from .base_view import BaseView
 from ..models.simulation import Simulation
 
-class SimulationsView(View):
-    template = "common/simulation.html"
+class SimulationsView(BaseView):
+    template = "groups/simulations.html"
     template_field = "common/fields/simulation.html"
     
     def get(self, request: HttpRequest) -> HttpResponse: 
@@ -17,11 +17,12 @@ class SimulationsView(View):
         
     def delete(self, request: HttpRequest, simulation_id):
         try:
+            simulation_id = int(simulation_id)
             simulation = Simulation.objects.get(pk=simulation_id)
             simulation.delete()
             return HttpResponse(status=204)
         except Simulation.DoesNotExist:
-            return HttpResponse("<p>Simulation not found</p>", status=404)
+            return render(request, self.template_not_found)
         
     def post(self, request: HttpRequest):
         simulation = Simulation.objects.create()

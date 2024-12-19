@@ -1,10 +1,10 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.views.generic import View
+from .base_view import BaseView
 from ..models.simulation import Simulation
 
-class Domain(View):
+class Domain(BaseView):
     template = "groups/domain.html"
     
     def get(self, request: HttpRequest, simulation_id: int) -> HttpResponse:

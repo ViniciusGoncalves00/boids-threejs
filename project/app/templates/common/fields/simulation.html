@@ -3,7 +3,7 @@
     <button class="h-full w-full px-[8px] text-primary_text flex items-center justify-start">{{ simulation.name }}</button>
     <button 
         class="h-full w-[32px] bg-primary text-primary_text flex items-center justify-between" 
-        hx-delete="/common/simulations/{{ simulation.pk }}"
+        hx-delete="{% url 'app:simulation' simulation_id=simulation.pk %}"
         hx-target="#simulation-{{ simulation.pk }}"
         hx-swap="outerHTML"
         hx-on="htmx:afterRequest: document.getElementById('simulations-list').dispatchEvent(new Event('revealed'));">

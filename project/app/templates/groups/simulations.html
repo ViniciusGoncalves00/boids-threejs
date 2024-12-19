@@ -6,7 +6,7 @@
             <div
                 x-show="open"
                 id="simulations-list"
-                hx-get="/common/simulations.html"
+                hx-get="{% url "app:simulations" %}"
                 hx-trigger="revealed"
                 hx-swap="innerHTML" 
                 class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">

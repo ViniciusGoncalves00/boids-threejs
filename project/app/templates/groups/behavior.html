@@ -1,6 +1,6 @@
 <div class="h-full w-full flex flex-col items-start justify-start">
-    <div id="boids-behaviours" x-data="{open: true}" class="w-full flex flex-col">
-        {% include "common/fields/dropdown.html" with label="Behaviour" %}
+    <div id="boids-behavior" x-data="{open: true}" class="w-full flex flex-col">
+        {% include "common/fields/dropdown.html" with label="Behavior" %}
         <div x-show="open" class="w-full flex flex-col items-start justify-start pl-[24px] my-[8px] space-y-[4px]">
             {% include "common/fields/input.html" with label="Separation" text="" value="" %}
             {% include "common/fields/input.html" with label="Alignment" text="" value="" %}

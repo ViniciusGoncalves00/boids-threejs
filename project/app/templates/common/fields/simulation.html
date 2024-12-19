@@ -1,8 +1,8 @@
 {% for simulation in simulations %}
-<div @click="$store.CurrentSimulation.id = {{ simulation.pk }}, console.log($store.CurrentSimulation.id)" id="simulation-{{ simulation.pk }}" class="h-[32px] w-full flex items-center justify-between my-[8px] space-y-[4px] hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">
+<div @click="$store.CurrentSimulation.id = {{ simulation.pk }}, console.log($store.CurrentSimulation.id)" id="simulation-{{ simulation.pk }}" class="h-[32px] w-full flex items-center justify-between space-y-[4px] hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">
     <button class="h-full w-full text-primary_text flex items-center justify-start">{{ simulation.name }}</button>
     <button 
-        class="h-full w-[16px] bg-primary text-primary_text flex items-center justify-between" 
+        class="h-full w-[32px] bg-primary text-primary_text flex items-center justify-between" 
         hx-delete="/common/simulations/{{ simulation.pk }}"
         hx-target="#simulation-{{ simulation.pk }}"
         hx-swap="outerHTML"

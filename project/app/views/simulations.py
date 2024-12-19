@@ -5,7 +5,7 @@ from ..models.simulation import Simulation
 
 class SimulationsView(View):
     template = "common/simulation.html"
-    template_field = "common/simulation_field.html"
+    template_field = "common/fields/simulation.html"
     
     def get(self, request: HttpRequest) -> HttpResponse: 
         try:

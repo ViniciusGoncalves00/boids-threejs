@@ -5,7 +5,7 @@ from django.views.generic import View
 from ..models.simulation import Simulation
 
 class Domain(View):
-    template = "common/domain.html"
+    template = "common/groups/domain.html"
     
     def get(self, request: HttpRequest) -> HttpResponse:
         simulation_id = request.GET.get('simulation_id')

@@ -1,29 +1,8 @@
-{% comment %} <div x-data="{open : false}" class="w-full max-h-[256px] bg-primary flex flex-col pointer-events-auto">
-    <button 
-        x-show="open"
-        id="new-simulation-button"
-        class="w-full mb-2 py-2 px-4 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2"
-        hx-post="/common/simulations.html"
-        hx-trigger="click"
-        hx-swap="none"
-        hx-on="htmx:afterRequest: document.getElementById('simulations-list').dispatchEvent(new Event('revealed'));">
-        NEW SIMULATION
-    </button>
-    <div 
-        x-show="open"
-        id="simulations-list"
-        class="w-full h-full overflow-y-scroll p-[8px]"
-        hx-get="/common/simulations.html"
-        hx-trigger="revealed"
-        hx-swap="innerHTML">
-    </div>
-    <button class="w-full mt-2 py-2 px-4 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2" @click="open = !open">SIMULATIONS</button>
-</div> {% endcomment %}
-
 <div class="h-full w-full flex flex-col items-start justify-start">
     <div id="simulations" x-data="{open: true}" class="w-full flex flex-col">
         {% include "common/fields/dropdown.html" with label="Simulations" %}
         <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
+            {% include "common/fields/create_simulation.html"%}
             <div
                 x-show="open"
                 id="simulations-list"
@@ -32,7 +11,6 @@
                 hx-swap="innerHTML" 
                 class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
             </div>
-            {% include "common/fields/create_simulation.html"%}
         </div>
         {% include "common/separators/horizontal_line.html" %}
     </div>

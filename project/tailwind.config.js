@@ -23,6 +23,11 @@ module.exports =
     
         primary_text: "rgba(var(--primary_text))",
         primary_highlight_text:"rgba(var(--primary_highlight_text))",
+
+        info: "rgba(var(--info))",
+        success: "rgba(var(--success))",
+        warning: "rgba(var(--warning))",
+        error: "rgba(var(--error))",
       }
     },
   },

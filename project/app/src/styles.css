@@ -56,7 +56,7 @@
 }
 .button-icon
 {
-  @apply w-[48px] h-[48px] btn-hover flex items-center justify-center text-primary_text bg-primary focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
+  @apply w-[48px] h-[48px] highlight-high-hierarchy flex items-center justify-center
 }
 .slider
 {
@@ -65,6 +65,18 @@
 .custom-text
 {
   @apply text-primary_text text-base font-RobotoCondensed
+}
+.highlight-low-hierarchy
+{
+  @apply btn-hover text-primary_text bg-primary focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
+}
+.highlight-medium-hierarchy
+{
+  @apply btn-hover text-primary_text bg-primary focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
+}
+.highlight-high-hierarchy
+{
+  @apply btn-hover text-primary_text bg-primary focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
 }
 
 @layer components {

@@ -1,6 +1,6 @@
 {% for simulation in simulations %}
-<div @click="$store.CurrentSimulation.id = {{ simulation.pk }}" id="simulation-{{ simulation.pk }}" class="btn-hover h-[32px] w-full flex items-center justify-between space-y-[4px] hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2">
-    <button class="h-full w-full px-[8px] text-primary_text flex items-center justify-start">{{ simulation.name }}</button>
+<div @click="$store.CurrentSimulation.id = {{ simulation.pk }}" id="simulation-{{ simulation.pk }}" class="highlight-high-hierarchy h-[32px] w-full flex items-center justify-between space-y-[4px]">
+    <button class="h-full w-full px-[8px] flex items-center justify-start">{{ simulation.name }}</button>
     <button 
         class="h-full w-[32px] bg-primary text-primary_text flex items-center justify-between" 
         hx-delete="{% url 'app:simulation' simulation_id=simulation.pk %}"

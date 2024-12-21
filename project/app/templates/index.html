@@ -14,7 +14,7 @@
     <script defer src="../../static/bundle.js"></script>
     <title>Boids</title>
   </head>
-  <body>
+  <body x-data="{ currentSimulation: localStorage.getItem('currentSimulation') || null }">
     <div id="screen" class="fixed w-screen h-screen z-10 flex flex-col items-center justify-center pointer-events-none">
       <div id="superior" class="w-full h-[64px] bg-primary p-[8px] pointer-events-auto">
         <div class="w-full h-full"></div>

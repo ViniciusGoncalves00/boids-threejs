@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { resizeRenderer, Grid } from "./utils";
 import { CameraController } from "./camera-controller";
 import { InputMapping } from "./input-mapping";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export class SceneManager
 {
@@ -11,9 +10,8 @@ export class SceneManager
     public Renderer : THREE.WebGLRenderer;
     public Camera : THREE.PerspectiveCamera;
     public CurrentCamera : THREE.PerspectiveCamera;
-    private _cameraController: CameraController;
+    public CameraController: CameraController;
     public Scene : THREE.Scene;
-    private Controls: OrbitControls;
 
     private constructor() {
         this._canvas = document.querySelector("canvas")!;
@@ -23,19 +21,9 @@ export class SceneManager
 
         this.Camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const inputMapping = new InputMapping();
-        this._cameraController = new CameraController(this.Camera, inputMapping);
+        this.CameraController = new CameraController(this.Camera, this.Renderer.domElement);
         this.CurrentCamera = this.Camera;
 
-        this.Controls = new OrbitControls( this.Camera, this.Renderer.domElement );
-        this.Controls.enableDamping = true; // Habilita animações suaves
-        this.Controls.dampingFactor = 0.05; // Ajusta o nível de suavidade
-        this.Controls.minDistance = 1; // Distância mínima da câmera
-        this.Controls.maxDistance = 100; // Distância máxima da câmera
-        
-        this.Controls.enablePan = false; // Desabilita o pan (movimento lateral)
-        this.Controls.enableRotate = true; // Permite apenas rotação
-        this.Controls.enableZoom = true; // Permite zoom
-        this.Controls.update();
 
         // this.Camera.position.x = 5;
         // this.Camera.position.y = 5;
@@ -48,6 +36,7 @@ export class SceneManager
         this.Scene.background = new THREE.Color(0.75, 0.75, 0.80);
 
 
+        
         this.temp_setup()
 
         this.Update();
@@ -82,9 +71,8 @@ export class SceneManager
             }
         }
         
-        this._cameraController.Update();
+        this.CameraController.Update();
         this.Renderer.render(this.Scene, this.Camera);
-        this.Controls.update();
         requestAnimationFrame(this.Update);
     };
 
@@ -93,6 +81,7 @@ export class SceneManager
         if(this._instance == null)
         {
             this._instance = new SceneManager();
+            (window as any).sceneManager = this._instance;
         }
 
         return this._instance

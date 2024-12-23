@@ -31,24 +31,24 @@
     </svg>
 </button>
 {% include "common/separators/horizontal_line.html" %}
-<button id="front-button" class="button-icon">
+<button @click="sceneManager.CameraController.FrontView()" id="front-button" class="button-icon">
     front
 </button>
-<button id="back-button" class="button-icon">
+<button @click="sceneManager.CameraController.BackView()" id="back-button" class="button-icon">
     back
 </button>
-<button id="right-button" class="button-icon">
+<button @click="sceneManager.CameraController.RightView()" id="right-button" class="button-icon">
     right
 </button>
-<button id="left-button" class="button-icon">
+<button @click="sceneManager.CameraController.LeftView()" id="left-button" class="button-icon">
     left
 </button>
-<button id="top-button" class="button-icon">
+<button @click="sceneManager.CameraController.TopView()" id="top-button" class="button-icon">
     top
 </button>
-<button id="bot-button" class="button-icon">
+<button @click="sceneManager.CameraController.BotView()" id="bot-button" class="button-icon">
     bot
 </button>
-<button id="iso-button" class="button-icon">
+<button @click="sceneManager.CameraController.IsometricView()" id="iso-button" class="button-icon">
     iso
 </button>

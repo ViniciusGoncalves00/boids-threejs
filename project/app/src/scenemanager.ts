@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { resizeRenderer, Grid } from "./utils";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { CameraController } from "./camera-controller";
+import { InputMapping } from "./input-mapping";
 
 export class SceneManager
 {
@@ -8,8 +9,9 @@ export class SceneManager
     private _canvas : HTMLCanvasElement | OffscreenCanvas | undefined;
     public Renderer : THREE.WebGLRenderer;
     public Camera : THREE.PerspectiveCamera;
+    public CurrentCamera : THREE.PerspectiveCamera;
+    public CameraController: CameraController;
     public Scene : THREE.Scene;
-    private Controls: OrbitControls;
 
     private constructor() {
         this._canvas = document.querySelector("canvas")!;
@@ -18,20 +20,15 @@ export class SceneManager
         this.Renderer.setSize(window.innerWidth, window.innerHeight);
 
         this.Camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const inputMapping = new InputMapping();
+        this.CameraController = new CameraController(this.Camera, this.Renderer.domElement);
+        this.CurrentCamera = this.Camera;
 
-        this.Controls = new OrbitControls( this.Camera, this.Renderer.domElement );
-        this.Controls.enableDamping = true; // Habilita animações suaves
-        this.Controls.dampingFactor = 0.05; // Ajusta o nível de suavidade
-        this.Controls.minDistance = 1; // Distância mínima da câmera
-        this.Controls.maxDistance = 20; // Distância máxima da câmera
-        this.Controls.enableZoom = true; // Padrão é true.
-        this.Controls.enablePan = true; // Padrão é true.
-        this.Controls.update();
 
-        this.Camera.position.x = 5;
-        this.Camera.position.y = 5;
-        this.Camera.position.z = 5;
-        this.Camera.lookAt(0,0,0)
+        // this.Camera.position.x = 5;
+        // this.Camera.position.y = 5;
+        // this.Camera.position.z = 5;
+        // this.Camera.lookAt(0,0,0)
         this.Camera.aspect = this._canvas.clientWidth / this._canvas.clientHeight;
         this.Camera.updateProjectionMatrix();
     
@@ -39,6 +36,7 @@ export class SceneManager
         this.Scene.background = new THREE.Color(0.75, 0.75, 0.80);
 
 
+        
         this.temp_setup()
 
         this.Update();
@@ -73,8 +71,8 @@ export class SceneManager
             }
         }
         
+        this.CameraController.Update();
         this.Renderer.render(this.Scene, this.Camera);
-        this.Controls.update();
         requestAnimationFrame(this.Update);
     };
 
@@ -83,6 +81,7 @@ export class SceneManager
         if(this._instance == null)
         {
             this._instance = new SceneManager();
+            (window as any).sceneManager = this._instance;
         }
 
         return this._instance

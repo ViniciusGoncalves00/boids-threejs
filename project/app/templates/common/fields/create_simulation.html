@@ -1,0 +1,10 @@
+<button 
+    x-show="open"
+    id="new-simulation-button"
+    class="h-[24px] w-full bg-primary_highlight text-primary_text border-[1px] border-black/20 rounded-[4px] hover:text-primary_highlight_text hover:bg-primary_highlight hover:drop-shadow-custom-shadow-2 flex items-center justify-center"
+    hx-post="{% url "app:simulations" %}"
+    hx-trigger="click"
+    hx-swap="none"
+    hx-on="htmx:afterRequest: document.getElementById('simulations-list').dispatchEvent(new Event('revealed'));">
+    create simulation
+</button>

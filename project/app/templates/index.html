@@ -14,46 +14,46 @@
     <script defer src="../../static/bundle.js"></script>
     <title>Boids</title>
   </head>
-  <body x-data="{darkMode: localStorage.getItem('theme') === 'custom_light' }">
-    <div class="fixed w-full h-screen flex flex-col items-center justify-end z-10 pointer-events-none"> <!--screen-->
-      <div class="w-full h-[64px] bg-primary"></div> <!--superior area-->
-      <div class="w-full flex flex-grow justify-between p-[8px]">
-        <div class="w-[256px] h-full flex flex-col-reverse">
-          {% include "common/simulations.html" %}
-        </div> <!--middle left area-->
-        <div class="w-[256px] h-full flex flex-grow flex-col items-center justify-between">
-          <div class="h-[32px] w-[64px] bg-primary flex items-center justify-center m-[8px]"> <!--start simulation buttons-->
-            <div class="flex items-center justify-center pointer-events-auto">
-              <button @click="$store.simulation.refresh" class="button-menu">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
-                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
-                </svg>
-              </button>
-              <button @click="$store.simulation.instantiate" class="button-menu">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/></svg>
-              </button>
+  <body x-data="{ currentSimulation: localStorage.getItem('currentSimulation') || null }">
+    <div id="screen" class="fixed w-screen h-screen z-10 flex flex-col items-center justify-center pointer-events-none">
+      <div id="superior" class="w-full h-[64px] bg-primary p-[8px] pointer-events-auto">
+        <div class="w-full h-full"></div>
+      </div>
+      <div id="middle" class="w-full grow flex justify-start pointer-events-none">
+        <div id="middle-left" class="w-[384px] h-full p-[8px] pointer-events-auto">
+          <div x-data="{open: false}" class="w-full h-full flex justify-start drop-shadow-custom-shadow-2">
+            <div class="w-[48px] h-full bg-primary flex flex-col items-center justify-start drop-shadow-custom-shadow-1">
+              {% include "templates/left_buttons.html" %}
             </div>
-          </div> <!--end simulation buttons-->
-        </div> <!--middle middle area-->
-        <div class="w-[256px] h-full flex flex-col-reverse">
-          {% include "common/events.html" %}
-        </div> <!--middle right area-->
-      </div> <!--middle area-->
-      <div class="w-full flex flex-col items-center justify-end p-[8px]"> <!--inferior area-->
-        <div x-data="{open: false}" @click.outside="open = false" class="w-full flex flex-col"> <!--menus buttons-->
-          <div x-show="open" id="data-div" class="w-full"></div>
-          <div class="w-full h-[64px] bg-primary flex items-center justify-center">
-            <div x-data="" class="w-full h-full flex items-center justify-around pointer-events-auto">
-              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/common/domain.html" :hx-vals="JSON.stringify({ simulation_id: $store.CurrentSimulation.id })" hx-target="#data-div" hx-swap="innerHTML">DOMAIN</button>
-              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/common/properties.html" :hx-vals="JSON.stringify({ simulation_id: $store.CurrentSimulation.id })" hx-target="#data-div" hx-swap="innerHTML">BOIDS</button>
-              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/common/domain.html" :hx-vals="JSON.stringify({ simulation_id: $store.CurrentSimulation.id })" hx-target="#data-div" hx-swap="innerHTML">CAMERA</button>
-              <button class="button-menu w-[25%]" @click="open = !open" hx-get="/common/domain.html" :hx-vals="JSON.stringify({ simulation_id: $store.CurrentSimulation.id })" hx-target="#data-div" hx-swap="innerHTML">CONFIG</button>
+            <div id="left-menu" x-show="open" class="w-full h-full bg-primary p-[16px]">
+              {% include "groups/simulations.html" %}
             </div>
           </div>
         </div>
-      </div> 
+        <div id="middle-center" class="h-full grow flex flex-col justify-between p-[8px] pointer-events-none">
+          <div id="middle-center-superior" class="w-full h-[32px] drop-shadow-custom-shadow-2 flex items-center justify-center">
+            {% include "templates/events.html" %}
+          </div>
+          <div id="middle-center-middle" class="w-full grow"></div>
+          <div id="middle-center-inferior" class="w-full flex items-center justify-center drop-shadow-custom-shadow-2 pointer-events-auto">
+            {% include "templates/run_controls.html" %}
+          </div>
+        </div>
+        <div id="middle-right" class="w-[384px] h-full p-[8px] pointer-events-auto">
+          <div x-data="{open: false}" class="w-full h-full flex justify-end drop-shadow-custom-shadow-2">
+            <div id="right-menu" x-show="open" class="w-full h-full bg-primary p-[16px]">
+            </div>
+            <div class="w-[48px] h-full bg-primary flex flex-col items-center justify-start drop-shadow-custom-shadow-1">
+              {% include "templates/right_buttons.html" %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="inferior" class="w-full h-[64px] bg-primary p-[8px] pointer-events-auto">
+        <div class="w-full h-full"></div>
+      </div>
     </div>
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" class="fixed z-0"></canvas>
+    <div id="script"></div>
   </body>
 </html>

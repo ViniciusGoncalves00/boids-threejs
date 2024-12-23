@@ -1,15 +1,13 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.views.generic import View
+from .base_view import BaseView
 from ..models.simulation import Simulation
 
-class Domain(View):
-    template = "common/domain.html"
+class Domain(BaseView):
+    template = "groups/domain.html"
     
-    def get(self, request: HttpRequest) -> HttpResponse:
-        simulation_id = request.GET.get('simulation_id')
-
+    def get(self, request: HttpRequest, simulation_id: int) -> HttpResponse:
         try:
             simulation = Simulation.objects.get(pk=simulation_id)
             context = {"simulation": simulation.serialize()}

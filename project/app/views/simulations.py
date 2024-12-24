@@ -4,7 +4,7 @@ from .base_view import BaseView
 from ..models.simulation import Simulation
 
 class SimulationsView(BaseView):
-    template = "groups/simulations.html"
+    template = "sections/simulations.html"
     template_field = "common/fields/simulation.html"
     
     def get(self, request: HttpRequest) -> HttpResponse: 

@@ -1,7 +1,0 @@
-<div x-data="{ title: '{{ title|default:"unnamed_title" }}' }" class="h-full w-full flex flex-col items-start justify-start">
-    <div class="w-full flex items-center justify-center">
-        <div class="text-high" x-text="title"></div>
-    </div>
-    {% include "common/separators/horizontal_line.html" %}
-    {% block data %}{% endblock %}
-</div>

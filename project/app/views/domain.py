@@ -5,7 +5,7 @@ from .base_view import BaseView
 from ..models.simulation import Simulation
 
 class Domain(BaseView):
-    template = "groups/domain.html"
+    template = "sections/domain.html"
     
     def get(self, request: HttpRequest, simulation_id: int) -> HttpResponse:
         try:

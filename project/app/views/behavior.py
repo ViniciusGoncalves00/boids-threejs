@@ -4,7 +4,7 @@ from .base_view import BaseView
 from ..models.simulation import Simulation
 
 class Behavior(BaseView):
-    template = "groups/behavior.html"
+    template = "sections/behavior.html"
     
     def get(self, request: HttpRequest, simulation_id) -> HttpResponse:
         try:

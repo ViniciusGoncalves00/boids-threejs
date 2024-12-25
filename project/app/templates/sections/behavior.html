@@ -1,7 +1,25 @@
-<div class="h-full w-full flex flex-col items-start justify-start">
+{% extends "sections/base-section.html"%}
+
+{% block title %}
+    boids
+{% endblock %}
+
+{% block data %}
+    <div id="boids-properties" x-data="{open: true}" class="w-full flex flex-col">
+        {% include "common/fields/dropdown.html" with label="Properties" %}
+        <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
+            {% include "common/fields/input.html" with label="Amount" text="" value="" %}
+            {% include "common/fields/input.html" with label="Speed" text="" value="" %}
+            {% include "common/fields/input.html" with label="Angular Speed" text="" value="" %}
+            {% include "common/fields/input.html" with label="Field of View (FOV)" text="" value="" %}
+            {% include "common/fields/submit.html"%}
+        </div>
+        {% include "common/separators/horizontal_line.html" %}
+    </div>
+
     <div id="boids-behavior" x-data="{open: true}" class="w-full flex flex-col">
         {% include "common/fields/dropdown.html" with label="Behavior" %}
-        <div x-show="open" class="w-full flex flex-col items-start justify-start pl-[24px] my-[8px] space-y-[4px]">
+        <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
             {% include "common/fields/input.html" with label="Separation" text="" value="" %}
             {% include "common/fields/input.html" with label="Alignment" text="" value="" %}
             {% include "common/fields/input.html" with label="Cohesion" text="" value="" %}
@@ -9,4 +27,4 @@
         </div>
         {% include "common/separators/horizontal_line.html" %}
     </div>
-</div>
+{% endblock %}

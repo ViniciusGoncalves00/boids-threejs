@@ -1,4 +1,10 @@
-<div class="h-full w-full flex flex-col items-start justify-start">
+{% extends "sections/base-section.html"%}
+
+{% block title %}
+    simulations
+{% endblock %}
+
+{% block data %}
     <div id="simulations" x-data="{open: true}" class="w-full flex flex-col">
         {% include "common/fields/dropdown.html" with label="Simulations" %}
         <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
@@ -14,4 +20,4 @@
         </div>
         {% include "common/separators/horizontal_line.html" %}
     </div>
-</div>
+{% endblock %}

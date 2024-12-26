@@ -3,14 +3,12 @@ from django.shortcuts import render
 from .base_view import BaseView
 from ..models.simulation import Simulation
 
-class SimulationsView(BaseView):
-    template = "sections/simulations.html"
+class SimulationSectionView(BaseView):
+    template = "sections/simulation-section.html"
     
     def get(self, request: HttpRequest) -> HttpResponse: 
         try:
-            simulations = Simulation.objects.all()
-
-            return render(request, self.template, {"simulations": simulations})
+            return render(request, self.template)
         except Exception as e:
             return HttpResponse(f"<div>Failed to load simulations: {str(e)}</div>", status=500)
         

@@ -1,0 +1,23 @@
+{% extends "sections/base-section.html"%}
+
+{% block title %}
+    simulations
+{% endblock %}
+
+{% block data %}
+    <div id="app:simulation-subsection" x-data="{open: true}" class="w-full flex flex-col">
+        {% include "common/fields/dropdown.html" with label="Simulations" %}
+        <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
+            {% include "common/components/simulation/create-simulation.html"%}
+            <div
+                x-show="open"
+                id="simulations-list"
+                hx-get="{% url "app:simulations-list" %}"
+                hx-trigger="revealed"
+                hx-swap="innerHTML" 
+                class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
+            </div>
+        </div>
+        {% include "common/separators/horizontal_line.html" %}
+    </div>
+{% endblock %}

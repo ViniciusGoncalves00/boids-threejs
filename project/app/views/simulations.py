@@ -5,13 +5,12 @@ from ..models.simulation import Simulation
 
 class SimulationsView(BaseView):
     template = "sections/simulations.html"
-    template_field = "common/fields/simulation.html"
     
     def get(self, request: HttpRequest) -> HttpResponse: 
         try:
             simulations = Simulation.objects.all()
 
-            return render(request, self.template_field, {"simulations": simulations})
+            return render(request, self.template, {"simulations": simulations})
         except Exception as e:
             return HttpResponse(f"<div>Failed to load simulations: {str(e)}</div>", status=500)
         

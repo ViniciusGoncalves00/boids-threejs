@@ -9,14 +9,22 @@
         {% include "common/fields/dropdown.html" with label="Simulations" %}
         <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
             {% include "common/fields/create_simulation.html"%}
-            <div
-                x-show="open"
-                id="simulations-list"
-                hx-get="{% url "app:simulations" %}"
-                hx-trigger="revealed"
-                hx-swap="innerHTML" 
-                class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
-            </div>
+            {% for simulation in simulations %}
+                <div @click="localStorage.setItem('currentSimulation', '{{ simulation.pk }}'); console.log(localStorage.getItem('currentSimulation'))" id="simulation-{{ simulation.pk }}" class="highlight-high-hierarchy h-[32px] w-full flex items-center justify-between space-y-[4px]">
+                    <button class="h-full w-full px-[8px] flex items-center justify-start">{{ simulation.name }}</button>
+                    <button 
+                        class="h-full w-[32px] bg-primary text-primary_text flex items-center justify-between" 
+                        hx-delete="{% url 'app:simulation' simulation_id=simulation.pk %}"
+                        hx-target="#simulation-{{ simulation.pk }}"
+                        hx-swap="outerHTML"
+                        hx-on="htmx:afterRequest: document.getElementById('simulations-list').dispatchEvent(new Event('revealed'));">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash hover:text-error" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                        </svg>
+                    </button>
+                </div>
+            {% endfor %}
         </div>
         {% include "common/separators/horizontal_line.html" %}
     </div>

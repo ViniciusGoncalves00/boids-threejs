@@ -7,8 +7,9 @@ from ..models.simulation import Simulation
 class Domain(BaseView):
     template = "sections/domain.html"
     
-    def get(self, request: HttpRequest, simulation_id: int) -> HttpResponse:
+    def get(self, request: HttpRequest) -> HttpResponse:
         try:
+            simulation_id = request.GET.get('simulation_id')
             simulation = Simulation.objects.get(pk=simulation_id)
             context = {"simulation": simulation.serialize()}
             

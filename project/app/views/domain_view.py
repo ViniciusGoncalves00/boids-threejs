@@ -9,6 +9,7 @@ class Domain(BaseView):
     
     def get(self, request: HttpRequest) -> HttpResponse:
         try:
+            print(request.GET.keys())
             simulation_id = request.GET.get('simulation_id')
             simulation = Simulation.objects.get(pk=simulation_id)
             context = {"simulation": simulation.serialize()}
@@ -33,7 +34,7 @@ class Domain(BaseView):
         simulation.sizeX = sizeX
         simulation.sizeY = sizeY
         simulation.sizeZ = sizeZ
-        simulation.partitionsX = partitionsX
+        simulation.divisions_x = partitionsX
         simulation.partitionsY = partitionsY
         simulation.partitionsZ = partitionsZ
         simulation.save()

@@ -4,7 +4,7 @@ from .base_view import BaseView
 from ..models.simulation import Simulation
 
 class ConfigurationView(BaseView):
-    template = "common/template-not-implemented.html"
+    template = "section/template-not-implemented.html"
     
     def get(self, request: HttpRequest) -> HttpResponse:
         try:

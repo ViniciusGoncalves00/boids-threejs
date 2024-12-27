@@ -10,7 +10,7 @@ from .views.configuration import ConfigurationView
 
 urlpatterns = [
     path('', Index.Index.as_view(), name='index'),
-    re_path(r'^domain/(?P<simulation_id>\d+)/?$', Domain.as_view(), name='domain'),
+    re_path(r'^domain/?$', Domain.as_view(), name='domain'),
     re_path(r'^boids/(?P<simulation_id>\d+)/?$', Boids.as_view(), name='boids'),
     re_path(r'^simulation/(?P<simulation_id>\d+)/?$', SimulationView.as_view(), name='simulation'),
     re_path(r'^simulation/?$', SimulationView.as_view(), name='simulation'),

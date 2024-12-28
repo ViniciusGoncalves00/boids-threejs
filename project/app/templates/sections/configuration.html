@@ -1,0 +1,15 @@
+{% extends "sections/base-section.html"%}
+
+{% block title %}
+    configuration
+{% endblock %}
+
+{% block data %}
+    <div id="theme" x-data="{open: true}" class="w-full flex flex-col">
+        {% include "common/fields/dropdown.html" with label="Properties" %}
+        <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
+            {% include "common/fields/input.html" with label="Amount" text="" value="" %}
+        </div>
+        {% include "common/separators/horizontal_line.html" %}
+    </div>
+{% endblock %}

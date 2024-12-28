@@ -3,15 +3,15 @@ from django.shortcuts import render
 from .base_view import BaseView
 from ..models.simulation import Simulation
 
-class Behavior(BaseView):
-    template = "groups/behavior.html"
+class Boids(BaseView):
+    template = "sections/boids.html"
     
-    def get(self, request: HttpRequest, simulation_id) -> HttpResponse:
+    def get(self, request: HttpRequest) -> HttpResponse:
         try:
-            simulation_id = int(simulation_id)
+            simulation_id = request.GET.get('simulation_id')
             simulation = Simulation.objects.get(pk=simulation_id)
             context = {"simulation": simulation.serialize()}
             
             return render(request, self.template, context)
-        except Behavior.DoesNotExist:
+        except Simulation.DoesNotExist:
             return render(request, self.template_not_found)

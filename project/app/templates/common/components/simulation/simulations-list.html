@@ -2,8 +2,8 @@
 <div @click="localStorage.setItem('currentSimulation', '{{ simulation.pk }}'); console.log(localStorage.getItem('currentSimulation'))" id="simulation-{{ simulation.pk }}" class="highlight-high-hierarchy h-[32px] w-full flex items-center justify-between space-y-[4px]">
     <button class="h-full w-full px-[8px] flex items-center justify-start">{{ simulation.name }}</button>
     <button 
-        class="h-full w-[32px] bg-primary text-primary_text flex items-center justify-between" 
-        hx-delete="{% url 'app:simulation' simulation_id=simulation.pk %}"
+        class="h-full w-[32px] bg-primary text-primary_text flex items-center justify-between"
+        hx-delete="{% url 'app:simulation' simulation_id=simulation.pk %}" 
         hx-target="#simulation-{{ simulation.pk }}"
         hx-swap="outerHTML"
         hx-on="htmx:afterRequest: document.getElementById('simulations-list').dispatchEvent(new Event('revealed'));">

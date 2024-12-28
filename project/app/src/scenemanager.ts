@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { resizeRenderer, Grid } from "./utils";
 import { CameraController } from "./camera-controller";
 import { InputMapping } from "./input-mapping";
+import { Simulation } from "./simulation";
 
 export class SceneManager
 {
@@ -12,6 +13,7 @@ export class SceneManager
     public CurrentCamera : THREE.PerspectiveCamera;
     public CameraController: CameraController;
     public Scene : THREE.Scene;
+    public Simulation : Simulation;
 
     private constructor() {
         this._canvas = document.querySelector("canvas")!;
@@ -24,18 +26,13 @@ export class SceneManager
         this.CameraController = new CameraController(this.Camera, this.Renderer.domElement);
         this.CurrentCamera = this.Camera;
 
-
-        // this.Camera.position.x = 5;
-        // this.Camera.position.y = 5;
-        // this.Camera.position.z = 5;
-        // this.Camera.lookAt(0,0,0)
         this.Camera.aspect = this._canvas.clientWidth / this._canvas.clientHeight;
         this.Camera.updateProjectionMatrix();
     
         this.Scene = new THREE.Scene();
         this.Scene.background = new THREE.Color(0.75, 0.75, 0.80);
 
-
+        this.Simulation = Simulation.GetInstance();
         
         this.temp_setup()
 

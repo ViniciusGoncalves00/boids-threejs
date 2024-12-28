@@ -5,13 +5,14 @@ from .base_view import BaseView
 from ..models.simulation import Simulation
 
 class Domain(BaseView):
-    template = "groups/domain.html"
+    template = "sections/domain.html"
     
-    def get(self, request: HttpRequest, simulation_id: int) -> HttpResponse:
+    def get(self, request: HttpRequest) -> HttpResponse:
         try:
+            print(request.GET.keys())
+            simulation_id = request.GET.get('simulation_id')
             simulation = Simulation.objects.get(pk=simulation_id)
             context = {"simulation": simulation.serialize()}
-            
             return render(request, self.template, context)
         except Simulation.DoesNotExist:
             return HttpResponse("<p>Simulation not found</p>", status=404)
@@ -32,7 +33,7 @@ class Domain(BaseView):
         simulation.sizeX = sizeX
         simulation.sizeY = sizeY
         simulation.sizeZ = sizeZ
-        simulation.partitionsX = partitionsX
+        simulation.divisions_x = partitionsX
         simulation.partitionsY = partitionsY
         simulation.partitionsZ = partitionsZ
         simulation.save()

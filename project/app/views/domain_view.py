@@ -13,7 +13,6 @@ class Domain(BaseView):
             simulation_id = request.GET.get('simulation_id')
             simulation = Simulation.objects.get(pk=simulation_id)
             context = {"simulation": simulation.serialize()}
-            
             return render(request, self.template, context)
         except Simulation.DoesNotExist:
             return HttpResponse("<p>Simulation not found</p>", status=404)

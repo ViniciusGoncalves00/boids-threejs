@@ -8,8 +8,8 @@
     <div id="domain-size" x-data="{open: true}" class="w-full flex flex-col">
         {% include "common/fields/dropdown.html" with label="Coordinates" %}
         <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
-            {% include "common/fields/input_coordinates.html" with label="minimum" first_label="x" second_label="y" third_label="z" %}
-            {% include "common/fields/input_coordinates.html" with label="maximum" first_label="x" second_label="y" third_label="z" %}
+            {% include "common/fields/input_coordinates.html" with label="minimum" first_label="x" first_value=simulation.domain_min_x second_label="y" second_value=simulation.domain_min_y third_label="z" third_value=simulation.domain_min_z %}
+            {% include "common/fields/input_coordinates.html" with label="maximum" first_label="x" first_value=simulation.domain_max_x second_label="y" second_value=simulation.domain_max_y third_label="z" third_value=simulation.domain_max_z %}
             {% include "common/fields/submit.html"%}
         </div>
         {% include "common/separators/horizontal_line.html" %}

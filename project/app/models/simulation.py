@@ -22,6 +22,11 @@ class Simulation(models.Model):
     spawn_max_y = models.FloatField(validators=[MinValueValidator(-1000.0), MaxValueValidator(1000.0)], default=100)
     spawn_max_z = models.FloatField(validators=[MinValueValidator(-1000.0), MaxValueValidator(1000.0)], default=100)
     
+    amount = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], default=1)
+    speed = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)], default=10)
+    angular_speed = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(720.0)], default=90)
+    field_of_view = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(360.0)], default=60)
+    
     separation = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], default=5)
     alignment = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], default=5)
     cohesion = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(10.0)], default=5)
@@ -32,8 +37,8 @@ class Simulation(models.Model):
             "domain_max": (self.domain_max_x, self.domain_max_y, self.domain_max_z)
         }
 
-    def get_partitions(self) -> tuple[float, float, float]:
-        return [self.divisions_x, self.partitionsY, self.partitionsZ]
+    def get_divisions(self) -> tuple[float, float, float]:
+        return [self.divisions_x, self.divisions_y, self.divisions_z]
     
     def serialize(self) -> dict:
         return {
@@ -56,6 +61,11 @@ class Simulation(models.Model):
             "spawn_max_x": self.spawn_max_x,
             "spawn_max_y": self.spawn_max_y,
             "spawn_max_z": self.spawn_max_z,
+            
+            "amount": self.amount,
+            "speed": self.speed,
+            "angular_speed": self.angular_speed,
+            "field_of_view": self.field_of_view,
             
             "separation": self.separation,
             "alignment": self.alignment,

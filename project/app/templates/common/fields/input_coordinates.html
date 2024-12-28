@@ -4,19 +4,19 @@
                 third_label: '{{ third_label|default:"" }}', third_text: '{{ third_text|default:"" }}', third_value: '{{ third_value|default:"" }}', }"
      x-init="$dispatch('input-init', {})"
      class="h-[24px] w-full flex items-center justify-between">
-    <div x-text="label" class="h-full w-[96px] text-primary_text flex items-center justify-start"></div>
-    <div class="h-full w-[calc(100%-96px)] flex items-center justify-between">
+    <div x-text="label" class="h-full w-[64px] text-primary_text flex items-center justify-start"></div>
+    <div class="h-full w-[calc(100%-64px)] flex items-center justify-between">
         <div class="h-full w-[33%] flex items-center justify-between">
             <div x-text="first_label" class="h-full w-[24px] text-primary_text flex items-center justify-center"></div>
-            <input type="number" step="1" placeholder="first_label" x-model.number="first_value" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text border-[1px] border-black/20"></input>
+            <input type="number" step="1" placeholder="..." x-model.number="first_value" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20"></input>
         </div>
         <div class="h-full w-[33%] flex items-center justify-between">
             <div x-text="second_label" class="h-full w-[24px] text-primary_text flex items-center justify-center"></div>
-            <input type="number" step="1" placeholder="second_label" x-model.number="second_value" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text border-[1px] border-black/20"></input>
+            <input type="number" step="1" placeholder="..." x-model.number="second_value" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20"></input>
         </div>
         <div class="h-full w-[33%] flex items-center justify-between">
             <div x-text="third_label" class="h-full w-[24px] text-primary_text flex items-center justify-center"></div>
-            <input type="number" step="1" placeholder="third_label" x-model.number="third_value" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text border-[1px] border-black/20"></input>
+            <input type="number" step="1" placeholder="..." x-model.number="third_value" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20"></input>
         </div>
     </div>
 </div>

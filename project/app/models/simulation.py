@@ -46,9 +46,9 @@ class Simulation(models.Model):
             "domain_max_y": self.domain_max_y,
             "domain_max_z": self.domain_max_z,
             
-            "divisions_X": self.divisions_x,
-            "divisions_Y": self.divisions_y,
-            "divisions_Z": self.divisions_z,
+            "divisions_x": self.divisions_x,
+            "divisions_y": self.divisions_y,
+            "divisions_z": self.divisions_z,
             
             "spawn_min_x": self.spawn_min_x,
             "spawn_min_y": self.spawn_min_y,

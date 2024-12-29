@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { Domain } from "../domain";
 import { Boid } from "../boid";
-import { SceneManager } from "../scenemanager";
+import { SceneManager } from "../scene-manager";
 
 import Alpine from "alpinejs";
 import {DomainStore} from "./stores/DomainStore";

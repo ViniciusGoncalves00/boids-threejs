@@ -1,28 +1,22 @@
 import * as THREE from "three";
-import { SceneManager } from "./scenemanager";
+import { SceneManager } from "./scene-manager";
 import { Domain } from "./domain";
 
 export class Boid
 {
     public Mesh : THREE.Mesh;
     private _domain : Domain;
-    private _sceneManager : SceneManager;
 
     public constructor(mesh : THREE.Mesh)
     {
         this.Mesh = mesh;
         this._domain = Domain.GetInstance()
-        this._sceneManager = SceneManager.GetInstance()
 
         this.Update()
     }
 
     public Update = () => {
-        requestAnimationFrame(this.Update);
-    
         this.Move(new THREE.Vector3(0, 1, 0), 0.5);
-
-        this._sceneManager.Renderer.render(this._sceneManager.Scene, this._sceneManager.Camera);
     };
 
     private Move(direction : THREE.Vector3, distance : number)
@@ -32,23 +26,25 @@ export class Boid
         const position = this.Mesh.position;
     
         position.add(offset);
+
+        const limits = this._domain.GetLimits();
     
-        if (position.x < this._domain.MinX) {
-            position.x += this._domain.MaxX - this._domain.MinX;
-        } else if (position.x > this._domain.MaxX) {
-            position.x -= this._domain.MaxX - this._domain.MinX;
+        if (position.x < limits.min[0]) {
+            position.x += limits.max[0] - limits.min[0];
+        } else if (position.x > limits.max[0]) {
+            position.x -= limits.max[0] - limits.min[0];
         }
     
-        if (position.y < this._domain.MinY) {
-            position.y += this._domain.MaxY - this._domain.MinY;
-        } else if (position.y > this._domain.MaxY) {
-            position.y -= this._domain.MaxY - this._domain.MinY;
+        if (position.y < limits.min[1]) {
+            position.y += limits.max[1] - limits.min[1];
+        } else if (position.y > limits.max[1]) {
+            position.y -= limits.max[1] - limits.min[1];
         }
     
-        if (position.z < this._domain.MinZ) {
-            position.z += this._domain.MaxZ - this._domain.MinZ;
-        } else if (position.z > this._domain.MaxZ) {
-            position.z -= this._domain.MaxZ - this._domain.MinZ;
+        if (position.z < limits.min[2]) {
+            position.z += limits.max[2] - limits.min[2];
+        } else if (position.z > limits.max[2]) {
+            position.z -= limits.max[2] - limits.min[2];
         }
     
     }

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { InputManager } from "./input-manager";
 import { InputMapping } from "./input-mapping";
-import { SceneManager } from "./scenemanager";
+import { SceneManager } from "./scene-manager";
 
 export interface CameraControllerEventMap {
     /**

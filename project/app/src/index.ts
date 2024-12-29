@@ -1,5 +1,5 @@
 import { Domain } from "./domain";
-import { SceneManager } from "./scenemanager";
+import { SceneManager } from "./scene-manager";
 import "./styles.css";
 import Alpine from "alpinejs";
 import "./store/Store";

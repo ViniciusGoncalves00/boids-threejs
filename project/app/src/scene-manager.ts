@@ -79,7 +79,6 @@ export class SceneManager
         if(this._instance == null)
         {
             this._instance = new SceneManager();
-            (window as any).sceneManager = this._instance;
         }
 
         return this._instance

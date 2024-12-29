@@ -14,8 +14,10 @@ window.Alpine = Alpine;
 
 document.addEventListener("DOMContentLoaded", () => {
   Alpine.start();
-  const domain = Domain.GetInstance()
+  const domain = Domain.GetInstance();
+  (window as any).domain = domain;
   const sceneManager = SceneManager.GetInstance();
+  (window as any).sceneManager = sceneManager;
 
   document.documentElement.setAttribute('data-theme', 'custom_light');
 

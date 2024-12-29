@@ -42,6 +42,8 @@ class Simulation(models.Model):
     
     def serialize(self) -> dict:
         return {
+            "id": self.pk,
+            
             "name": self.name,
             
             "domain_min_x": self.domain_min_x,

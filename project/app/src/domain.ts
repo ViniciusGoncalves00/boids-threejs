@@ -122,56 +122,55 @@ export class Domain
         this._sceneManager.Scene.add(this.Spawn)
     }
 
-    private UpdateDomain = () =>
-    {
-        // const nodeSizeX = this._sizeX / this._divisionsX; 
-        // const nodeSizeY = this._sizeY / this._divisionsY; 
-        // const nodeSizeZ = this._sizeZ / this._divisionsZ; 
+    private UpdateDomain(): void {
+        const width = Math.abs(this._spawnMaxX - this._spawnMinX)
+        const height = Math.abs(this._spawnMaxY - this._spawnMinY)
+        const depth = Math.abs(this._spawnMaxZ - this._spawnMinZ)
 
-        // this.Nodes.flat(Infinity).forEach(node =>
-        //     {
-        //         if (node instanceof THREE.LineSegments)
-        //             {
-        //                 this._sceneManager.Scene.remove(node)
-        //             }
-        //     }
-        // );
+        this.Nodes.flat(Infinity).forEach(node =>
+            {
+                if (node instanceof THREE.LineSegments)
+                    {
+                        this._sceneManager.Scene.remove(node)
+                    }
+            }
+        );
         
-        // this.Nodes = []
-        // this.Nodes = Array.from({ length: this._divisionsX }, () =>
-        //     Array.from({ length: this._divisionsY }, () =>
-        //         Array.from({ length: this._divisionsZ }, () => null)
-        //     )
-        // );
+        this.Nodes = []
+        this.Nodes = Array.from({ length: this._divisionsX }, () =>
+            Array.from({ length: this._divisionsY }, () =>
+                Array.from({ length: this._divisionsZ }, () => null)
+            )
+        );
 
-        // const geometry = new THREE.BoxGeometry( nodeSizeX, nodeSizeY, nodeSizeZ);
-        // const edges = new THREE.EdgesGeometry( geometry ); 
-        // const material = new THREE.LineBasicMaterial({ color: 0xffffff })
+        const geometry = new THREE.BoxGeometry( width, height, depth);
+        const edges = new THREE.EdgesGeometry( geometry ); 
+        const material = new THREE.LineBasicMaterial({ color: 0xffffff })
 
-        // const partitionCenterX = this._divisionsX / 2
-        // const partitionCenterY = this._divisionsY / 2
-        // const partitionCenterZ = this._divisionsZ / 2
+        const partitionCenterX = this._divisionsX / 2
+        const partitionCenterY = this._divisionsY / 2
+        const partitionCenterZ = this._divisionsZ / 2
         
-        // const centerX = nodeSizeX / 2
-        // const centerY = nodeSizeY / 2
-        // const centerZ = nodeSizeZ / 2
+        const centerX = width / 2
+        const centerY = height / 2
+        const centerZ = depth / 2
 
-        // for (let x = 0; x < this._divisionsX; x++)
-        // {
-        //     for (let y = 0; y < this._divisionsY; y++)
-        //     {
-        //         for (let z = 0; z < this._divisionsZ; z++)
-        //         {
-        //             const line = new THREE.LineSegments(edges, material);
-        //             line.position.x = (x - partitionCenterX) * nodeSizeX + centerX;
-        //             line.position.y = (y - partitionCenterY) * nodeSizeY + centerY;
-        //             line.position.z = (z - partitionCenterZ) * nodeSizeZ + centerZ;
+        for (let x = 0; x < this._divisionsX; x++)
+        {
+            for (let y = 0; y < this._divisionsY; y++)
+            {
+                for (let z = 0; z < this._divisionsZ; z++)
+                {
+                    const line = new THREE.LineSegments(edges, material);
+                    line.position.x = (x - partitionCenterX) * width + centerX;
+                    line.position.y = (y - partitionCenterY) * height + centerY;
+                    line.position.z = (z - partitionCenterZ) * depth + centerZ;
                     
-        //             this._sceneManager.Scene.add(line);
-        //             this.Nodes[x][y][z] = line;
-        //         }
-        //     }
-        // }
+                    this._sceneManager.Scene.add(line);
+                    this.Nodes[x][y][z] = line;
+                }
+            }
+        }
     }
 
     // private UpdateBoids = () =>

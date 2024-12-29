@@ -54,6 +54,20 @@ export class Domain
         return limits;
     }
 
+    public GetDivisions() {
+        const divisions = [this._divisionsX, this._divisionsY, this._divisionsZ]
+
+        return divisions;
+    }
+
+    public GetSpawn() {
+        const spawn = {
+            "min": [this._spawnMinX, this._spawnMinY, this._spawnMinZ],
+            "max": [this._spawnMaxX, this._spawnMaxY, this._spawnMaxZ],
+        }
+        return spawn;
+    }
+
     public SetLimits(min_x : number, min_y : number, min_z : number, max_x : number, max_y : number, max_z : number)
     {
         this._minX = min_x;

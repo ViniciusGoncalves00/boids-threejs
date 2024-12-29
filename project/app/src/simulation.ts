@@ -22,6 +22,8 @@ export class Simulation
         data =  this.Validate(data);
 
         this._isRunning = true;
+
+        
     }
 
     public Stop(): void {

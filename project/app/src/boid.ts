@@ -30,22 +30,22 @@ export class Boid
         const limits = this._domain.GetLimits();
     
         if (position.x < limits.min[0]) {
-            position.x += limits.max[0] - limits.min[0];
+            
+            position.x = limits.max[0];
         } else if (position.x > limits.max[0]) {
-            position.x -= limits.max[0] - limits.min[0];
+            position.x = limits.min[0];
         }
     
         if (position.y < limits.min[1]) {
-            position.y += limits.max[1] - limits.min[1];
+            position.y = limits.max[1];
         } else if (position.y > limits.max[1]) {
-            position.y -= limits.max[1] - limits.min[1];
+            position.y = limits.min[1];
         }
     
         if (position.z < limits.min[2]) {
-            position.z += limits.max[2] - limits.min[2];
+            position.z = limits.max[2];
         } else if (position.z > limits.max[2]) {
-            position.z -= limits.max[2] - limits.min[2];
+            position.z = limits.min[2];
         }
-    
     }
 }

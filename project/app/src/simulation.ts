@@ -1,8 +1,15 @@
+import * as THREE from "three";
+import { SceneManager } from "./scene-manager";
+import { Boid } from "./boid";
+import { Domain } from "./domain";
+
 export class Simulation
 {
     private static _instance : Simulation;
 
     private _isRunning : boolean;
+
+    private _boids : Boid | null = null;
 
     private constructor() {
         this._isRunning = false;
@@ -19,11 +26,27 @@ export class Simulation
     }
 
     public Start(data: Record<string, any>): void {
-        data =  this.Validate(data);
+        // data =  this.Validate(data);
 
         this._isRunning = true;
 
-        
+        this.Update()
+    }
+
+    private Update = () =>
+    {
+        if(this._boids == null)
+        {
+            const geometry = new THREE.ConeGeometry();
+            const material = new THREE.MeshStandardMaterial();
+            material.color.setRGB(200, 0, 0);
+            const boidMesh = new THREE.Mesh(geometry, material);
+            this._boids = new Boid(boidMesh);
+            SceneManager.GetInstance().Scene.add(boidMesh);
+        }
+
+        requestAnimationFrame(this._boids.Update);
+        requestAnimationFrame(this.Update);
     }
 
     public Stop(): void {
@@ -46,7 +69,10 @@ export class Simulation
     }
 
     private Validate(data : Record<string, any>): Record<string, any> {
+        console.log(data)
         let validated_data: Record<string, any> = {
+            id: data.id,
+
             name: data.name,
 
             domain_min_x: data.domain_min_x,

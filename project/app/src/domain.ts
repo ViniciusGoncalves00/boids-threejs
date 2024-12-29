@@ -98,7 +98,7 @@ export class Domain
         this._spawnMaxY = max_y;
         this._spawnMaxZ = max_z;
 
-        this.UpdateDomain()
+        this.UpdateSpawn()
     }
 
     private UpdateSpawn()
@@ -112,10 +112,9 @@ export class Domain
         const depth = Math.abs(this._spawnMaxZ - this._spawnMinZ)
 
         const geometry = new THREE.BoxGeometry( width, height, depth);
-        const edges = new THREE.EdgesGeometry( geometry ); 
-        const color = new THREE.Color(50, 50, 100)
+        const edges = new THREE.EdgesGeometry( geometry );
         const material = new THREE.LineBasicMaterial()
-        material.color = color;
+        material.color.setRGB(0, 0, 200);
 
         this.Spawn = new THREE.LineSegments(edges, material)
 
@@ -123,9 +122,9 @@ export class Domain
     }
 
     private UpdateDomain(): void {
-        const width = Math.abs(this._spawnMaxX - this._spawnMinX)
-        const height = Math.abs(this._spawnMaxY - this._spawnMinY)
-        const depth = Math.abs(this._spawnMaxZ - this._spawnMinZ)
+        const width = Math.abs(this._maxX - this._minX)
+        const height = Math.abs(this._maxY - this._minY)
+        const depth = Math.abs(this._maxZ - this._minZ)
 
         this.Nodes.flat(Infinity).forEach(node =>
             {
@@ -143,7 +142,11 @@ export class Domain
             )
         );
 
-        const geometry = new THREE.BoxGeometry( width, height, depth);
+        const nodeWidth = width / this._divisionsX;
+        const nodeHeight = height / this._divisionsY;
+        const nodeDepth = depth / this._divisionsZ;
+
+        const geometry = new THREE.BoxGeometry( nodeWidth, nodeHeight, nodeDepth);
         const edges = new THREE.EdgesGeometry( geometry ); 
         const material = new THREE.LineBasicMaterial({ color: 0xffffff })
 
@@ -151,9 +154,9 @@ export class Domain
         const partitionCenterY = this._divisionsY / 2
         const partitionCenterZ = this._divisionsZ / 2
         
-        const centerX = width / 2
-        const centerY = height / 2
-        const centerZ = depth / 2
+        const centerX = nodeWidth / 2
+        const centerY = nodeHeight / 2
+        const centerZ = nodeDepth / 2
 
         for (let x = 0; x < this._divisionsX; x++)
         {
@@ -162,9 +165,9 @@ export class Domain
                 for (let z = 0; z < this._divisionsZ; z++)
                 {
                     const line = new THREE.LineSegments(edges, material);
-                    line.position.x = (x - partitionCenterX) * width + centerX;
-                    line.position.y = (y - partitionCenterY) * height + centerY;
-                    line.position.z = (z - partitionCenterZ) * depth + centerZ;
+                    line.position.x = (x - partitionCenterX) * nodeWidth + centerX;
+                    line.position.y = (y - partitionCenterY) * nodeHeight + centerY;
+                    line.position.z = (z - partitionCenterZ) * nodeDepth + centerZ;
                     
                     this._sceneManager.Scene.add(line);
                     this.Nodes[x][y][z] = line;

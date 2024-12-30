@@ -68,6 +68,14 @@ export class Domain
         return spawn;
     }
 
+    public GetCenter() {
+        const x = (this._maxX + this._minX) / 2;
+        const y = (this._maxY + this._minY) / 2;
+        const z = (this._maxZ + this._minZ) / 2;
+
+        return [x, y, z];
+    }
+
     public SetLimits(min_x : number, min_y : number, min_z : number, max_x : number, max_y : number, max_z : number)
     {
         this._minX = min_x;

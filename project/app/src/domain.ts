@@ -76,6 +76,14 @@ export class Domain
         return [x, y, z];
     }
 
+    public GetSize() {
+        const x = this._maxX - this._minX;
+        const y = this._maxY - this._minY;
+        const z = this._maxZ - this._minZ;
+
+        return [x, y, z];
+    }
+
     public SetLimits(min_x : number, min_y : number, min_z : number, max_x : number, max_y : number, max_z : number)
     {
         this._minX = min_x;
@@ -162,9 +170,11 @@ export class Domain
         const partitionCenterY = this._divisionsY / 2
         const partitionCenterZ = this._divisionsZ / 2
         
-        const centerX = nodeWidth / 2
-        const centerY = nodeHeight / 2
-        const centerZ = nodeDepth / 2
+        const nodeCenterX = nodeWidth / 2
+        const nodeCenterY = nodeHeight / 2
+        const nodeCenterZ = nodeDepth / 2
+
+        const center = this.GetCenter();
 
         for (let x = 0; x < this._divisionsX; x++)
         {
@@ -173,9 +183,9 @@ export class Domain
                 for (let z = 0; z < this._divisionsZ; z++)
                 {
                     const line = new THREE.LineSegments(edges, material);
-                    line.position.x = (x - partitionCenterX) * nodeWidth + centerX;
-                    line.position.y = (y - partitionCenterY) * nodeHeight + centerY;
-                    line.position.z = (z - partitionCenterZ) * nodeDepth + centerZ;
+                    line.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center[0];
+                    line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center[1];
+                    line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center[2];
                     
                     this._sceneManager.Scene.add(line);
                     this.Nodes[x][y][z] = line;

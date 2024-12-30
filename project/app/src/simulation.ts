@@ -45,12 +45,17 @@ export class Simulation
         if(this._boids == null)
         {
             const geometry = new THREE.ConeGeometry();
+            geometry.rotateX(90 * Math.PI / 180)
+            geometry.scale(2, 2, 5)
+
             const material = new THREE.MeshStandardMaterial();
             material.color.setRGB(200, 0, 0);
+
             const boidMesh = new THREE.Mesh(geometry, material);
-            boidMesh.rotateX(Math.random() * 360 * Math.PI)
-            boidMesh.rotateY(Math.random() * 360 * Math.PI)
-            boidMesh.rotateZ(Math.random() * 360 * Math.PI)
+            boidMesh.rotateX(Math.random() * 360 * Math.PI/180)
+            boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
+            boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
+
             this._boids = new Boid(boidMesh);
             SceneManager.GetInstance().Scene.add(boidMesh);
         }

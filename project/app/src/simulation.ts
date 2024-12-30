@@ -8,11 +8,13 @@ export class Simulation
     private static _instance : Simulation;
 
     private _isRunning : boolean;
+    private _isPaused : boolean;
 
     private _boids : Boid | null = null;
 
     private constructor() {
         this._isRunning = false;
+        this._isPaused = false;
     }
 
     public static GetInstance(): Simulation
@@ -35,12 +37,20 @@ export class Simulation
 
     private Update = () =>
     {
+        
+        if(!this._isRunning ) {
+            return;
+        }
+
         if(this._boids == null)
         {
             const geometry = new THREE.ConeGeometry();
             const material = new THREE.MeshStandardMaterial();
             material.color.setRGB(200, 0, 0);
             const boidMesh = new THREE.Mesh(geometry, material);
+            boidMesh.rotateX(Math.random() * 360 * Math.PI)
+            boidMesh.rotateY(Math.random() * 360 * Math.PI)
+            boidMesh.rotateZ(Math.random() * 360 * Math.PI)
             this._boids = new Boid(boidMesh);
             SceneManager.GetInstance().Scene.add(boidMesh);
         }
@@ -51,21 +61,35 @@ export class Simulation
 
     public Stop(): void {
         this._isRunning = false;
+        this._isPaused = false;
+
+        if(this._boids === null) {
+            return;
+        }
+
+        SceneManager.GetInstance().Scene.remove(this._boids.Mesh);
+        this._boids = null;
         return;
     }
 
     public Pause(): void {
         this._isRunning = false;
+        this._isPaused = true;
         return;
     }
     
     public Unpause(): void {
         this._isRunning = true;
+        this._isPaused = false;
         return;
     }
 
     public IsRunning() {
         return this._isRunning;
+    }
+
+    public IsPaused() {
+        return this._isPaused;
     }
 
     private Validate(data : Record<string, any>): Record<string, any> {

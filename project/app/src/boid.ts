@@ -16,15 +16,17 @@ export class Boid
     }
 
     public Update = () => {
-        this.Move(new THREE.Vector3(0, 1, 0), 0.5);
+        this.Move(1);
     };
 
-    private Move(direction : THREE.Vector3, distance : number)
+    private Move(distance : number)
     {
-        direction.normalize();
-        const offset = direction.multiplyScalar(distance);
-        const position = this.Mesh.position;
+        const direction = new THREE.Vector3();
+        this.Mesh.getWorldDirection(direction);
     
+        const offset = direction.multiplyScalar(distance);
+    
+        const position = this.Mesh.position;
         position.add(offset);
 
         const limits = this._domain.GetLimits();

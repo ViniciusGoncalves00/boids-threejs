@@ -3,6 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { InputManager } from "./input-manager";
 import { InputMapping } from "./input-mapping";
 import { SceneManager } from "./scene-manager";
+import { Domain } from "./domain";
 
 export interface CameraControllerEventMap {
     /**
@@ -26,6 +27,8 @@ export class CameraController extends THREE.Controls<CameraControllerEventMap> {
     private inputManager: InputManager;
     private speed: number = 1;
     private orbitControls: OrbitControls;
+
+    private _distanceMultiplierBuffer: number = 1.2;
 
     constructor(camera: THREE.PerspectiveCamera, domElement: HTMLElement) {
         super(camera, domElement);
@@ -89,52 +92,100 @@ export class CameraController extends THREE.Controls<CameraControllerEventMap> {
         this.camera.updateProjectionMatrix();
     }
 
+   
+
     public FrontView(): void {
-        this.camera.position.x = 0
-        this.camera.position.y = 0
-        this.camera.position.z = 150
-        this.camera.lookAt(0, 0, 0)
+        this.SetHorizontalView(0, 1, 2, 0, 1)
     }
 
     public BackView(): void {
-        this.camera.position.x = 0
-        this.camera.position.y = 0
-        this.camera.position.z = -150
-        this.camera.lookAt(0, 0, 0)
+        this.SetHorizontalView(0, 1, 2, 0, -1)
     }
     
     public RightView(): void {
-        this.camera.position.x = 150
-        this.camera.position.y = 0
-        this.camera.position.z = 0
-        this.camera.lookAt(0, 0, 0)
+        this.SetHorizontalView(2, 1, 0, 1, 0)
     }
 
     public LeftView(): void {
-        this.camera.position.x = -150
-        this.camera.position.y = 0
-        this.camera.position.z = 0
-        this.camera.lookAt(0, 0, 0)
+        this.SetHorizontalView(2, 1, 0, -1, 0)
     }
 
     public TopView(): void {
-        this.camera.position.x = 0
-        this.camera.position.y = 150
-        this.camera.position.z = 0
-        this.camera.lookAt(0, 0, 0)
+        this.SetTopDownView(1)
     }
 
     public BotView(): void {
-        this.camera.position.x = 0
-        this.camera.position.y = -150
-        this.camera.position.z = 0
-        this.camera.lookAt(0, 0, 0)
+        this.SetTopDownView(-1)
     }
 
     public IsometricView(): void {
-        this.camera.position.x = 100
-        this.camera.position.y = 100
-        this.camera.position.z = 100
-        this.camera.lookAt(0, 0, 0)
+        this.camera.position.x = 100;
+        this.camera.position.y = 100;
+        this.camera.position.z = 100;
+        this.camera.lookAt(0, 0, 0);
+    }
+
+    private SetTopDownView(direction: number) {
+        const domain = Domain.GetInstance()
+        const center = domain.GetCenter();
+        const size = domain.GetSize();
+
+        const verticalFOVrad = this.camera.fov * Math.PI / 180;
+        const aspectRatio = this.camera.aspect;
+    
+        const horizontalFOVrad = 2 * Math.atan(Math.tan(verticalFOVrad / 2) * aspectRatio);
+
+        let fov: number = 0;
+        let higherSize: number = 0;
+
+        if(size[0] > size[2]) {
+            fov = verticalFOVrad;
+            higherSize = size[0]
+        }
+        else {
+            fov = horizontalFOVrad;
+            higherSize = size[2]
+        }
+
+        const distanceFromLimits = (higherSize / 2) * Math.tan(fov / 2)
+        const distanceFromCenter = size[1] / 2;
+
+        this.camera.position.x = center[0];
+        this.camera.position.y = center[1] + (distanceFromLimits + (distanceFromCenter * this._distanceMultiplierBuffer)) * direction
+        this.camera.position.z = center[2];
+        
+        this.camera.lookAt(center[0], center[1], center[2]);
+    }
+
+    private SetHorizontalView(right: number, upward : number, forward: number, right_multiplier: number, forward_multiplier: number) {
+        const domain = Domain.GetInstance()
+        const center = domain.GetCenter();
+        const size = domain.GetSize();
+
+        const verticalFOVrad = this.camera.fov * Math.PI / 180;
+        const aspectRatio = this.camera.aspect;
+    
+        const horizontalFOVrad = 2 * Math.atan(Math.tan(verticalFOVrad / 2) * aspectRatio);
+
+        let fov: number = 0;
+        let higherSize: number = 0;
+
+        if(size[right] > size[upward]) {
+            fov = verticalFOVrad;
+            higherSize = size[right]
+        }
+        else {
+            fov = horizontalFOVrad;
+            higherSize = size[upward]
+        }
+
+        const distanceFromLimits = (higherSize / 2) * Math.tan(fov / 2)
+        const distanceFromCenter = size[forward] / 2;
+
+        this.camera.position.x = center[0] + (distanceFromLimits + (distanceFromCenter * this._distanceMultiplierBuffer)) * right_multiplier;
+        this.camera.position.y = center[1];
+        this.camera.position.z = center[2] + (distanceFromLimits + (distanceFromCenter * this._distanceMultiplierBuffer)) * forward_multiplier;
+        
+        this.camera.lookAt(center[0], center[1], center[2]);
     }
 }

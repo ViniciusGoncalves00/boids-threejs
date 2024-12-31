@@ -5,6 +5,10 @@ import { Domain } from "./domain";
 export class Boid
 {
     public Mesh : THREE.Mesh;
+    public ViewRadius : number = 20
+    public Speed : number = 1
+    public AngularSpeed : number = 10
+
     private _domain : Domain;
 
     public constructor(mesh : THREE.Mesh)
@@ -16,38 +20,52 @@ export class Boid
     }
 
     public Update = () => {
-        this.Move(1);
+        this.Move(this.Speed);
     };
+
+    public ShowGizmos() {
+    }
 
     private Move(distance : number)
     {
-        const direction = new THREE.Vector3();
-        this.Mesh.getWorldDirection(direction);
+        const forward = new THREE.Vector3();
+        this.Mesh.getWorldDirection(forward);
     
-        const offset = direction.multiplyScalar(distance);
+        const forwardOffset = forward.multiplyScalar(distance);
     
         const position = this.Mesh.position;
-        position.add(offset);
+        position.add(forwardOffset);
 
         const limits = this._domain.GetLimits();
-    
-        if (position.x < limits.min[0]) {
-            
-            position.x = limits.max[0];
-        } else if (position.x > limits.max[0]) {
-            position.x = limits.min[0];
+
+        const forwardCollision = forward.multiplyScalar(this.ViewRadius);
+        forwardCollision.add(position)
+
+        if(forwardCollision.x < limits.min[0]) {
+            this.Mesh.rotateY(this.AngularSpeed * Math.PI / 180)
+            this.Mesh.rotateX(this.AngularSpeed * Math.PI / 180)
         }
-    
-        if (position.y < limits.min[1]) {
-            position.y = limits.max[1];
-        } else if (position.y > limits.max[1]) {
-            position.y = limits.min[1];
+        else if (forwardCollision.x > limits.max[0]) {
+            this.Mesh.rotateY(-this.AngularSpeed * Math.PI / 180)
+            this.Mesh.rotateX(-this.AngularSpeed * Math.PI / 180)
         }
-    
-        if (position.z < limits.min[2]) {
-            position.z = limits.max[2];
-        } else if (position.z > limits.max[2]) {
-            position.z = limits.min[2];
+
+        if(forwardCollision.y < limits.min[1]) {
+            this.Mesh.rotateX(this.AngularSpeed * Math.PI / 180)
+            this.Mesh.rotateY(this.AngularSpeed * Math.PI / 180)
+        }
+        else if (forwardCollision.y > limits.max[1]) {
+            this.Mesh.rotateX(-this.AngularSpeed * Math.PI / 180)
+            this.Mesh.rotateY(-this.AngularSpeed * Math.PI / 180)
+        }
+
+        if(forwardCollision.z < limits.min[2]) {
+            this.Mesh.rotateY(this.AngularSpeed * Math.PI / 180)
+            this.Mesh.rotateX(this.AngularSpeed * Math.PI / 180)
+        }
+        else if (forwardCollision.z > limits.max[2]) {
+            this.Mesh.rotateY(-this.AngularSpeed * Math.PI / 180)
+            this.Mesh.rotateX(-this.AngularSpeed * Math.PI / 180)
         }
     }
 }

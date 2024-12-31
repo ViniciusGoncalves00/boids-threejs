@@ -58,6 +58,11 @@ export class Simulation
 
             this._boids = new Boid(boidMesh);
             SceneManager.GetInstance().Scene.add(boidMesh);
+
+            const sphereGeometry = new THREE.SphereGeometry();
+            const sphereMesh = new THREE.Mesh(sphereGeometry, material);
+            sphereMesh.position.z = 20;
+            boidMesh.add(sphereMesh)
         }
 
         requestAnimationFrame(this._boids.Update);

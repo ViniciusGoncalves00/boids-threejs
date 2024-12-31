@@ -44,6 +44,8 @@ export class SceneManager
     {
         // const grid = new THREE.GridHelper( 100, 100 );
         // this.Scene.add(grid)
+        const axesHelper = new THREE.AxesHelper( 10 );
+        this.Scene.add( axesHelper );
 
         window.addEventListener("resize", () => resizeRenderer(this.Renderer, this.Camera));
 

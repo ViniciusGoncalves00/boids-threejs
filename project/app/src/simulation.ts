@@ -10,7 +10,7 @@ export class Simulation
     private _isRunning : boolean;
     private _isPaused : boolean;
 
-    private _boids : Boid | null = null;
+    private _boids : Boid[] | null = null;
 
     private constructor() {
         this._isRunning = false;
@@ -51,21 +51,29 @@ export class Simulation
             const material = new THREE.MeshStandardMaterial();
             material.color.setRGB(200, 0, 0);
 
-            const boidMesh = new THREE.Mesh(geometry, material);
-            boidMesh.rotateX(Math.random() * 360 * Math.PI/180)
-            boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
-            boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
+            this._boids = new Array(3)
 
-            this._boids = new Boid(boidMesh);
-            SceneManager.GetInstance().Scene.add(boidMesh);
+            for (let index = 0; index < this._boids.length; index++) {
+                const boidMesh = new THREE.Mesh(geometry, material);
+                boidMesh.rotateX(Math.random() * 360 * Math.PI/180)
+                boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
+                boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
 
-            const sphereGeometry = new THREE.SphereGeometry();
-            const sphereMesh = new THREE.Mesh(sphereGeometry, material);
-            sphereMesh.position.z = 20;
-            boidMesh.add(sphereMesh)
+                this._boids[index] = new Boid(boidMesh);
+                SceneManager.GetInstance().Scene.add(boidMesh);
+
+                const sphereGeometry = new THREE.SphereGeometry();
+                const sphereMesh = new THREE.Mesh(sphereGeometry, material);
+                sphereMesh.position.z = 10;
+                boidMesh.add(sphereMesh)
+            }
         }
 
-        requestAnimationFrame(this._boids.Update);
+        for (let index = 0; index < this._boids.length; index++) {
+            requestAnimationFrame(this._boids[index].Update);
+        }
+
+        
         requestAnimationFrame(this.Update);
     }
 
@@ -77,7 +85,10 @@ export class Simulation
             return;
         }
 
-        SceneManager.GetInstance().Scene.remove(this._boids.Mesh);
+        for (let index = 0; index < this._boids.length; index++) {
+            SceneManager.GetInstance().Scene.remove(this._boids[index].Mesh);
+        }
+
         this._boids = null;
         return;
     }

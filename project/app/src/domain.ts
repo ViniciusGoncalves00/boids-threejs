@@ -1,76 +1,146 @@
 import * as THREE from "three";
-import { SceneManager } from "./scenemanager";
+import { SceneManager } from "./scene-manager";
 import { Boid } from "./boid";
+import { spawn } from "child_process";
 
 export class Domain
 {
     private static _instance : Domain;
     private _sceneManager : SceneManager;
 
-    private _sizeX : number = 0;
-    private _sizeY : number = 0;
-    private _sizeZ : number = 0;
-
-    private _partitionsX : number = 0;
-    private _partitionsY : number = 0;
-    private _partitionsZ : number = 0;
-
-    public MinX : number = 0;
-    public MinY : number = 0;
-    public MinZ : number = 0;
-
-    public MaxX : number = 0;
-    public MaxY : number = 0;
-    public MaxZ : number = 0;
+    private _minX: number = 0;
+    private _minY: number = 0;
+    private _minZ: number = 0;
+    private _maxX: number = 0;
+    private _maxY: number = 0;
+    private _maxZ: number = 0;
+    
+    private _divisionsX : number = 0;
+    private _divisionsY : number = 0;
+    private _divisionsZ : number = 0;
+    
+    private _spawnMinX : number = 0;
+    private _spawnMinY : number = 0;
+    private _spawnMinZ : number = 0;
+    private _spawnMaxX : number = 0;
+    private _spawnMaxY : number = 0;
+    private _spawnMaxZ : number = 0;
 
     public Nodes: (THREE.LineSegments | null)[][][] = [];
+    public Spawn: (THREE.LineSegments | null) = null;
 
     public Boids : Boid[] = [];
 
-    private constructor(sizeX : number, sizeY : number, sizeZ : number, partitionsAmountX : number, partitionsAmountY : number, partitionsAmountZ : number)
+    private constructor()
     {
         this._sceneManager = SceneManager.GetInstance();
-
-        this.SetDomainProperties(sizeX, sizeY, sizeZ, partitionsAmountX, partitionsAmountY, partitionsAmountZ)
-
-        // this.UpdateBoids()
     }
 
     public static GetInstance() : Domain
     {
         if(this._instance == null)
         {
-            this._instance = new Domain(100,100,100,5,5,5);
+            this._instance = new Domain();
         }
 
         return this._instance;
     }
 
-    public SetDomainProperties(x : number, y : number, z : number, p_x : number, p_y : number, p_z : number)
+    public GetLimits() {
+        const limits = {
+            "min": [this._minX, this._minY, this._minZ],
+            "max": [this._maxX, this._maxY, this._maxZ],
+        }
+        return limits;
+    }
+
+    public GetDivisions() {
+        const divisions = [this._divisionsX, this._divisionsY, this._divisionsZ]
+
+        return divisions;
+    }
+
+    public GetSpawn() {
+        const spawn = {
+            "min": [this._spawnMinX, this._spawnMinY, this._spawnMinZ],
+            "max": [this._spawnMaxX, this._spawnMaxY, this._spawnMaxZ],
+        }
+        return spawn;
+    }
+
+    public GetCenter() {
+        const x = (this._maxX + this._minX) / 2;
+        const y = (this._maxY + this._minY) / 2;
+        const z = (this._maxZ + this._minZ) / 2;
+
+        return [x, y, z];
+    }
+
+    public GetSize() {
+        const x = this._maxX - this._minX;
+        const y = this._maxY - this._minY;
+        const z = this._maxZ - this._minZ;
+
+        return [x, y, z];
+    }
+
+    public SetLimits(min_x : number, min_y : number, min_z : number, max_x : number, max_y : number, max_z : number)
     {
-        this._sizeX = x;
-        this._sizeY = y;
-        this._sizeZ = z;
-
-        this._partitionsX = p_x;
-        this._partitionsY = p_y;
-        this._partitionsZ = p_z;
-
-        this.MinX = -x
-        this.MaxX = x
-        this.MinY = -y
-        this.MaxY = y
-        this.MinZ = -z
-        this.MaxZ = z
+        this._minX = min_x;
+        this._minY = min_y;
+        this._minZ = min_z;
+        this._maxX = max_x;
+        this._maxY = max_y;
+        this._maxZ = max_z;
 
         this.UpdateDomain()
     }
 
-    private UpdateDomain = () =>
+    public SetDivisions(x : number, y : number, z : number)
     {
-        const nodeSizeX = this._sizeX / this._partitionsX; 
-        const nodeSizeY = this._sizeY / this._partitionsY; 
-        const nodeSizeZ = this._sizeZ / this._partitionsZ; 
+        this._divisionsX = x;
+        this._divisionsY = y;
+        this._divisionsZ = z;
+
+        this.UpdateDomain()
+    }
+
+    public SetSpawn(min_x : number, min_y : number, min_z : number, max_x : number, max_y : number, max_z : number)
+    {
+        this._spawnMinX = min_x;
+        this._spawnMinY = min_y;
+        this._spawnMinZ = min_z;
+        this._spawnMaxX = max_x;
+        this._spawnMaxY = max_y;
+        this._spawnMaxZ = max_z;
+
+        this.UpdateSpawn()
+    }
+
+    private UpdateSpawn()
+    {
+        if(this.Spawn !== null){
+            this._sceneManager.Scene.remove(this.Spawn)
+        }
+
+        const width = Math.abs(this._spawnMaxX - this._spawnMinX)
+        const height = Math.abs(this._spawnMaxY - this._spawnMinY)
+        const depth = Math.abs(this._spawnMaxZ - this._spawnMinZ)
+
+        const geometry = new THREE.BoxGeometry( width, height, depth);
+        const edges = new THREE.EdgesGeometry( geometry );
+        const material = new THREE.LineBasicMaterial()
+        material.color.setRGB(0, 0, 200);
+
+        this.Spawn = new THREE.LineSegments(edges, material)
+
+        this._sceneManager.Scene.add(this.Spawn)
+    }
+
+    private UpdateDomain(): void {
+        const width = Math.abs(this._maxX - this._minX)
+        const height = Math.abs(this._maxY - this._minY)
+        const depth = Math.abs(this._maxZ - this._minZ)
 
         this.Nodes.flat(Infinity).forEach(node =>
             {
@@ -82,34 +152,40 @@ export class Domain
         );
         
         this.Nodes = []
-        this.Nodes = Array.from({ length: this._partitionsX }, () =>
-            Array.from({ length: this._partitionsY }, () =>
-                Array.from({ length: this._partitionsZ }, () => null)
+        this.Nodes = Array.from({ length: this._divisionsX }, () =>
+            Array.from({ length: this._divisionsY }, () =>
+                Array.from({ length: this._divisionsZ }, () => null)
             )
         );
 
-        const geometry = new THREE.BoxGeometry( nodeSizeX, nodeSizeY, nodeSizeZ);
+        const nodeWidth = width / this._divisionsX;
+        const nodeHeight = height / this._divisionsY;
+        const nodeDepth = depth / this._divisionsZ;
+
+        const geometry = new THREE.BoxGeometry( nodeWidth, nodeHeight, nodeDepth);
         const edges = new THREE.EdgesGeometry( geometry ); 
         const material = new THREE.LineBasicMaterial({ color: 0xffffff })
 
-        const partitionCenterX = this._partitionsX / 2
-        const partitionCenterY = this._partitionsY / 2
-        const partitionCenterZ = this._partitionsZ / 2
+        const partitionCenterX = this._divisionsX / 2
+        const partitionCenterY = this._divisionsY / 2
+        const partitionCenterZ = this._divisionsZ / 2
         
-        const centerX = nodeSizeX / 2
-        const centerY = nodeSizeY / 2
-        const centerZ = nodeSizeZ / 2
+        const nodeCenterX = nodeWidth / 2
+        const nodeCenterY = nodeHeight / 2
+        const nodeCenterZ = nodeDepth / 2
 
-        for (let x = 0; x < this._partitionsX; x++)
+        const center = this.GetCenter();
+
+        for (let x = 0; x < this._divisionsX; x++)
         {
-            for (let y = 0; y < this._partitionsY; y++)
+            for (let y = 0; y < this._divisionsY; y++)
             {
-                for (let z = 0; z < this._partitionsZ; z++)
+                for (let z = 0; z < this._divisionsZ; z++)
                 {
                     const line = new THREE.LineSegments(edges, material);
-                    line.position.x = (x - partitionCenterX) * nodeSizeX + centerX;
-                    line.position.y = (y - partitionCenterY) * nodeSizeY + centerY;
-                    line.position.z = (z - partitionCenterZ) * nodeSizeZ + centerZ;
+                    line.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center[0];
+                    line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center[1];
+                    line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center[2];
                     
                     this._sceneManager.Scene.add(line);
                     this.Nodes[x][y][z] = line;

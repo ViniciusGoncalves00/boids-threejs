@@ -9,10 +9,10 @@ class Domain(BaseView):
     
     def get(self, request: HttpRequest) -> HttpResponse:
         try:
-            print(request.GET.keys())
             simulation_id = request.GET.get('simulation_id')
             simulation = Simulation.objects.get(pk=simulation_id)
             context = {"simulation": simulation.serialize()}
+            print(context)
             return render(request, self.template, context)
         except Simulation.DoesNotExist:
             return HttpResponse("<p>Simulation not found</p>", status=404)
@@ -24,10 +24,6 @@ class Domain(BaseView):
         partitionsX = request.POST.get('partitionsX')
         partitionsY = request.POST.get('partitionsY')
         partitionsZ = request.POST.get('partitionsZ')
-        
-        print(sizeX)
-        print(sizeY)
-        print(sizeZ)
 
         simulation = Simulation.objects.get(pk=simulation_id)
         simulation.sizeX = sizeX

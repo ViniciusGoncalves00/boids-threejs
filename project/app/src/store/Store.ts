@@ -1,25 +1,13 @@
 import * as THREE from "three";
 import { Domain } from "../domain";
 import { Boid } from "../boid";
-import { SceneManager } from "../scenemanager";
+import { SceneManager } from "../scene-manager";
 
 import Alpine from "alpinejs";
 import {DomainStore} from "./stores/DomainStore";
 import {PropertiesStore} from "./stores/PropertiesStore";
 
 function InitializeStore() {
-    // const stores: { [key: string]: IVisible } =
-    // {
-    //     "DomainStore": new DomainStore(),
-    //     "PropertiesStore": new PropertiesStore(),
-    // };
-
-    // Object.keys(stores).forEach(storeName =>
-    //     {
-    //         Alpine.store(storeName, stores[storeName]);
-    //     }
-    // );
-
     Alpine.store("DomainStore", new DomainStore())
     Alpine.store("PropertiesStore", new PropertiesStore())
 
@@ -28,54 +16,6 @@ function InitializeStore() {
             id: null
         }
     )
-
-    // Alpine.store("Stores",
-    //     {
-    //         stores:
-    //         {
-    //             "DomainStore": { visible: false},
-    //             "PropertiesStore": { visible: false},
-    //         },
-
-    //         Toggle(storeName: string)
-    //         {
-    //             Object.keys(stores).forEach(name =>
-    //                 {
-    //                     if(name === storeName)
-    //                     {
-    //                         stores[storeName].visible = !stores[storeName].visible;
-    //                     }
-    //                     else
-    //                     {
-    //                         stores[name].visible = false;
-    //                     }
-    //                 });
-    //         }
-    //     }
-    // )
-
-    // Alpine.store("visibility",
-    // {
-    //     IsVisible(storeName: string)
-    //     {
-    //         return stores[storeName].visible
-    //     },
-
-    //     Toggle(storeName: string)
-    //     {
-    //         Object.keys(stores).forEach(name =>
-    //         {
-    //             if(name === storeName)
-    //             {
-    //                 stores[storeName].visible = !stores[storeName].visible;
-    //             }
-    //             else
-    //             {
-    //                 stores[name].visible = false;
-    //             }
-    //         });
-    //     }
-    // })
 }
 
 document.addEventListener("alpine:init", () => {

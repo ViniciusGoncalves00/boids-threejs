@@ -3,6 +3,7 @@ import { resizeRenderer, Grid } from "./utils";
 import { CameraController } from "./camera-controller";
 import { InputMapping } from "./input-mapping";
 import { Simulation } from "./simulation";
+import { Domain } from "./domain";
 
 export class SceneManager
 {
@@ -41,8 +42,10 @@ export class SceneManager
 
     private temp_setup()
     {
-        const grid = new THREE.GridHelper( 100, 100 );
-        this.Scene.add(grid)
+        // const grid = new THREE.GridHelper( 100, 100 );
+        // this.Scene.add(grid)
+        const axesHelper = new THREE.AxesHelper( 10 );
+        this.Scene.add( axesHelper );
 
         window.addEventListener("resize", () => resizeRenderer(this.Renderer, this.Camera));
 
@@ -78,7 +81,6 @@ export class SceneManager
         if(this._instance == null)
         {
             this._instance = new SceneManager();
-            (window as any).sceneManager = this._instance;
         }
 
         return this._instance

@@ -15,41 +15,38 @@
     <title>Boids</title>
   </head>
   <body x-data="scene">
-    <div id="screen" class="fixed w-screen h-screen z-10 flex flex-col items-center justify-center pointer-events-none">
-      <div id="superior" class="w-full h-[64px] bg-gray-100 p-[8px] pointer-events-auto">
+    <div id="screen" class="fixed w-screen h-screen flex flex-col items-center justify-center pointer-events-none">
+      <div id="superior" class="w-full h-[64px] drop-shadow-[0_1px_2px_rgba(1,1,1,.1)] bg-gray-100 p-[8px] pointer-events-auto z-50 outline outline-[1px] outline-black/10">
         <div class="w-full h-full"></div>
       </div>
       
-      <div id="middle" class="w-full grow flex justify-start pointer-events-none">
-
-        <div id="middle-left" class="w-[256px] h-full p-[8px] pointer-events-auto">
-          <div x-data="{open: false}" class="w-full h-full flex justify-start drop-shadow-custom-shadow-2">
-            <div class="w-[48px] h-full bg-gray-200 flex flex-col items-center justify-start drop-shadow-custom-shadow-1"></div>
-            <div id="left-menu" x-show="open" class="w-full h-full bg-gray-100 p-[16px]">
+      <div id="middle" class="relative w-full grow flex items-center justify-start p-[8px] pointer-events-none z-30">
+        <canvas id="canvas" class="absolute inset-0 w-full h-full z-0"></canvas>
+    
+        <div id="middle-left" class="h-full pointer-events-auto">
+            <div x-data="{open: true}" class="h-full flex justify-start drop-shadow-[2px_0_4px_rgba(1,1,1,.1)] outline outline-[1px] outline-black/10">
+                <div class="w-[48px] h-full bg-gray-200 flex flex-col items-center justify-start"></div>
+                <div id="left-menu" x-show="open" class="w-[256px] h-full bg-gray-100 p-[16px]"></div>
             </div>
-          </div>
         </div>
-
-        <div id="middle-center" class="h-full grow flex flex-col justify-between p-[8px] pointer-events-none">
-          <div id="middle-center-superior" class="w-full h-[32px] drop-shadow-custom-shadow-2 flex items-center justify-center"></div>
-          <div id="middle-center-middle" class="w-full grow"></div>
-          <div id="middle-center-inferior" class="w-full flex items-center justify-center drop-shadow-custom-shadow-2 pointer-events-auto"></div>
+    
+        <div id="middle-center" class="h-full grow flex flex-col items-center justify-between pointer-events-none">
+            <div id="middle-center-superior" class="w-[calc(100%-256px)] h-[48px] drop-shadow-[0_-2px_4px_rgba(1,1,1,.1)] bg-gray-100 flex items-center justify-center outline outline-[1px] outline-black/10"></div>
+            <div id="middle-center-middle" class="w-full grow"></div>
+            <div id="middle-center-inferior" class="w-[calc(100%-256px)] h-[48px] drop-shadow-[0_2px_4px_rgba(1,1,1,.1)] bg-gray-100 flex items-center justify-center outline outline-[1px] outline-black/10"></div>
         </div>
-
-        <div id="middle-right" class="w-[256px] h-full p-[8px] pointer-events-auto">
-          <div x-data="{open: false}" class="w-full h-full flex justify-end drop-shadow-custom-shadow-2">
-            <div id="right-menu" x-show="open" class="w-full h-full bg-gray-100 p-[16px]">
+    
+        <div id="middle-right" class="h-full pointer-events-auto">
+            <div x-data="{open: true}" class="h-full flex justify-end drop-shadow-[-2px_0_4px_rgba(1,1,1,.1)] outline outline-[1px] outline-black/10">
+                <div id="right-menu" x-show="open" class="w-[256px] h-full bg-gray-100 p-[16px]"></div>
+                <div class="w-[48px] h-full bg-gray-200 flex flex-col items-center justify-start"></div>
             </div>
-            <div class="w-[48px] h-full bg-gray-200 flex flex-col items-center justify-start drop-shadow-custom-shadow-1"></div>
-          </div>
         </div>
+    </div>
 
-      </div>
-
-      <div id="inferior" class="w-full h-[64px] bg-gray-100 p-[8px] pointer-events-auto">
+      <div id="inferior" class="w-full h-[32px] drop-shadow-[0_-1px_2px_rgba(1,1,1,.1)] bg-gray-100 p-[8px] pointer-events-auto z-50 outline outline-[1px] outline-black/10">
         <div class="w-full h-full"></div>
       </div>
     </div>
-    <canvas id="canvas" class="fixed z-0"></canvas>
   </body>
 </html>

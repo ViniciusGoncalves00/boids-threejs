@@ -10,9 +10,9 @@
       "forceConsistentCasingInFileNames": true,
       "allowJs": true,
       "outDir": "./static",
-      "rootDir": "./app/src"
+      "rootDir": "./src"
     },
-    "include": ["./app/src/**/*"],
+    "include": ["./src/**/*"],
     "exclude": ["./static"]
   }
   

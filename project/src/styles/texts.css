@@ -1,0 +1,34 @@
+@layer components
+{
+    .base-font
+    {
+        @apply font-RobotoCondensed
+    }
+    
+    .text-low
+    {
+        @apply text-primary_text text-base font-base-font
+    }
+    .text-low-highlight
+    {
+        @apply text-primary_highlight_text text-base font-base-font
+    }
+    
+    .text-mid
+    {
+        @apply text-primary_text text-base font-base-font
+    }
+    .text-mid-highlight
+    {
+        @apply text-primary_highlight_text text-base font-base-font
+    }
+    
+    .text-high
+    {
+        @apply text-primary_text text-base font-bold font-base-font
+    }
+    .text-high-highlight
+    {
+        @apply text-primary_highlight_text text-base font-bold font-base-font
+    }
+}

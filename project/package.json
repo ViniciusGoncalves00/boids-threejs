@@ -36,5 +36,8 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0",
     "whitenoise": "^0.0.1"
+  },
+  "dependencies": {
+    "bootstrap-icons": "^1.11.3"
   }
 }

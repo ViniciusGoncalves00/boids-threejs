@@ -40,7 +40,7 @@
     
         <div id="middle-center" class="h-full grow flex flex-col items-center justify-between pointer-events-none">
             <!-- SUPERIOR MENU -->
-            <div id="middle-center-superior" class="max-w-[calc(100%-256px)] h-[48px] drop-shadow-[0_-2px_4px_rgba(1,1,1,.1)] bg-gray-100 flex items-center justify-center outline outline-[1px] outline-black/10 pointer-events-auto"
+            <div id="middle-center-superior" class="max-w-[calc(100%-256px)] h-[48px] drop-shadow-[0_-2px_4px_rgba(1,1,1,.1)] bg-gray-100 flex items-center justify-center outline outline-[1px] outline-black/10 pointer-events-auto overflow-x-auto no-scrollbar"
                  x-data="{ content: '' }"
                  x-init="fetch('./components/visualization.html').then(res => res.text()).then(html => content = html)"
                  x-html="content">
@@ -74,7 +74,11 @@
 
       <!-- FOOTER -->
       <footer id="inferior" class="w-full h-[32px] drop-shadow-[0_-1px_2px_rgba(1,1,1,.1)] bg-gray-100 p-[8px] pointer-events-auto z-50 outline outline-[1px] outline-black/10">
-        <div class="w-full h-full"></div>
+        <div class="w-full h-full flex items-center justify-between"
+             x-data="{ content: '' }"
+             x-init="fetch('./components/footer.html').then(res => res.text()).then(html => content = html)"
+             x-html="content">
+        </div>
       </footer>
       <!-- END FOOTER -->
     </div>

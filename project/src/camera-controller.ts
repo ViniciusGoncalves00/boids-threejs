@@ -42,10 +42,7 @@ export class CameraController extends THREE.Controls<CameraControllerEventMap> {
         this.orbitControls.minDistance = 1;
         this.orbitControls.maxDistance = 100000;
         
-        // this.orbitControls.enablePan = true;
-        // this.orbitControls.enableRotate = true;
-        // this.orbitControls.enableZoom = true;
-        // this.orbitControls.update();
+        this.orbitControls.update();
     }
 
     public Update(): void {

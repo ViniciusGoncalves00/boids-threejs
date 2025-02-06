@@ -27,20 +27,20 @@
     
         <!-- LEFT MENU -->
         <div id="middle-left" class="h-full pointer-events-auto">
-            <div x-data="{open: true}" class="h-full flex justify-start drop-shadow-[2px_0_4px_rgba(1,1,1,.1)] outline outline-[1px] outline-black/10">
+            <div x-data="{open: false, menuContent: ''}" class="h-full flex justify-start drop-shadow-[2px_0_4px_rgba(1,1,1,.1)] outline outline-[1px] outline-black/10 rounded-[4px]">
                 <div class="w-[48px] h-full bg-gray-200 flex flex-col items-center justify-start"
                      x-data="{ content: '' }"
                      x-init="fetch('./components/left_buttons.html').then(res => res.text()).then(html => content = html)"
                      x-html="content">
                 </div>
-                <div id="left-menu" x-show="open" class="w-[256px] h-full bg-gray-100 p-[16px]"></div>
+                <div id="left-menu" x-show="open" class="w-[256px] h-full bg-gray-100 p-[16px]" x-html="menuContent"></div>
             </div>
         </div>
         <!-- END LEFT MENU -->
     
         <div id="middle-center" class="h-full grow flex flex-col items-center justify-between pointer-events-none">
             <!-- SUPERIOR MENU -->
-            <div id="middle-center-superior" class="max-w-[calc(100%-256px)] h-[36px] drop-shadow-[0_-2px_4px_rgba(1,1,1,.1)] bg-gray-100 flex items-center justify-center outline outline-[1px] outline-black/10 pointer-events-auto overflow-x-auto no-scrollbar"
+            <div id="middle-center-superior" class="max-w-[calc(100%-256px)] h-[36px] drop-shadow-[0_-2px_4px_rgba(1,1,1,.1)] bg-gray-100 flex items-center justify-center outline outline-[1px] outline-black/10 rounded-[4px] pointer-events-auto overflow-x-auto overflow-y-clip no-scrollbar"
                  x-data="{ content: '' }"
                  x-init="fetch('./components/visualization.html').then(res => res.text()).then(html => content = html)"
                  x-html="content">
@@ -50,7 +50,7 @@
             <div id="middle-center-middle" class="w-full grow"></div>
 
             <!-- INFERIOR MENU -->
-            <div id="middle-center-inferior" class="max-w-[calc(100%-256px)] h-[36px] drop-shadow-[0_2px_4px_rgba(1,1,1,.1)] bg-gray-100 flex items-center justify-center outline outline-[1px] outline-black/10 pointer-events-auto overflow-x-auto no-scrollbar"
+            <div id="middle-center-inferior" class="max-w-[calc(100%-256px)] h-[36px] drop-shadow-[0_2px_4px_rgba(1,1,1,.1)] bg-gray-100 flex items-center justify-center outline outline-[1px] outline-black/10 rounded-[4px] pointer-events-auto overflow-x-auto overflow-y-clip  no-scrollbar"
                  x-data="{ content: '' }"
                  x-init="fetch('./components/time_control.html').then(res => res.text()).then(html => content = html)"
                  x-html="content">
@@ -60,7 +60,7 @@
     
         <!-- RIGHT MENU -->
         <div id="middle-right" class="h-full pointer-events-auto">
-            <div x-data="{open: true}" class="h-full flex justify-end drop-shadow-[-2px_0_4px_rgba(1,1,1,.1)] outline outline-[1px] outline-black/10">
+            <div x-data="{open: false}" class="h-full flex justify-end drop-shadow-[-2px_0_4px_rgba(1,1,1,.1)] outline outline-[1px] outline-black/10 rounded-[4px]">
                 <div id="right-menu" x-show="open" class="w-[256px] h-full bg-gray-100 p-[16px]"></div>
                 <div class="w-[48px] h-full bg-gray-200 flex flex-col items-center justify-start"
                      x-data="{ content: '' }"

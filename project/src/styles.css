@@ -6,6 +6,7 @@
 @import "./styles/fonts.css";
 @import "./styles/texts.css";
 @import "./styles/inputs.css";
+@import "./styles/shapes.css";
 
 #three-canvas {
   display: block;

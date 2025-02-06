@@ -13,6 +13,6 @@
       "rootDir": "./src"
     },
     "include": ["./src/**/*"],
-    "exclude": ["./static"]
+    "exclude": ["./static", "./node_modules"]
   }
   

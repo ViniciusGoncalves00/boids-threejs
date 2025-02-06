@@ -31,14 +31,4 @@
     {
         @apply text-primary_highlight_text text-base font-bold font-base-font
     }
-
-    .menu-title
-    {
-        @apply text-red-500
-    }
-
-    .menu-title
-    {
-        @apply text-red-500
-    }
 }

@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @import "./styles/themes.css";
 @import "./styles/fonts.css";
@@ -103,5 +103,24 @@
   .btn-hover:hover,
   .btn-hover:focus {
     @apply text-blue-500;
+  }
+
+  .opacity-highlight
+  {
+    @apply opacity-50 hover:opacity-100
+  }
+
+  /* MENUS */
+  .text-title-1
+  {
+      @apply text-gray-800 text-[18px] font-bold font-RobotoCondensed
+  }
+  .text-title-2
+  {
+      @apply text-gray-800 text-[14px] font-light font-mono
+  }
+  .text-content-1
+  {
+      @apply text-gray-800 font-light font-RobotoCondensed
   }
 }

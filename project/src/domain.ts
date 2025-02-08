@@ -1,9 +1,8 @@
 import * as THREE from "three";
-import { SceneManager } from "./scene-manager";
+import { SceneManager } from "./managers/scene-manager";
 
 export class Domain
 {
-    private static _instance : Domain;
     private _sceneManager : SceneManager;
 
     private _minX: number = 0;
@@ -27,19 +26,9 @@ export class Domain
     public Nodes: (THREE.LineSegments | null)[][][] = [];
     public Spawn: (THREE.LineSegments | null) = null;
 
-    private constructor()
+    private constructor(sceneManager : SceneManager)
     {
-        this._sceneManager = SceneManager.GetInstance();
-    }
-
-    public static GetInstance() : Domain
-    {
-        if(this._instance == null)
-        {
-            this._instance = new Domain();
-        }
-
-        return this._instance;
+        this._sceneManager = sceneManager;
     }
 
     public GetLimits() {
@@ -116,7 +105,7 @@ export class Domain
     private UpdateSpawn()
     {
         if(this.Spawn !== null){
-            this._sceneManager.Scene.remove(this.Spawn)
+            this._sceneManager.RemoveObject(this.Spawn)
         }
 
         const width = Math.abs(this._spawnMaxX - this._spawnMinX)
@@ -130,7 +119,7 @@ export class Domain
 
         this.Spawn = new THREE.LineSegments(edges, material)
 
-        this._sceneManager.Scene.add(this.Spawn)
+        this._sceneManager.AddObject(this.Spawn)
     }
 
     private UpdateDomain(): void {
@@ -142,7 +131,7 @@ export class Domain
             {
                 if (node instanceof THREE.LineSegments)
                     {
-                        this._sceneManager.Scene.remove(node)
+                        this._sceneManager.RemoveObject(node)
                     }
             }
         );
@@ -183,7 +172,7 @@ export class Domain
                     line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center[1];
                     line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center[2];
                     
-                    this._sceneManager.Scene.add(line);
+                    this._sceneManager.AddObject(line);
                     this.Nodes[x][y][z] = line;
                 }
             }

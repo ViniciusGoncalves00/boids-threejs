@@ -22,41 +22,41 @@ export interface CameraControllerEventMap {
 }
 
 export class CameraController {
-    private camera: THREE.PerspectiveCamera | THREE.OrthographicCamera;
-    private domElement: HTMLCanvasElement;
-    private inputManager: InputManager;
-    private speed: number = 1;
-    private orbitControls: OrbitControls;
+    private _camera: THREE.PerspectiveCamera | THREE.OrthographicCamera;
+    private _canvas: HTMLCanvasElement;
+    private _inputManager: InputManager;
+    private _speed: number = 1;
+    private _orbitControls: OrbitControls;
 
-    constructor(cameraProjection: string, domElement: HTMLCanvasElement) {
-        this.domElement = domElement;
+    constructor(cameraProjection: string, canvas: HTMLCanvasElement) {
+        this._canvas = canvas;
 
         if(cameraProjection == "Perspective") {
-            this.camera = this.set_perspective_projection()
+            this._camera = this.SetPerspectiveProjection()
         }
         else if(cameraProjection == "Orthographic") {
-            this.camera = this.set_orthographic_projection()
+            this._camera = this.SetOrthographicProjection()
         }
         else {
             throw new Error("Argument is not a projection type")
         }
 
-        this.camera = new THREE.PerspectiveCamera()
+        this._camera = new THREE.PerspectiveCamera()
 
-        this.inputManager = InputManager.GetInstance();
+        this._inputManager = InputManager.GetInstance();
 
-        this.orbitControls = new OrbitControls(this.camera, domElement);
-        this.orbitControls.keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown'}
-        this.orbitControls.enableDamping = true;
-        this.orbitControls.dampingFactor = 0.05;
-        this.orbitControls.minDistance = 1;
-        this.orbitControls.maxDistance = 100000;
+        this._orbitControls = new OrbitControls(this._camera, canvas);
+        // this.orbitControls.keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown'}
+        // this.orbitControls.enableDamping = true;
+        // this.orbitControls.dampingFactor = 0.05;
+        this._orbitControls.minDistance = 1;
+        this._orbitControls.maxDistance = 100000;
         
-        this.orbitControls.update();
+        this._orbitControls.update();
     }
 
     public GetCamera(): THREE.Camera {
-        return this.camera;
+        return this._camera;
     }
 
     public Update(): void {
@@ -66,66 +66,66 @@ export class CameraController {
         const localRight = new THREE.Vector3();
         const worldUp = new THREE.Vector3();
 
-        this.camera.getWorldDirection(localForward);
+        this._camera.getWorldDirection(localForward);
         localForward.normalize();
 
-        localRight.crossVectors(localForward, this.camera.up).normalize();
+        localRight.crossVectors(localForward, this._camera.up).normalize();
 
-        worldUp.copy(this.camera.up).normalize();
+        worldUp.copy(this._camera.up).normalize();
 
-        let speed = this.speed;
+        let speed = this._speed;
 
-        if (this.inputManager.GetKeyHeld(InputMapping.Moddifier)) {
+        if (this._inputManager.GetKeyHeld(InputMapping.Moddifier)) {
             speed *= 10
         }
 
-        if (this.inputManager.GetKeyHeld(InputMapping.Forward)) {
-            this.camera.position.addScaledVector(localForward, speed);
+        if (this._inputManager.GetKeyHeld(InputMapping.Forward)) {
+            this._camera.position.addScaledVector(localForward, speed);
         }
-        if (this.inputManager.GetKeyHeld(InputMapping.Backward)) {
-            this.camera.position.addScaledVector(localForward, -speed);
-        }
-
-        if (this.inputManager.GetKeyHeld(InputMapping.Right)) {
-            this.camera.position.addScaledVector(localRight, speed);
-        }
-        if (this.inputManager.GetKeyHeld(InputMapping.Left)) {
-            this.camera.position.addScaledVector(localRight, -speed);
+        if (this._inputManager.GetKeyHeld(InputMapping.Backward)) {
+            this._camera.position.addScaledVector(localForward, -speed);
         }
 
-        if (this.inputManager.GetKeyHeld(InputMapping.Up)) {
-            this.camera.position.y += speed;
+        if (this._inputManager.GetKeyHeld(InputMapping.Right)) {
+            this._camera.position.addScaledVector(localRight, speed);
         }
-        if (this.inputManager.GetKeyHeld(InputMapping.Down)) {
-            this.camera.position.y -= speed;
+        if (this._inputManager.GetKeyHeld(InputMapping.Left)) {
+            this._camera.position.addScaledVector(localRight, -speed);
         }
 
-        this.camera.updateProjectionMatrix();
+        if (this._inputManager.GetKeyHeld(InputMapping.Up)) {
+            this._camera.position.y += speed;
+        }
+        if (this._inputManager.GetKeyHeld(InputMapping.Down)) {
+            this._camera.position.y -= speed;
+        }
+
+        this._camera.updateProjectionMatrix();
     }
 
-    public rotate(angle_degrees: number) {
-        this.camera.rotateZ(degToRad(angle_degrees));
-        this.camera.updateProjectionMatrix();
+    public Rotate(angle_degrees: number) {
+        this._camera.rotateZ(degToRad(angle_degrees));
+        this._camera.updateProjectionMatrix();
     }
 
-    public toggle_projection(projection: string): void {
+    public ToggleProjection(projection: string): void {
         switch (projection) {
-            case "PerspectiveCamera":
-                this.set_perspective_projection();
+            case "Perspective":
+                this.SetPerspectiveProjection();
                 break;
-            case "OrthographicCamera":
-                this.set_orthographic_projection();
+            case "Orthographic":
+                this.SetOrthographicProjection();
                 break;
             default:
-                this.set_perspective_projection();
+                this.SetPerspectiveProjection();
                 break;
         }
 
-        this.orbitControls = new OrbitControls(this.camera, this.domElement);
-        this.camera.updateProjectionMatrix();
+        this._orbitControls = new OrbitControls(this._camera, this._canvas);
+        this._camera.updateProjectionMatrix();
     }
 
-    public toggle_view(canvas_size : { width: number, height: number}, view: string, bounds: { min: [number, number, number]; max: [number, number, number] }): void {
+    public ToggleView(canvas_size : { width: number, height: number}, view: string, bounds: { min: [number, number, number]; max: [number, number, number] }): void {
         const face_mapping: Record<string, [number, number]> = {
             right: [1, 2],
             left: [1, 2],
@@ -148,26 +148,26 @@ export class CameraController {
         const direction = directions[view];
         const view_map = face_mapping[view];
 
-        if (this.camera instanceof THREE.PerspectiveCamera) {
-            this.set_perspective_view(bounds, view_map, direction);
+        if (this._camera instanceof THREE.PerspectiveCamera) {
+            this.SetPerspectiveView(bounds, view_map, direction);
         } else {
-            this.set_orthographic_view(canvas_size, bounds, view_map, direction);
+            this.SetOrthographicView(canvas_size, bounds, view_map, direction);
         }
         if (view == "superior" || view == "inferior") {
-            this.camera.rotateZ(degToRad(-90));
+            this._camera.rotateZ(degToRad(-90));
         }
     }
 
-    private set_perspective_projection(): THREE.PerspectiveCamera {
+    private SetPerspectiveProjection(): THREE.PerspectiveCamera {
         const aspect_ratio = window.innerWidth / window.innerHeight;
         const perspective_camera = new THREE.PerspectiveCamera(75, aspect_ratio, 0.01, 100000);
         perspective_camera.up.set(0, 0, 1);
-        this.camera = perspective_camera;
-        this.camera.position.set(500, 500, 500);
-        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        this._camera = perspective_camera;
+        this._camera.position.set(500, 500, 500);
+        this._camera.lookAt(new THREE.Vector3(0, 0, 0));
         return perspective_camera;
     }
-    private set_orthographic_projection(): THREE.OrthographicCamera {
+    private SetOrthographicProjection(): THREE.OrthographicCamera {
         const orthographic_camera = new THREE.OrthographicCamera(
             window.innerWidth / -2,
             window.innerWidth / 2,
@@ -177,13 +177,13 @@ export class CameraController {
             1000000
         );
         orthographic_camera.up.set(0, 0, 1);
-        this.camera = orthographic_camera;
-        this.camera.position.set(500, 500, 500);
-        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        this._camera = orthographic_camera;
+        this._camera.position.set(500, 500, 500);
+        this._camera.lookAt(new THREE.Vector3(0, 0, 0));
         return orthographic_camera;
     }
 
-    private set_perspective_view(
+    private SetPerspectiveView(
         bounds: { min: [number, number, number]; max: [number, number, number] },
         face: [number, number],
         direction: [number, number, number]
@@ -201,7 +201,7 @@ export class CameraController {
             (bounds.min[2] + bounds.max[2]) / 2,
         ];
 
-        const camera = this.camera as THREE.PerspectiveCamera;
+        const camera = this._camera as THREE.PerspectiveCamera;
 
         // we need the field of view to be able to frame
         const fovVertical = camera.fov;
@@ -219,18 +219,18 @@ export class CameraController {
         const distance =
             (higher_dimension / 2 / Math.tan(lower_fov / 2)) * framing_buffer_multiplier;
 
-        this.camera.position.set(
+        this._camera.position.set(
             distance * direction[0] + center[0],
             distance * direction[1] + center[1],
             distance * direction[2] + center[2]
         );
 
-        this.camera.lookAt(center[0], center[1], center[2]);
-        this.orbitControls.target = new THREE.Vector3(center[0], center[1], center[2]);
+        this._camera.lookAt(center[0], center[1], center[2]);
+        this._orbitControls.target = new THREE.Vector3(center[0], center[1], center[2]);
         camera.updateProjectionMatrix();
     }
 
-    private set_orthographic_view(
+    private SetOrthographicView(
         renderer_size : { width: number, height: number},
         bounds: { min: [number, number, number]; max: [number, number, number] },
         face: [number, number],
@@ -249,7 +249,7 @@ export class CameraController {
             (bounds.min[2] + bounds.max[2]) / 2,
         ];
 
-        const camera = this.camera as THREE.OrthographicCamera;
+        const camera = this._camera as THREE.OrthographicCamera;
 
         const width = size[face[0]];
         const height = size[face[1]];
@@ -278,7 +278,7 @@ export class CameraController {
             distance * direction[2] + center[2]
         );
 
-        this.orbitControls.target = new THREE.Vector3(center[0], center[1], center[2]);
-        this.camera.updateProjectionMatrix();
+        this._orbitControls.target = new THREE.Vector3(center[0], center[1], center[2]);
+        this._camera.updateProjectionMatrix();
     }
 }

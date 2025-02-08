@@ -9,7 +9,7 @@ export class RendererManager {
     public constructor(canvas: HTMLCanvasElement) {
         this._canvas = canvas;
         this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, antialias: true });
-        this._renderer.setSize(this._canvas.clientWidth, this._canvas.clientHeight);
+        this._renderer.setSize(window.innerWidth, window.innerHeight);
 
         window.addEventListener("resize", () => this.Resize());
 
@@ -19,7 +19,7 @@ export class RendererManager {
     public SetCanvas(canvas : HTMLCanvasElement) : void {
         this._canvas = canvas;
         this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, antialias: true });
-        this._renderer.setSize(this._canvas.clientWidth, this._canvas.clientHeight);
+        this._renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
     public SetScene(scene: THREE.Scene) : void {
@@ -34,7 +34,7 @@ export class RendererManager {
         return this._renderer.domElement;
     }
 
-    private Update = () =>
+    private Update = (): void =>
     {        
         requestAnimationFrame(this.Update);
 
@@ -50,10 +50,10 @@ export class RendererManager {
             return;
         }
 
-        this._renderer.setSize(this._canvas.width, this._canvas.height);
+        this._renderer.setSize(window.innerWidth, window.innerHeight)
 
         if(this._camera instanceof THREE.PerspectiveCamera) {
-            this._camera.aspect = this._canvas.width / this._canvas.height;
+            this._camera.aspect = window.innerWidth / window.innerHeight;
             this._camera.updateProjectionMatrix();
         }
     }

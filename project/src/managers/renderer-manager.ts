@@ -1,10 +1,11 @@
 import * as THREE from "three";
+import { CameraController, CameraControllerEventMap } from "../controllers/camera-controller";
 
 export class RendererManager {
     private _canvas: HTMLCanvasElement;
     private _renderer: THREE.Renderer;
     private _scene: THREE.Scene | null = null;
-    private _camera: THREE.Camera | null = null;
+    private _cameraController: CameraController | null = null;
 
     public constructor(canvas: HTMLCanvasElement) {
         this._canvas = canvas;
@@ -12,6 +13,7 @@ export class RendererManager {
         this._renderer.setSize(window.innerWidth, window.innerHeight);
 
         window.addEventListener("resize", () => this.Resize());
+        window.addEventListener("DOMContentLoaded", () => this.Resize());
 
         this.Update()
     }
@@ -26,11 +28,11 @@ export class RendererManager {
         this._scene = scene;
     }
 
-    public SetCamera(camera: THREE.Camera) : void {
-        this._camera = camera;
+    public SetCameraController(cameraController: CameraController) : void {
+        this._cameraController = cameraController;
     }
 
-    public GetDom() : HTMLCanvasElement{
+    public GetCanvas() : HTMLCanvasElement{
         return this._renderer.domElement;
     }
 
@@ -38,23 +40,23 @@ export class RendererManager {
     {        
         requestAnimationFrame(this.Update);
 
-        if(!this._scene || !this._camera) {
+        if(!this._scene || !this._cameraController) {
             return;
         }
 
-        this._renderer.render(this._scene, this._camera);
+        this._renderer.render(this._scene, this._cameraController.GetCamera());
     };
 
     private Resize(): void {
-        if(!this._canvas || !this._camera) {
+        if(!this._canvas || !this._cameraController) {
             return;
         }
 
         this._renderer.setSize(window.innerWidth, window.innerHeight)
 
-        if(this._camera instanceof THREE.PerspectiveCamera) {
-            this._camera.aspect = window.innerWidth / window.innerHeight;
-            this._camera.updateProjectionMatrix();
+        if(this._cameraController instanceof THREE.PerspectiveCamera) {
+            this._cameraController.aspect = window.innerWidth / window.innerHeight;
+            this._cameraController.updateProjectionMatrix();
         }
     }
 }

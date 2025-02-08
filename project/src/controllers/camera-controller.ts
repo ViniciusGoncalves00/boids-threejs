@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { InputManager } from "../input-manager";
+import { InputManager } from "../managers/input-manager";
 import { InputMapping } from "../input-mapping";
 import { degToRad } from "three/src/math/MathUtils";
 
@@ -109,11 +109,13 @@ export class CameraController {
     }
 
     public ToggleProjection(projection: string): void {
+        projection.toLowerCase()
+        
         switch (projection) {
-            case "Perspective":
+            case "perspective":
                 this.SetPerspectiveProjection();
                 break;
-            case "Orthographic":
+            case "orthographic":
                 this.SetOrthographicProjection();
                 break;
             default:
@@ -125,7 +127,7 @@ export class CameraController {
         this._camera.updateProjectionMatrix();
     }
 
-    public ToggleView(canvas_size : { width: number, height: number}, view: string, bounds: { min: [number, number, number]; max: [number, number, number] }): void {
+    public ToggleView(view_size : { width: number, height: number}, view: string, bounds: { min: [number, number, number]; max: [number, number, number] }): void {
         const face_mapping: Record<string, [number, number]> = {
             right: [1, 2],
             left: [1, 2],
@@ -151,17 +153,13 @@ export class CameraController {
         if (this._camera instanceof THREE.PerspectiveCamera) {
             this.SetPerspectiveView(bounds, view_map, direction);
         } else {
-            this.SetOrthographicView(canvas_size, bounds, view_map, direction);
-        }
-        if (view == "superior" || view == "inferior") {
-            this._camera.rotateZ(degToRad(-90));
+            this.SetOrthographicView(view_size, bounds, view_map, direction);
         }
     }
 
     private SetPerspectiveProjection(): THREE.PerspectiveCamera {
         const aspect_ratio = window.innerWidth / window.innerHeight;
         const perspective_camera = new THREE.PerspectiveCamera(75, aspect_ratio, 0.01, 100000);
-        perspective_camera.up.set(0, 0, 1);
         this._camera = perspective_camera;
         this._camera.position.set(500, 500, 500);
         this._camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -176,7 +174,6 @@ export class CameraController {
             0.0,
             1000000
         );
-        orthographic_camera.up.set(0, 0, 1);
         this._camera = orthographic_camera;
         this._camera.position.set(500, 500, 500);
         this._camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -231,7 +228,7 @@ export class CameraController {
     }
 
     private SetOrthographicView(
-        renderer_size : { width: number, height: number},
+        view_size : { width: number, height: number},
         bounds: { min: [number, number, number]; max: [number, number, number] },
         face: [number, number],
         direction: [number, number, number]
@@ -255,8 +252,8 @@ export class CameraController {
         const height = size[face[1]];
         const higher_dimension = Math.max(width, height);
 
-        const renderer_width = renderer_size.width;
-        const renderer_height = renderer_size.height;
+        const renderer_width = view_size.width;
+        const renderer_height = view_size.height;
 
         const maxSize = Math.max(renderer_width, renderer_height);
         const normalizedWidth = renderer_width / maxSize;

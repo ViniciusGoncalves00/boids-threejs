@@ -39,16 +39,13 @@ export class ProgramManager {
         
         this._rendererManagers[0] = new RendererManager(canvas);
         this._sceneManagers[0] = new SceneManager();
-        this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetDom());
+        this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
-
-        Alpine.store("SceneManager", this._sceneManagers[0]);
-        Alpine.store("CameraController", this._cameraControllers[0]);
         
-        this._rendererManagers[0].SetCamera(this._cameraControllers[0].GetCamera());
+        this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
 
-        (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._rendererManagers[0], this._domainController[0]);
+        (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._domainController[0]);
     }
 
     public static GetInstance() : ProgramManager {

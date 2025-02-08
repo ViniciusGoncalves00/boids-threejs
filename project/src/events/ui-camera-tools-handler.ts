@@ -4,13 +4,11 @@ import { RendererManager } from "../managers/renderer-manager";
 
 export class UICameraToolsHandler {
     private _cameraController : CameraController;
-    private _rendererManager : RendererManager;
-    private _domain : DomainController;
+    private _domainController : DomainController;
 
-    public constructor(cameraController: CameraController, rendererManager: RendererManager, domain: DomainController) {
+    public constructor(cameraController: CameraController, domainController: DomainController) {
         this._cameraController = cameraController;
-        this._rendererManager = rendererManager;
-        this._domain = domain;
+        this._domainController = domainController;
     }
 
     public Rotate(angle_degrees: number) : void {
@@ -22,7 +20,7 @@ export class UICameraToolsHandler {
     }
 
     public ToggleView(view: string) : void {
-        let bounds = this._domain.GetLimits();
+        let bounds = this._domainController.GetLimits();
         bounds = bounds == null ? { min: [-200, -200, -200], max: [200, 200, 200] } : bounds;
         this._cameraController.ToggleView({ width: window.innerWidth, height: window.innerHeight }, view, bounds);
     }

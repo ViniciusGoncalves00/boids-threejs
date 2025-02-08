@@ -12,9 +12,9 @@ export class DomainController
     private _maxY: number = 0;
     private _maxZ: number = 0;
     
-    private _divisionsX : number = 0;
-    private _divisionsY : number = 0;
-    private _divisionsZ : number = 0;
+    private _divisionsX : number = 1;
+    private _divisionsY : number = 1;
+    private _divisionsZ : number = 1;
     
     private _spawnMinX : number = 0;
     private _spawnMinY : number = 0;
@@ -29,6 +29,9 @@ export class DomainController
     public constructor(sceneManager : SceneManager)
     {
         this._sceneManager = sceneManager;
+
+        this.SetLimits(0, 0, 0, 100, 200, 300);
+        this.SetDivisions(5, 5, 5);
     }
 
     public GetLimits() : { min: [number, number, number], max: [number, number, number]} {
@@ -176,6 +179,7 @@ export class DomainController
                 }
             }
         }
+
     }
 
     // private UpdateBoids = () =>

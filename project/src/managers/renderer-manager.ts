@@ -9,7 +9,7 @@ export class RendererManager {
     public constructor(canvas: HTMLCanvasElement) {
         this._canvas = canvas;
         this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, antialias: true });
-        this._renderer.setSize(this._canvas.width, this._canvas.height);
+        this._renderer.setSize(this._canvas.clientWidth, this._canvas.clientHeight);
 
         window.addEventListener("resize", () => this.Resize());
 
@@ -19,7 +19,7 @@ export class RendererManager {
     public SetCanvas(canvas : HTMLCanvasElement) : void {
         this._canvas = canvas;
         this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, antialias: true });
-        this._renderer.setSize(this._canvas.width, this._canvas.height);
+        this._renderer.setSize(this._canvas.clientWidth, this._canvas.clientHeight);
     }
 
     public SetScene(scene: THREE.Scene) : void {
@@ -37,7 +37,7 @@ export class RendererManager {
     private Update = () =>
     {        
         requestAnimationFrame(this.Update);
-        
+
         if(!this._scene || !this._camera) {
             return;
         }

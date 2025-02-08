@@ -3,7 +3,7 @@ import { RendererManager } from "./managers/renderer-manager";
 import { SceneManager } from "./managers/scene-manager";
 import { CameraController } from "./controllers/camera-controller";
 import { UICameraToolsHandler } from "./events/ui-camera-tools-handler";
-import { DomainManager } from "./managers/domain-manager";
+import { DomainController } from "./controllers/domain-controller";
 
 declare global {
     interface Window {
@@ -19,7 +19,7 @@ export class ProgramManager {
     private _rendererManagers : RendererManager[] = [];
     private _sceneManagers : SceneManager[] = [];
     private _cameraControllers : CameraController[] = [];
-    private _domainManager : DomainManager[] = [];
+    private _domainController : DomainController[] = [];
 
     private constructor() {
         document.addEventListener("DOMContentLoaded", () => {
@@ -40,7 +40,7 @@ export class ProgramManager {
         this._rendererManagers[0] = new RendererManager(canvas);
         this._sceneManagers[0] = new SceneManager();
         this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetDom());
-        this._domainManager[0] = new DomainManager(this._sceneManagers[0]);
+        this._domainController[0] = new DomainController(this._sceneManagers[0]);
 
         Alpine.store("SceneManager", this._sceneManagers[0]);
         Alpine.store("CameraController", this._cameraControllers[0]);
@@ -48,7 +48,7 @@ export class ProgramManager {
         this._rendererManagers[0].SetCamera(this._cameraControllers[0].GetCamera());
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
 
-        (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._rendererManagers[0], this._domainManager[0]);
+        (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._rendererManagers[0], this._domainController[0]);
     }
 
     public static GetInstance() : ProgramManager {

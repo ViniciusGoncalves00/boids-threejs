@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { SceneManager } from "./scene-manager";
+import { SceneManager } from "../managers/scene-manager";
 
-export class DomainManager
+export class DomainController
 {
     private _sceneManager : SceneManager;
 

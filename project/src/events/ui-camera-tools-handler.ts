@@ -1,13 +1,13 @@
 import { CameraController } from "../controllers/camera-controller";
-import { DomainManager } from "../managers/domain-manager";
+import { DomainController } from "../controllers/domain-controller";
 import { RendererManager } from "../managers/renderer-manager";
 
 export class UICameraToolsHandler {
     private _cameraController : CameraController;
     private _rendererManager : RendererManager;
-    private _domain : DomainManager;
+    private _domain : DomainController;
 
-    public constructor(cameraController: CameraController, rendererManager: RendererManager, domain: DomainManager) {
+    public constructor(cameraController: CameraController, rendererManager: RendererManager, domain: DomainController) {
         this._cameraController = cameraController;
         this._rendererManager = rendererManager;
         this._domain = domain;

@@ -30,7 +30,7 @@ export class DomainController
     {
         this._sceneManager = sceneManager;
 
-        this.SetLimits(0, 0, 0, 100, 200, 300);
+        this.SetLimits(-100, -100, -100, 100, 100, 100);
         this.SetDivisions(5, 5, 5);
     }
 

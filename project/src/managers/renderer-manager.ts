@@ -43,7 +43,8 @@ export class RendererManager {
         if(!this._scene || !this._cameraController) {
             return;
         }
-
+        
+        this._cameraController.Update()
         this._renderer.render(this._scene, this._cameraController.GetCamera());
     };
 
@@ -53,10 +54,13 @@ export class RendererManager {
         }
 
         this._renderer.setSize(window.innerWidth, window.innerHeight)
-
-        if(this._cameraController instanceof THREE.PerspectiveCamera) {
-            this._cameraController.aspect = window.innerWidth / window.innerHeight;
-            this._cameraController.updateProjectionMatrix();
+        
+        if(this._cameraController instanceof CameraController) {
+            const camera = this._cameraController.GetCamera();
+            if(camera instanceof THREE.PerspectiveCamera) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+            }
         }
     }
 }

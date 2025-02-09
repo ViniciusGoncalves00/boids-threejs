@@ -28,6 +28,8 @@ export class CameraController {
     private _speed: number = 1;
     private _orbitControls: OrbitControls;
 
+    private _wasMoving: boolean = false;
+
     constructor(cameraProjection: string, canvas: HTMLCanvasElement) {
         this._canvas = canvas;
 
@@ -60,8 +62,6 @@ export class CameraController {
     }
 
     public Update(): void {
-        // this.orbitControls.update();
-
         const localForward = new THREE.Vector3();
         const localRight = new THREE.Vector3();
         const worldUp = new THREE.Vector3();
@@ -75,31 +75,54 @@ export class CameraController {
 
         let speed = this._speed;
 
-        if (this._inputManager.GetKeyHeld(InputMapping.Moddifier)) {
-            speed *= 10
-        }
+        let keyHelded = false;
+        // if (this._inputManager.GetKeyHeld(InputMapping.Moddifier)) {
+        //     speed *= 10
+        // }
 
         if (this._inputManager.GetKeyHeld(InputMapping.Forward)) {
             this._camera.position.addScaledVector(localForward, speed);
+            keyHelded = true;
         }
         if (this._inputManager.GetKeyHeld(InputMapping.Backward)) {
             this._camera.position.addScaledVector(localForward, -speed);
+            keyHelded = true;
         }
 
         if (this._inputManager.GetKeyHeld(InputMapping.Right)) {
             this._camera.position.addScaledVector(localRight, speed);
+            keyHelded = true;
         }
         if (this._inputManager.GetKeyHeld(InputMapping.Left)) {
             this._camera.position.addScaledVector(localRight, -speed);
+            keyHelded = true;
         }
 
         if (this._inputManager.GetKeyHeld(InputMapping.Up)) {
             this._camera.position.y += speed;
+            keyHelded = true;
         }
         if (this._inputManager.GetKeyHeld(InputMapping.Down)) {
             this._camera.position.y -= speed;
+            keyHelded = true;
         }
 
+        if (keyHelded) {
+            this._orbitControls.enableRotate = false;
+            this._wasMoving = true;
+        } else {
+            this._orbitControls.enableRotate = true;
+    
+            if (this._wasMoving) {
+                const newTarget = new THREE.Vector3();
+                this._camera.getWorldDirection(newTarget);
+                newTarget.multiplyScalar(100).add(this._camera.position);
+                this._orbitControls.target.copy(newTarget);
+                this._orbitControls.update();
+                this._wasMoving = false;
+            }
+        }
+    
         this._camera.updateProjectionMatrix();
     }
 
@@ -129,21 +152,21 @@ export class CameraController {
 
     public ToggleView(view_size : { width: number, height: number}, view: string, bounds: { min: [number, number, number]; max: [number, number, number] }): void {
         const face_mapping: Record<string, [number, number]> = {
-            right: [1, 2],
-            left: [1, 2],
-            front: [0, 2],
-            back: [0, 2],
-            superior: [0, 1],
-            inferior: [0, 1],
+            right: [2, 1],
+            left: [2, 1],
+            front: [0, 1],
+            back: [0, 1],
+            superior: [0, 2],
+            inferior: [0, 2],
             isometric: [0, 2],
         };
         const directions: Record<string, [number, number, number]> = {
             right: [1, 0, 0],
             left: [-1, 0, 0],
-            front: [0, 1, 0],
-            back: [0, -1, 0],
-            superior: [0, 0, 1],
-            inferior: [0, 0, -1],
+            front: [0, 0, 1],
+            back: [0, 0, -1],
+            superior: [0, 1, 0],
+            inferior: [0, -1, 0],
             isometric: [1, 1, 1],
         };
 
@@ -158,7 +181,7 @@ export class CameraController {
     }
 
     private SetPerspectiveProjection(): THREE.PerspectiveCamera {
-        const aspect_ratio = window.innerWidth / window.innerHeight;
+        const aspect_ratio = this._canvas.clientWidth / this._canvas.clientHeight;
         const perspective_camera = new THREE.PerspectiveCamera(75, aspect_ratio, 0.01, 100000);
         this._camera = perspective_camera;
         this._camera.position.set(500, 500, 500);
@@ -167,10 +190,10 @@ export class CameraController {
     }
     private SetOrthographicProjection(): THREE.OrthographicCamera {
         const orthographic_camera = new THREE.OrthographicCamera(
-            window.innerWidth / -2,
-            window.innerWidth / 2,
-            window.innerHeight / 2,
-            window.innerHeight / -2,
+            this._canvas.clientWidth / -2,
+            this._canvas.clientWidth / 2,
+           this._canvas.clientHeight / 2,
+           this._canvas.clientHeight / -2,
             0.0,
             1000000
         );

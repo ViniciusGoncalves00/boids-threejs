@@ -36,15 +36,15 @@ export class SimulationController implements IUpgradeable
             const material = new THREE.MeshStandardMaterial();
             material.color.setRGB(200, 0, 0);
 
-            this._boids = new Array(100)
+            this._boids = new Array(5)
 
             for (let index = 0; index < this._boids.length; index++) {
                 const boidMesh = new THREE.Mesh(geometry, material);
                 const limits = this._spawnerController.GetLimits();
                 const size = this._spawnerController.GetSize();
-                boidMesh.position.x = Math.random() * size[0] + limits.min[0] / 2;
-                boidMesh.position.y = Math.random() * size[1] + limits.min[1] / 2;
-                boidMesh.position.z = Math.random() * size[2] + limits.min[2] / 2;
+                boidMesh.position.x = Math.random() * size[0] + limits.min[0];
+                boidMesh.position.y = Math.random() * size[1] + limits.min[1];
+                boidMesh.position.z = Math.random() * size[2] + limits.min[2];
                 boidMesh.rotateX(Math.random() * 360 * Math.PI/180)
                 boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
                 boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)

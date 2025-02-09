@@ -12,7 +12,7 @@ export class SpawnerController
     private _maxY: number = 0;
     private _maxZ: number = 0;
 
-    public Spawn: (THREE.LineSegments | null) = null;
+    public _spawn: (THREE.LineSegments | null) = null;
 
     public constructor(sceneManager : SceneManager)
     {
@@ -37,9 +37,9 @@ export class SpawnerController
     }
 
     public GetSize() {
-        const x = this._maxX - this._minX;
-        const y = this._maxY - this._minY;
-        const z = this._maxZ - this._minZ;
+        const x = Math.abs(this._maxX - this._minX);
+        const y = Math.abs(this._maxY - this._minY);
+        const z = Math.abs(this._maxZ - this._minZ);
 
         return [x, y, z];
     }
@@ -58,21 +58,21 @@ export class SpawnerController
 
     private Update()
     {
-        if(this.Spawn !== null){
-            this._sceneManager.RemoveObject(this.Spawn)
+        if(this._spawn !== null){
+            this._sceneManager.RemoveObject(this._spawn)
         }
 
-        const width = Math.abs(this._maxX - this._minX)
-        const height = Math.abs(this._maxY - this._minY)
-        const depth = Math.abs(this._maxZ - this._minZ)
+        const size = this.GetSize()
+        const center = this.GetCenter()
 
-        const geometry = new THREE.BoxGeometry( width, height, depth);
+        const geometry = new THREE.BoxGeometry( size[0], size[1], size[2]);
         const edges = new THREE.EdgesGeometry( geometry );
         const material = new THREE.LineBasicMaterial()
         material.color.setRGB(0, 0, 200);
 
-        this.Spawn = new THREE.LineSegments(edges, material)
-
-        this._sceneManager.AddObject(this.Spawn)
+        this._spawn = new THREE.LineSegments(edges, material)
+        this._spawn.position.set(center[0], center[1], center[2])
+        console.log(center)
+        this._sceneManager.AddObject(this._spawn)
     }
 }

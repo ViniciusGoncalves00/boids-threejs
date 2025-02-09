@@ -2,11 +2,13 @@ import Alpine from "alpinejs";
 import { RendererManager } from "./managers/renderer-manager";
 import { SceneManager } from "./managers/scene-manager";
 import { CameraController } from "./controllers/camera-controller";
-import { UICameraToolsHandler } from "./events/ui-camera-tools-handler";
+import { UICameraToolsHandler } from "./handlers/ui-camera-tools-handler";
 import { DomainController } from "./controllers/domain-controller";
-import { UIDomainHandler } from "./events/ui-domain-handler";
+import { UIDomainHandler } from "./handlers/ui-domain-handler";
 import { SpawnerController } from "./controllers/spawner-controller";
-import { UISpawnerHandler } from "./events/ui-spawner-handler";
+import { UISpawnerHandler } from "./handlers/ui-spawner-handler";
+import { SimulationController } from "./controllers/simulation-controller";
+import { UISimulationHandler } from "./handlers/ui-simulation-handler";
 
 declare global {
     interface Window {
@@ -15,6 +17,7 @@ declare global {
         UICameraToolsHandler: typeof UICameraToolsHandler;
         UIDomainHandler: typeof UIDomainHandler;
         UISpawnerHandler: typeof UISpawnerHandler;
+        UISimulationHandler: typeof UISimulationHandler;
     }
   }
 
@@ -26,6 +29,7 @@ export class ProgramManager {
     private _cameraControllers : CameraController[] = [];
     private _domainController : DomainController[] = [];
     private _spawnerController : SpawnerController[] = [];
+    private _simulationController : SimulationController[] = [];
 
     private constructor() {
         document.addEventListener("DOMContentLoaded", () => {
@@ -48,13 +52,16 @@ export class ProgramManager {
         this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
         this._spawnerController[0] = new SpawnerController(this._sceneManagers[0]);
+        this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0].GetLimits());
         
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
-
+        this._rendererManagers[0].AddUpgradeable(this._simulationController[0]);
+        
         (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._domainController[0]);
         (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0]);
         (window.UISpawnerHandler as any) = new UISpawnerHandler(this._spawnerController[0]);
+        (window.UISimulationHandler as any) = new UISimulationHandler(this._simulationController[0]);
     }
 
     public static GetInstance() : ProgramManager {

@@ -3,6 +3,7 @@ import * as THREE from "three";
 export class SceneManager
 {
     private _scene : THREE.Scene;
+    private _objects : THREE.Object3D[] = []
 
     public constructor() {
         this._scene = new THREE.Scene();
@@ -26,15 +27,17 @@ export class SceneManager
     }
 
     public AddObject(object : THREE.Object3D) : void {
+        this._objects.push(object)
         this._scene.add(object)
     }
-
+    
     public AddObjects(objects : THREE.Object3D[]) : void {
         this._scene.add(...objects)
     }
-
+    
     public RemoveObject(object : THREE.Object3D) : void {
-        this._scene.remove(object)
+        this._objects.splice(this._objects.findIndex(obj => obj === object), 1);
+        this._scene.remove(object);
     }
 
     public RemoveObjects(objects : THREE.Object3D[]) : void {

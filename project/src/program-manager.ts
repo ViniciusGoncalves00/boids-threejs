@@ -56,6 +56,8 @@ export class ProgramManager {
         this._domainController[0].SetDivisions(5, 5, 5);
 
         this._spawnerController[0] = new SpawnerController(this._sceneManagers[0]);
+        this._spawnerController[0].SetLimits(-10, -10, -10, 10, 10, 10);
+
         this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0], this._spawnerController[0]);
         
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);

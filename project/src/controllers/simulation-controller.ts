@@ -28,36 +28,7 @@ export class SimulationController implements IUpgradeable
     public Start(): void {
         this._isRunning = true;
 
-        if(this._boids == null) {
-            const geometry = new THREE.ConeGeometry();
-            geometry.rotateX(90 * Math.PI / 180)
-            geometry.scale(2, 2, 5)
-
-            const material = new THREE.MeshStandardMaterial();
-            material.color.setRGB(200, 0, 0);
-
-            this._boids = new Array(5)
-
-            for (let index = 0; index < this._boids.length; index++) {
-                const boidMesh = new THREE.Mesh(geometry, material);
-                const limits = this._spawnerController.GetLimits();
-                const size = this._spawnerController.GetSize();
-                boidMesh.position.x = Math.random() * size[0] + limits.min[0];
-                boidMesh.position.y = Math.random() * size[1] + limits.min[1];
-                boidMesh.position.z = Math.random() * size[2] + limits.min[2];
-                boidMesh.rotateX(Math.random() * 360 * Math.PI/180)
-                boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
-                boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
-
-                this._boids[index] = new Boid(boidMesh, this._domainController.GetLimits());
-                this._sceneManager.AddObject(boidMesh);
-
-                const sphereGeometry = new THREE.SphereGeometry();
-                const sphereMesh = new THREE.Mesh(sphereGeometry, material);
-                sphereMesh.position.z = 10;
-                boidMesh.add(sphereMesh)
-            }
-        }
+        this._boids = this._spawnerController.Spawn(this._domainController.GetLimits(), 10)
     }
 
     public Update(): void {

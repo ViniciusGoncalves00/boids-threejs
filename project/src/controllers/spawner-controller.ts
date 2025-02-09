@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
+import { Boid } from "../boid";
+import { DomainController } from "./domain-controller";
 
 export class SpawnerController
 {
@@ -17,8 +19,6 @@ export class SpawnerController
     public constructor(sceneManager : SceneManager)
     {
         this._sceneManager = sceneManager;
-
-        this.SetLimits(-10, -10, -10, 10, 10, 10);
     }
 
     public GetLimits() : {min: [number, number, number], max: [number, number, number]} {
@@ -56,6 +56,43 @@ export class SpawnerController
         this.Update()
     }
 
+    public Spawn(domainSize: {min: [number, number, number], max: [number, number, number]} , amount: number): Boid[] {
+        let boids: Boid[] = []
+
+        const geometry = new THREE.ConeGeometry();
+        geometry.rotateX(90 * Math.PI / 180)
+        geometry.scale(2, 2, 5)
+
+        const material = new THREE.MeshStandardMaterial();
+        material.color.setRGB(200, 0, 0);
+
+        for (let index = 0; index < amount; index++) {
+            const boidMesh = new THREE.Mesh(geometry, material);
+        
+            const sphereGeometry = new THREE.SphereGeometry();
+            const sphereMesh = new THREE.Mesh(sphereGeometry, material);
+            sphereMesh.position.z = 10;
+            boidMesh.add(sphereMesh)
+
+            const limits = this.GetLimits();
+            const size = this.GetSize();
+
+            boidMesh.position.x = Math.random() * size[0] + limits.min[0];
+            boidMesh.position.y = Math.random() * size[1] + limits.min[1];
+            boidMesh.position.z = Math.random() * size[2] + limits.min[2];
+            boidMesh.rotateX(Math.random() * 360 * Math.PI/180)
+            boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
+            boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
+
+            const boid = new Boid(boidMesh, domainSize);
+            boids.push(boid);
+
+            this._sceneManager.AddObject(boidMesh);
+        }
+
+        return boids;
+    }
+
     private Update()
     {
         if(this._spawn !== null){
@@ -72,7 +109,7 @@ export class SpawnerController
 
         this._spawn = new THREE.LineSegments(edges, material)
         this._spawn.position.set(center[0], center[1], center[2])
-        console.log(center)
+
         this._sceneManager.AddObject(this._spawn)
     }
 }

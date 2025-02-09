@@ -15,11 +15,11 @@ export class UIDomainHandler {
         this._domainController.SetDivisions(x, y, z);
     }
 
-    public GetDivisions() : {x: number, y: number, z: number} {
-        return this._domainController.GetDivisions()
-    }
-
     public GetLimits() : {min: [number, number, number], max: [number, number, number]} {
         return this._domainController.GetLimits()
+    }
+
+    public GetDivisions() : {x: number, y: number, z: number} {
+        return this._domainController.GetDivisions()
     }
 }

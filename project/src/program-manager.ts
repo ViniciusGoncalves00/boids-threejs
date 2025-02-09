@@ -5,6 +5,8 @@ import { CameraController } from "./controllers/camera-controller";
 import { UICameraToolsHandler } from "./events/ui-camera-tools-handler";
 import { DomainController } from "./controllers/domain-controller";
 import { UIDomainHandler } from "./events/ui-domain-handler";
+import { SpawnerController } from "./controllers/spawner-controller";
+import { UISpawnerHandler } from "./events/ui-spawner-handler";
 
 declare global {
     interface Window {
@@ -12,6 +14,7 @@ declare global {
         SceneManager: typeof SceneManager;
         UICameraToolsHandler: typeof UICameraToolsHandler;
         UIDomainHandler: typeof UIDomainHandler;
+        UISpawnerHandler: typeof UISpawnerHandler;
     }
   }
 
@@ -22,6 +25,7 @@ export class ProgramManager {
     private _sceneManagers : SceneManager[] = [];
     private _cameraControllers : CameraController[] = [];
     private _domainController : DomainController[] = [];
+    private _spawnerController : SpawnerController[] = [];
 
     private constructor() {
         document.addEventListener("DOMContentLoaded", () => {
@@ -43,12 +47,14 @@ export class ProgramManager {
         this._sceneManagers[0] = new SceneManager();
         this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
+        this._spawnerController[0] = new SpawnerController(this._sceneManagers[0]);
         
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
 
         (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._domainController[0]);
         (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0]);
+        (window.UISpawnerHandler as any) = new UISpawnerHandler(this._spawnerController[0]);
     }
 
     public static GetInstance() : ProgramManager {

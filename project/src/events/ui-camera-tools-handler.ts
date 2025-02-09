@@ -1,6 +1,5 @@
 import { CameraController } from "../controllers/camera-controller";
 import { DomainController } from "../controllers/domain-controller";
-import { RendererManager } from "../managers/renderer-manager";
 
 export class UICameraToolsHandler {
     private _cameraController : CameraController;

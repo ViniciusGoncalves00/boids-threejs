@@ -15,16 +15,8 @@ export class DomainController
     private _divisionsX : number = 1;
     private _divisionsY : number = 1;
     private _divisionsZ : number = 1;
-    
-    private _spawnMinX : number = 0;
-    private _spawnMinY : number = 0;
-    private _spawnMinZ : number = 0;
-    private _spawnMaxX : number = 0;
-    private _spawnMaxY : number = 0;
-    private _spawnMaxZ : number = 0;
 
     public Nodes: (THREE.LineSegments | null)[][][] = [];
-    public Spawn: (THREE.LineSegments | null) = null;
 
     public constructor(sceneManager : SceneManager)
     {
@@ -43,14 +35,6 @@ export class DomainController
 
     public GetDivisions() : {x: number, y: number, z: number} {
         return { x: this._divisionsX, y: this._divisionsY, z: this._divisionsZ }
-    }
-
-    public GetSpawn() {
-        const spawn = {
-            "min": [this._spawnMinX, this._spawnMinY, this._spawnMinZ],
-            "max": [this._spawnMaxX, this._spawnMaxY, this._spawnMaxZ],
-        }
-        return spawn;
     }
 
     public GetCenter() {
@@ -88,38 +72,6 @@ export class DomainController
         this._divisionsZ = z == undefined ? this._divisionsZ : z;
 
         this.UpdateDomain()
-    }
-
-    public SetSpawn(min_x : number, min_y : number, min_z : number, max_x : number, max_y : number, max_z : number)
-    {
-        this._spawnMinX = min_x;
-        this._spawnMinY = min_y;
-        this._spawnMinZ = min_z;
-        this._spawnMaxX = max_x;
-        this._spawnMaxY = max_y;
-        this._spawnMaxZ = max_z;
-
-        this.UpdateSpawn()
-    }
-
-    private UpdateSpawn()
-    {
-        if(this.Spawn !== null){
-            this._sceneManager.RemoveObject(this.Spawn)
-        }
-
-        const width = Math.abs(this._spawnMaxX - this._spawnMinX)
-        const height = Math.abs(this._spawnMaxY - this._spawnMinY)
-        const depth = Math.abs(this._spawnMaxZ - this._spawnMinZ)
-
-        const geometry = new THREE.BoxGeometry( width, height, depth);
-        const edges = new THREE.EdgesGeometry( geometry );
-        const material = new THREE.LineBasicMaterial()
-        material.color.setRGB(0, 0, 200);
-
-        this.Spawn = new THREE.LineSegments(edges, material)
-
-        this._sceneManager.AddObject(this.Spawn)
     }
 
     private UpdateDomain(): void {

@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { Boid } from "../boid";
 import { SceneManager } from "../managers/scene-manager";
 import { IUpgradeable } from "../interfaces/IUpdate";
+import { DomainController } from "./domain-controller";
+import { SpawnerController } from "./spawner-controller";
 
 export class SimulationController implements IUpgradeable
 {
@@ -11,11 +13,13 @@ export class SimulationController implements IUpgradeable
     private _boids : Boid[] | null = null;
 
     private _sceneManager : SceneManager;
-    private _limits : { min: [number, number, number], max: [number, number, number]};
+    private _domainController : DomainController;
+    private _spawnerController : SpawnerController;
 
-    public constructor(sceneManager : SceneManager,  limits: { min: [number, number, number], max: [number, number, number]}) {
+    public constructor(sceneManager : SceneManager, domainController: DomainController, spawnerController: SpawnerController) {
         this._sceneManager = sceneManager;
-        this._limits = limits;
+        this._domainController = domainController;
+        this._spawnerController = spawnerController;
 
         this._isRunning = false;
         this._isPaused = false;
@@ -32,15 +36,20 @@ export class SimulationController implements IUpgradeable
             const material = new THREE.MeshStandardMaterial();
             material.color.setRGB(200, 0, 0);
 
-            this._boids = new Array(3)
+            this._boids = new Array(100)
 
             for (let index = 0; index < this._boids.length; index++) {
                 const boidMesh = new THREE.Mesh(geometry, material);
+                const limits = this._spawnerController.GetLimits();
+                const size = this._spawnerController.GetSize();
+                boidMesh.position.x = Math.random() * size[0] + limits.min[0] / 2;
+                boidMesh.position.y = Math.random() * size[1] + limits.min[1] / 2;
+                boidMesh.position.z = Math.random() * size[2] + limits.min[2] / 2;
                 boidMesh.rotateX(Math.random() * 360 * Math.PI/180)
                 boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
                 boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
 
-                this._boids[index] = new Boid(boidMesh, this._limits);
+                this._boids[index] = new Boid(boidMesh, this._domainController.GetLimits());
                 this._sceneManager.AddObject(boidMesh);
 
                 const sphereGeometry = new THREE.SphereGeometry();

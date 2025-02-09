@@ -123,10 +123,6 @@ export class DomainController
     }
 
     private UpdateDomain(): void {
-        const width = Math.abs(this._maxX - this._minX)
-        const height = Math.abs(this._maxY - this._minY)
-        const depth = Math.abs(this._maxZ - this._minZ)
-
         this.Nodes.flat(Infinity).forEach(node =>
             {
                 if (node instanceof THREE.LineSegments)
@@ -135,13 +131,17 @@ export class DomainController
                     }
             }
         );
-        
+
         this.Nodes = []
         this.Nodes = Array.from({ length: this._divisionsX }, () =>
             Array.from({ length: this._divisionsY }, () =>
                 Array.from({ length: this._divisionsZ }, () => null)
             )
         );
+
+        const width = Math.abs(this._maxX - this._minX)
+        const height = Math.abs(this._maxY - this._minY)
+        const depth = Math.abs(this._maxZ - this._minZ)
 
         const nodeWidth = width / this._divisionsX;
         const nodeHeight = height / this._divisionsY;

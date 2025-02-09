@@ -1,0 +1,94 @@
+<!-- <div class="flex-none max-h-full flex flex-col items-center justify-start">
+    <div id="menu-title-assets" class="text-title-1 w-full my-[4px] flex items-center justify-center text-center align-middle uppercase">assets</div>
+
+    <div class="w-full h-[16px] flex flex-col items-center justify-center">
+        <div class="w-full h-[2px] bg-gray-300"></div>
+    </div>
+
+    <div class="w-full flex flex-col items-center justify-start">
+        <div class="w-full flex items-center justify-between">
+            <div>position</div>
+            <input class="text-title-2 w-full my-[4px] flex items-center justify-center text-center align-middle">
+            <input type="checkbox" class="">
+        </div>
+    </div>
+</div> -->
+
+<div class="flex-none max-h-full flex flex-col items-center justify-start">
+    <div id="menu-title-assets" class="text-title-1 w-full my-[4px] flex items-center justify-center text-center align-middle uppercase">domain</div>
+    <div class="w-full h-[16px] flex flex-col items-center justify-center">
+        <div class="w-full h-[2px] bg-gray-300"></div>
+    </div>
+
+    <div id="domain-limits" x-data="{open: true}" class="w-full flex flex-col">
+        <div x-show="open" x-data="{ limits: UIDomainHandler.GetLimits() }" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
+
+            <div x-data="{ minX: limits.min[0], minY: limits.min[1], minZ: limits.min[2], maxX: limits.max[0], maxY: limits.max[1], maxZ: limits.max[2] }" class="h-[24px] w-full flex flex-col items-center justify-start">
+                <div class="h-[24px] w-full flex items-center justify-between">
+                    <div class="h-full w-[64px] text-primary_text flex items-center justify-start">minimum</div>
+                    <div class="h-full w-[calc(100%-64px)] flex items-center justify-between">
+                        <div class="h-full w-[33%] flex items-center justify-between">
+                            <div class="h-full w-[24px] text-primary_text flex items-center justify-center">x</div>
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minX" @input="UIDomainHandler.SetLimits(minX, minY, minZ, maxX, maxY, maxZ)" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                        </div>
+                        <div class="h-full w-[33%] flex items-center justify-between">
+                            <div class="h-full w-[24px] text-primary_text flex items-center justify-center">y</div>
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minY" @input="UIDomainHandler.SetLimits(minX, minY, minZ, maxX, maxY, maxZ)" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                        </div>
+                        <div class="h-full w-[33%] flex items-center justify-between">
+                            <div class="h-full w-[24px] text-primary_text flex items-center justify-center">z</div>
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minZ" @input="UIDomainHandler.SetLimits(minX, minY, minZ, maxX, maxY, maxZ)" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                        </div>
+                    </div>
+                </div>
+                <div class="h-[24px] w-full flex items-center justify-between">
+                    <div class="h-full w-[64px] text-primary_text flex items-center justify-start">maximum</div>
+                    <div class="h-full w-[calc(100%-64px)] flex items-center justify-between">
+                        <div class="h-full w-[33%] flex items-center justify-between">
+                            <div class="h-full w-[24px] text-primary_text flex items-center justify-center">x</div>
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="maxX" @input="UIDomainHandler.SetLimits(minX, minY, minZ, maxX, maxY, maxZ)" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                        </div>
+                        <div class="h-full w-[33%] flex items-center justify-between">
+                            <div class="h-full w-[24px] text-primary_text flex items-center justify-center">y</div>
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="maxY" @input="UIDomainHandler.SetLimits(minX, minY, minZ, maxX, maxY, maxZ)" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                        </div>
+                        <div class="h-full w-[33%] flex items-center justify-between">
+                            <div class="h-full w-[24px] text-primary_text flex items-center justify-center">z</div>
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="maxZ" @input="UIDomainHandler.SetLimits(minX, minY, minZ, maxX, maxY, maxZ)" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-full h-[16px] flex flex-col items-center justify-center">
+            <div class="w-full h-[2px] bg-gray-300"></div>
+        </div>
+    </div>
+    
+    <div id="domain-divisions" x-data="{open: true}" class="w-full flex flex-col">
+        <div x-show="open" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
+
+            <div x-data="{ divisions: UIDomainHandler.GetDivisions() }" class="h-[24px] w-full flex items-center justify-between">
+                <div class="h-full w-[64px] text-primary_text flex items-center justify-start">divisions</div>
+                <div x-data="{ x: divisions.x, y: divisions.y, z: divisions.z }" class="h-full w-[calc(100%-64px)] flex items-center justify-between">
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] text-primary_text flex items-center justify-center">x</div>
+                        <input type="number" min="1" max="99" step="1" placeholder="..." x-model="x" @input="UIDomainHandler.SetDivisions(x, y, z)" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                    </div>
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] text-primary_text flex items-center justify-center">y</div>
+                        <input type="number" min="1" max="99" step="1" placeholder="..." x-model="y" @input="UIDomainHandler.SetDivisions(x, y, z)" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                    </div>
+                    <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-[24px] text-primary_text flex items-center justify-center">z</div>
+                        <input type="number" min="1" max="99" step="1" placeholder="..." x-model="z" @input="UIDomainHandler.SetDivisions(x, y, z)" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="w-full h-[16px] flex flex-col items-center justify-center">
+            <div class="w-full h-[2px] bg-gray-300"></div>
+        </div>
+    </div>
+</div>

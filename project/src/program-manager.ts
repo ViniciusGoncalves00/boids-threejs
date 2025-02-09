@@ -4,12 +4,14 @@ import { SceneManager } from "./managers/scene-manager";
 import { CameraController } from "./controllers/camera-controller";
 import { UICameraToolsHandler } from "./events/ui-camera-tools-handler";
 import { DomainController } from "./controllers/domain-controller";
+import { UIDomainHandler } from "./events/ui-domain-handler";
 
 declare global {
     interface Window {
         Alpine: typeof Alpine;
         SceneManager: typeof SceneManager;
         UICameraToolsHandler: typeof UICameraToolsHandler;
+        UIDomainHandler: typeof UIDomainHandler;
     }
   }
 
@@ -46,6 +48,7 @@ export class ProgramManager {
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
 
         (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._domainController[0]);
+        (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0]);
     }
 
     public static GetInstance() : ProgramManager {

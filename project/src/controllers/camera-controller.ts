@@ -43,14 +43,12 @@ export class CameraController {
             throw new Error("Argument is not a projection type")
         }
 
-        this._camera = new THREE.PerspectiveCamera()
-
         this._inputManager = InputManager.GetInstance();
 
         this._orbitControls = new OrbitControls(this._camera, canvas);
-        // this.orbitControls.keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown'}
-        // this.orbitControls.enableDamping = true;
-        // this.orbitControls.dampingFactor = 0.05;
+        // this._orbitControls.keys = { LEFT: 'ArrowLeft', UP: 'ArrowUp', RIGHT: 'ArrowRight', BOTTOM: 'ArrowDown'}
+        // this._orbitControls.enableDamping = true;
+        // this._orbitControls.dampingFactor = 0.05;
         this._orbitControls.minDistance = 1;
         this._orbitControls.maxDistance = 100000;
         
@@ -182,7 +180,7 @@ export class CameraController {
 
     private SetPerspectiveProjection(): THREE.PerspectiveCamera {
         const aspect_ratio = this._canvas.clientWidth / this._canvas.clientHeight;
-        const perspective_camera = new THREE.PerspectiveCamera(75, aspect_ratio, 0.01, 100000);
+        const perspective_camera = new THREE.PerspectiveCamera(50, aspect_ratio, 0.01, 100000);
         this._camera = perspective_camera;
         this._camera.position.set(500, 500, 500);
         this._camera.lookAt(new THREE.Vector3(0, 0, 0));

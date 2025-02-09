@@ -34,17 +34,15 @@ export class DomainController
         this.SetDivisions(5, 5, 5);
     }
 
-    public GetLimits() : { min: [number, number, number], max: [number, number, number]} {
+    public GetLimits() : {min: [number, number, number], max: [number, number, number]} {
         return {
             min: [this._minX, this._minY, this._minZ],
             max: [this._maxX, this._maxY, this._maxZ],
         }
     }
 
-    public GetDivisions() {
-        const divisions = [this._divisionsX, this._divisionsY, this._divisionsZ]
-
-        return divisions;
+    public GetDivisions() : {x: number, y: number, z: number} {
+        return { x: this._divisionsX, y: this._divisionsY, z: this._divisionsZ }
     }
 
     public GetSpawn() {
@@ -71,23 +69,23 @@ export class DomainController
         return [x, y, z];
     }
 
-    public SetLimits(min_x : number, min_y : number, min_z : number, max_x : number, max_y : number, max_z : number)
+    public SetLimits(minX? : number, minY? : number, minZ? : number, maxX? : number, maxY? : number, maxZ? : number)
     {
-        this._minX = min_x;
-        this._minY = min_y;
-        this._minZ = min_z;
-        this._maxX = max_x;
-        this._maxY = max_y;
-        this._maxZ = max_z;
+        this._minX = minX == undefined ? this._minX : minX;
+        this._minY = minY == undefined ? this._minY : minY;
+        this._minZ = minZ == undefined ? this._minZ : minZ;
+        this._maxX = maxX == undefined ? this._maxX : maxX;
+        this._maxY = maxY == undefined ? this._maxY : maxY;
+        this._maxZ = maxZ == undefined ? this._maxZ : maxZ;
 
         this.UpdateDomain()
     }
 
-    public SetDivisions(x : number, y : number, z : number)
+    public SetDivisions(x? : number, y? : number, z? : number)
     {
-        this._divisionsX = x;
-        this._divisionsY = y;
-        this._divisionsZ = z;
+        this._divisionsX = x == undefined ? this._divisionsX : x;
+        this._divisionsY = y == undefined ? this._divisionsY : y;
+        this._divisionsZ = z == undefined ? this._divisionsZ : z;
 
         this.UpdateDomain()
     }

@@ -50,7 +50,11 @@ export class ProgramManager {
         this._rendererManagers[0] = new RendererManager(canvas);
         this._sceneManagers[0] = new SceneManager();
         this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
+
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
+        this._domainController[0].SetLimits(-100, -100, -100, 100, 100, 100);
+        this._domainController[0].SetDivisions(5, 5, 5);
+
         this._spawnerController[0] = new SpawnerController(this._sceneManagers[0]);
         this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0].GetLimits());
         

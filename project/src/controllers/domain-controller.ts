@@ -21,9 +21,6 @@ export class DomainController
     public constructor(sceneManager : SceneManager)
     {
         this._sceneManager = sceneManager;
-
-        this.SetLimits(-100, -100, -100, 100, 100, 100);
-        this.SetDivisions(5, 5, 5);
     }
 
     public GetLimits() : {min: [number, number, number], max: [number, number, number]} {

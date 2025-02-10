@@ -7,6 +7,10 @@ export class UIDomainHandler {
         this._domainController = domainController;
     }
 
+    public ToggleVisibility(): void {
+        this._domainController.ToggleVisibility();
+    }
+
     public SetLimits(minX? : number, minY? : number, minZ? : number, maxX? : number, maxY? : number, maxZ? : number) : void {
         this._domainController.SetLimits(minX, minY, minZ, maxX, maxY, maxZ);
     }

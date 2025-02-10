@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
+import { IVisible } from "../interfaces/IVisible";
 
-export class DomainController
+export class DomainController implements IVisible 
 {
     private _sceneManager : SceneManager;
 
@@ -21,6 +22,24 @@ export class DomainController
     public constructor(sceneManager : SceneManager)
     {
         this._sceneManager = sceneManager;
+    }
+
+    public ToggleVisibility(): void {
+        if (this.Nodes !== null) {
+            for (let x = 0; x < this._divisionsX; x++)
+                {
+                    for (let y = 0; y < this._divisionsY; y++)
+                    {
+                        for (let z = 0; z < this._divisionsZ; z++)
+                        {
+                            const node = this.Nodes[x][y][z];
+                            if(node !== null) {
+                                node.visible = !node.visible;
+                            }
+                        }
+                    }
+                }
+        }
     }
 
     public GetLimits() : {min: [number, number, number], max: [number, number, number]} {
@@ -126,7 +145,6 @@ export class DomainController
                 }
             }
         }
-
     }
 
     // private UpdateBoids = () =>

@@ -2,8 +2,9 @@ import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
 import { Boid } from "../boid";
 import { DomainController } from "./domain-controller";
+import { IVisible } from "../interfaces/IVisible";
 
-export class SpawnerController
+export class SpawnerController implements IVisible
 {
     private _sceneManager : SceneManager;
 
@@ -19,6 +20,12 @@ export class SpawnerController
     public constructor(sceneManager : SceneManager)
     {
         this._sceneManager = sceneManager;
+    }
+
+    public ToggleVisibility(): void {
+        if (this._spawn !== null) {
+            this._spawn.visible = !this._spawn.visible;
+        }
     }
 
     public GetLimits() : {min: [number, number, number], max: [number, number, number]} {

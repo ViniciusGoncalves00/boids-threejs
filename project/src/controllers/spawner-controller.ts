@@ -71,8 +71,8 @@ export class SpawnerController
         
             const sphereGeometry = new THREE.SphereGeometry();
             const sphereMesh = new THREE.Mesh(sphereGeometry, material);
-            sphereMesh.position.z = 10;
-            boidMesh.add(sphereMesh)
+            sphereMesh.position.z = 100;
+            // boidMesh.add(sphereMesh)
 
             const limits = this.GetLimits();
             const size = this.GetSize();

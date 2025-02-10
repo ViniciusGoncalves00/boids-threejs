@@ -4,7 +4,7 @@ import { IUpgradeable } from "./interfaces/IUpdate";
 export class Boid implements IUpgradeable
 {
     public Mesh : THREE.Mesh;
-    public ViewRadius : number = 10;
+    public ViewRadius : number = 100;
     public Speed : number = 1;
     public AngularSpeed : number = 2;
 

@@ -91,7 +91,7 @@ export class SpawnerController implements IVisible
             boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
             boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
 
-            const boid = new Boid(boidMesh, domainSize);
+            const boid = new Boid(this._sceneManager, boidMesh, domainSize);
             boids.push(boid);
 
             this._sceneManager.AddObject(boidMesh);

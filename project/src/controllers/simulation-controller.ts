@@ -28,7 +28,7 @@ export class SimulationController implements IUpgradeable
     public Start(): void {
         this._isRunning = true;
 
-        this._boids = this._spawnerController.Spawn(this._domainController.GetLimits(), 1000)
+        this._boids = this._spawnerController.Spawn(this._domainController.GetLimits(), 100)
     }
 
     public Update(): void {

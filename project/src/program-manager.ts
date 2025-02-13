@@ -1,4 +1,5 @@
 import Alpine from "alpinejs";
+import * as THREE from "three";
 import { RendererManager } from "./managers/renderer-manager";
 import { SceneManager } from "./managers/scene-manager";
 import { CameraController } from "./controllers/camera-controller";
@@ -53,7 +54,7 @@ export class ProgramManager {
 
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
         this._domainController[0].SetLimits(-100, -100, -100, 100, 100, 100);
-        this._domainController[0].SetDivisions(5, 5, 5);
+        this._domainController[0].SetDivisions(1, 1, 1);
 
         this._spawnerController[0] = new SpawnerController(this._sceneManagers[0]);
         this._spawnerController[0].SetLimits(-10, -10, -10, 10, 10, 10);
@@ -63,6 +64,17 @@ export class ProgramManager {
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
         this._rendererManagers[0].AddUpgradeable(this._simulationController[0]);
+
+        const geometry = new THREE.BoxGeometry( 50, 50, 50);
+        const edges = new THREE.EdgesGeometry( geometry );
+        const material = new THREE.LineBasicMaterial()
+        material.color.setRGB(0, 0, 100);
+
+        const testCube = new THREE.LineSegments(edges, material)
+        testCube.position.set(50, 50, 50)
+
+        this._sceneManagers[0].BOXES.push(testCube);
+        this._sceneManagers[0].AddObject(testCube);
         
         (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._domainController[0]);
         (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0]);

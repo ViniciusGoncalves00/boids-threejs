@@ -4,6 +4,7 @@ export class SceneManager
 {
     private _scene : THREE.Scene;
     private _objects : THREE.Object3D[] = []
+    public BOXES: THREE.Object3D[] = []
 
     public constructor() {
         this._scene = new THREE.Scene();
@@ -24,6 +25,10 @@ export class SceneManager
 
     public GetScene() : THREE.Scene {
         return this._scene;
+    }
+
+    public GetObjects(): THREE.Object3D[] {
+        return this._objects;
     }
 
     public AddObject(object : THREE.Object3D) : void {

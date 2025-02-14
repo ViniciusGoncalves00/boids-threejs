@@ -1,0 +1,36 @@
+<div x-data="boundingBox({ 
+    name: 'Objeto A', 
+    onUpdate: (data) => console.log('Atualizado:', data) 
+})"
+class="p-4 border rounded shadow-lg">
+
+<h3 class="font-bold text-lg" x-text="name"></h3>
+
+<div class="grid grid-cols-3 gap-2 mt-2">
+    <div>
+        <label>Min X</label>
+        <input type="number" x-model="minX" @input="update()" class="border p-1 w-full">
+    </div>
+    <div>
+        <label>Min Y</label>
+        <input type="number" x-model="minY" @input="update()" class="border p-1 w-full">
+    </div>
+    <div>
+        <label>Min Z</label>
+        <input type="number" x-model="minZ" @input="update()" class="border p-1 w-full">
+    </div>
+
+    <div>
+        <label>Max X</label>
+        <input type="number" x-model="maxX" @input="update()" class="border p-1 w-full">
+    </div>
+    <div>
+        <label>Max Y</label>
+        <input type="number" x-model="maxY" @input="update()" class="border p-1 w-full">
+    </div>
+    <div>
+        <label>Max Z</label>
+        <input type="number" x-model="maxZ" @input="update()" class="border p-1 w-full">
+    </div>
+</div>
+</div>

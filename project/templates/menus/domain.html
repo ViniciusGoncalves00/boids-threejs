@@ -143,4 +143,9 @@
         </div>
         <button @click="UISpawnerHandler.ToggleVisibility()">VISIBLE</button>
     </div>
+
+    <div x-data="boundingBox({ 
+        name: 'Cubo Azul', 
+        onUpdate: (data) => atualizarThreeJS(data) 
+    })"></div>
 </div>

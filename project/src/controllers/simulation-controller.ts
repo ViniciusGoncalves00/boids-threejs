@@ -1,4 +1,3 @@
-import * as THREE from "three";
 import { Boid } from "../boid";
 import { SceneManager } from "../managers/scene-manager";
 import { IUpgradeable } from "../interfaces/IUpdate";
@@ -27,8 +26,9 @@ export class SimulationController implements IUpgradeable
 
     public Start(): void {
         this._isRunning = true;
+        this._isPaused = false;
 
-        this._boids = this._spawnerController.Spawn(this._domainController.GetLimits(), 100)
+        this._boids = this._spawnerController.Spawn(this._domainController.GetLimits(), 2000)
     }
 
     public Update(): void {
@@ -61,13 +61,11 @@ export class SimulationController implements IUpgradeable
     public Pause(): void {
         this._isRunning = false;
         this._isPaused = true;
-        return;
     }
     
     public Unpause(): void {
         this._isRunning = true;
         this._isPaused = false;
-        return;
     }
 
     public IsRunning() {

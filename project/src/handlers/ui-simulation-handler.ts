@@ -23,11 +23,11 @@ export class UISimulationHandler {
         this._simulationController.Unpause()
     }
 
-    public IsRunning(): void {
-        this._simulationController.IsRunning()
+    public IsRunning(): boolean {
+        return this._simulationController.IsRunning()
     }
 
-    public IsPaused(): void {
-        this._simulationController.IsPaused()
+    public IsPaused(): boolean {
+        return this._simulationController.IsPaused()
     }
 }

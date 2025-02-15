@@ -7,9 +7,9 @@ export class Boid implements IUpgradeable
 {
     private _sceneManager : SceneManager;
     public Mesh : THREE.Mesh;
-    public ViewDistance : number = 120;
+    public ViewDistance : number = 50;
     public Speed : number = 1.2;
-    public AngularSpeed : number = 0.2;
+    public AngularSpeed : number = 0.05;
 
     private _limits : { min: [number, number, number], max: [number, number, number]};
     private _directions = [
@@ -163,7 +163,29 @@ export class Boid implements IUpgradeable
     // }
 
     public Update(): void {
+        let isDirectionOutOfBounds =
+        this.Mesh.position.x < this._limits.min[0] || this.Mesh.position.x > this._limits.max[0] ||
+        this.Mesh.position.y < this._limits.min[1] || this.Mesh.position.y > this._limits.max[1] ||
+        this.Mesh.position.z < this._limits.min[2] || this.Mesh.position.z > this._limits.max[2];
+
+        const boxes: THREE.Box3[] = this._sceneManager.BOXES.map(object => new THREE.Box3().setFromObject(object));
+
+        for (const box of boxes) {
+            if (Collision.PointInsideBounds(this.Mesh.position, box)) {
+                isDirectionOutOfBounds = true;
+                break;
+            }
+        }
+
+        if(isDirectionOutOfBounds) {
+            this.Destroy();
+        }
+
         this.Move(this.Speed);
+    }
+
+    public Destroy(): void {
+        this._sceneManager.RemoveObject(this.Mesh)
     }
     
     private Move(distance: number): void {
@@ -193,8 +215,6 @@ export class Boid implements IUpgradeable
         // Aplicar uma rotação suave usando slerp()
         mesh.quaternion.slerp(targetQuaternion.multiply(mesh.quaternion), rotationSpeed);
     }
-    
-    
     
     private GetBestDirection(
         mesh: THREE.Mesh,

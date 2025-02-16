@@ -83,7 +83,7 @@ export class ProgramManager {
         this._domainController[0].SetDivisions(1, 1, 1);
 
         this._spawnerController[0] = new SpawnerController(this._sceneManagers[0]);
-        this._spawnerController[0].SetLimits(-10, 200, 200, 10, 220, 220);
+        this._spawnerController[0].SetLimits(-100, 150, 150, 100, 250, 250);
 
         this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0], this._spawnerController[0]);
         
@@ -109,12 +109,12 @@ export class ProgramManager {
         this._sceneManagers[0].AddObject(testCube2);
 
         const geometry1 = new THREE.BoxGeometry( 200, 200, 200);
-        // const edges1 = new THREE.EdgesGeometry( geometry1 );
-        const material1 = new THREE.MeshStandardMaterial()
-        // material1.color.setRGB(100, 0, 100);
+        // // const edges1 = new THREE.EdgesGeometry( geometry1 );
+        const material1 = new THREE.MeshStandardMaterial();
+        // // material1.color.setRGB(100, 0, 100);
 
-        const testCube1 = new THREE.Mesh(geometry1, material1)
-        testCube1.position.set(0, 0, 0)
+        const testCube1 = new THREE.Mesh(geometry1, material1);
+        testCube1.position.set(0, 0, 0);
 
         this._sceneManagers[0].BOXES.push(testCube1);
         this._sceneManagers[0].AddObject(testCube1);

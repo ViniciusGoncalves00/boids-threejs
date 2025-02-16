@@ -6,9 +6,9 @@ export class Boid implements IUpdatable, IGizmos
 {
     private _sceneManager : SceneManager;
     public Mesh : THREE.Mesh;
-    public ViewDistance : number = 50;
+    public ViewDistance : number = 100;
     public Speed : number = 1.2;
-    public AngularSpeed : number = 0.05;
+    public AngularSpeed : number = 0.1;
 
     private _limits : { min: [number, number, number], max: [number, number, number]};
     private _directions = [
@@ -27,7 +27,7 @@ export class Boid implements IUpdatable, IGizmos
     public Alignment: boolean = true;
     public Cohesion: boolean = false;
 
-    private _isGizmosVisible: boolean = true;
+    private _isGizmosVisible: boolean = false;
 
     public constructor(sceneManager: SceneManager, mesh: THREE.Mesh, limits: { min: [number, number, number], max: [number, number, number]})
     {
@@ -96,17 +96,18 @@ export class Boid implements IUpdatable, IGizmos
         this.Mesh.getWorldDirection(forward);
         
         let direction: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
-        let willCollide: boolean = false;
+        let needToAvoid: boolean = false;
 
         if(this.Avoidance) {
-            const data = this.TryAvoidCollision(this.Mesh, this._directions, this.ViewDistance, this._sceneManager.BOXES, this._limits);
-            willCollide = data[0]
-            if(willCollide) {
-                direction = data[1];
+            const boxes: THREE.Box3[] = this._sceneManager.BOXES.map(object => new THREE.Box3().setFromObject(object));
+            needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this.ViewDistance, boxes, this._limits);
+
+            if(needToAvoid) {
+                direction = this.TryAvoidCollision(this.Mesh, this._directions, this.ViewDistance, boxes, this._limits);
             }
         }
         
-        else if(this.Alignment && !willCollide) {
+        if(this.Alignment && !needToAvoid) {
             direction = this.Align();
         }
         
@@ -114,8 +115,9 @@ export class Boid implements IUpdatable, IGizmos
             //     direction = this.TryAvoidCollision(this.Mesh, this._directions, this.ViewDistance, this._sceneManager.BOXES, this._limits);
             // }
             
-
-        this.Rotate(this.Mesh, direction, this.AngularSpeed); 
+        if(direction != new THREE.Vector3(0, 0, 0)) {
+            this.Rotate(this.Mesh, direction, this.AngularSpeed); 
+        }
 
         this.Mesh.translateZ(distance);
     }
@@ -133,101 +135,99 @@ export class Boid implements IUpdatable, IGizmos
     
         mesh.quaternion.slerp(targetQuaternion.multiply(mesh.quaternion), rotationSpeed);
     }
+
+    private TryAvoidForwardCollision(
+        mesh: THREE.Mesh,
+        viewDistance: number,
+        boxes: THREE.Box3[],
+        limits: { min: [number, number, number], max: [number, number, number] },
+        collisionRadius: number = 3,
+    ): boolean {
+        const forward = new THREE.Vector3();
+        mesh.getWorldDirection(forward).normalize();
+
+        const forwardPosition = mesh.position.clone().add(forward.clone().multiplyScalar(viewDistance));
+        
+        const detectionSphere = new THREE.Sphere(forwardPosition, collisionRadius);
+    
+        let isForwardColliding =
+            forwardPosition.x - collisionRadius < limits.min[0] || forwardPosition.x + collisionRadius > limits.max[0] ||
+            forwardPosition.y - collisionRadius < limits.min[1] || forwardPosition.y + collisionRadius > limits.max[1] ||
+            forwardPosition.z - collisionRadius < limits.min[2] || forwardPosition.z + collisionRadius > limits.max[2];
+    
+        if (!isForwardColliding) {
+            isForwardColliding = boxes.some(box => detectionSphere.intersectsBox(box));
+        }
+    
+        return isForwardColliding;
+    }
+    
     
     private TryAvoidCollision(
         mesh: THREE.Mesh,
         directions: THREE.Vector3[],
         viewDistance: number,
-        objects: THREE.Object3D[],
+        boxes: THREE.Box3[],
         limits: { min: [number, number, number], max: [number, number, number] }
-    ): [boolean, THREE.Vector3] {
-        let thereIsAtLeastOneCollision: boolean = false;
+    ): THREE.Vector3 {
         let bestDirection = new THREE.Vector3();
-        let higherDistance = -Infinity;
+        let maxDistance = -Infinity;
     
-        const forward = new THREE.Vector3();
-        mesh.getWorldDirection(forward).normalize();
-
-        const localDirections = directions.map(direction =>
-            direction.clone().applyQuaternion(mesh.quaternion).normalize()
-        );
-
-        const boxes: THREE.Box3[] = objects.map(object => new THREE.Box3().setFromObject(object));
-
-        const forwardVector = forward.clone().multiplyScalar(viewDistance);
-        const forwardPosition = mesh.position.clone().add(forwardVector);
+        const localDirections = directions
+            .map(dir => dir.clone().applyQuaternion(mesh.quaternion).normalize())
+            .sort(() => Math.random() - 0.5);
     
-        let forwardColliding =
-            forwardPosition.x < limits.min[0] || forwardPosition.x > limits.max[0] ||
-            forwardPosition.y < limits.min[1] || forwardPosition.y > limits.max[1] ||
-            forwardPosition.z < limits.min[2] || forwardPosition.z > limits.max[2];
+        for (const direction of localDirections) {
+            const checkPosition = mesh.position.clone().addScaledVector(direction, viewDistance);
+            
+            if (!this.IsColliding(checkPosition, boxes, limits)) {
+                return direction;
+            }
     
-        let willCollide = forwardColliding || boxes.some(box => Collision.PointInsideBounds(forwardPosition, box));
-    
-        if (!willCollide) {
-            return [false, new THREE.Vector3(0, 0, 0)];
+            const distance = mesh.position.distanceTo(checkPosition);
+            if (distance > maxDistance) {
+                maxDistance = distance;
+                bestDirection.copy(direction);
+            }
         }
-
-        localDirections.forEach(direction => {
-            const collisorVector = direction.clone().multiplyScalar(viewDistance);
-            const collisorPosition = mesh.position.clone().add(collisorVector);
-
-            let collidingDirection = false;
     
-            collidingDirection =
-                collisorPosition.x < limits.min[0] || collisorPosition.x > limits.max[0] ||
-                collisorPosition.y < limits.min[1] || collisorPosition.y > limits.max[1] ||
-                collisorPosition.z < limits.min[2] || collisorPosition.z > limits.max[2];
-    
-            if (collidingDirection) {
-                thereIsAtLeastOneCollision = true;
-                const distance = mesh.position.distanceTo(collisorPosition);
+        return bestDirection;
+    }
 
-                if (distance > higherDistance) {
-                    higherDistance = distance;
-                    bestDirection = direction;
-                }
-            }
-            else {
-                higherDistance = mesh.position.distanceTo(collisorPosition);
-                bestDirection = direction;
-            }
-
-            for (const box of boxes) {
-                if (Collision.PointInsideBounds(collisorPosition, box)) {
-                    thereIsAtLeastOneCollision = true;
-                    const distance = mesh.position.distanceTo(collisorPosition);
-    
-                    if (distance > higherDistance) {
-                        higherDistance = distance;
-                        bestDirection = direction;
-                    }
-                }
-            }
-        });
-
-        return [thereIsAtLeastOneCollision, bestDirection];
+    private IsColliding(position: THREE.Vector3, boxes: THREE.Box3[], limits: { min: [number, number, number], max: [number, number, number] }): boolean {
+        return (
+            position.x < limits.min[0] || position.x > limits.max[0] ||
+            position.y < limits.min[1] || position.y > limits.max[1] ||
+            position.z < limits.min[2] || position.z > limits.max[2] ||
+            boxes.some(box => Collision.PointInsideBounds(position, box))
+        );
     }
     
-    private Align(): THREE.Vector3 {
+    private Align(alignmentRadius: number = 30): THREE.Vector3 {
         const creatures = this._sceneManager.GetPopulation();
         let totalDirection = new THREE.Vector3(0, 0, 0);
         let count = 0;
     
         creatures.forEach(creature => {
             if (creature !== this) {
-                const directionToCreature = new THREE.Vector3().subVectors(creature.Mesh.position, this.Mesh.position);
-                totalDirection.add(directionToCreature);
-                count++;
+                const distance = this.Mesh.position.distanceTo(creature.Mesh.position);
+    
+                if (distance < alignmentRadius) {
+                    const creatureDirection = new THREE.Vector3();
+                    creature.Mesh.getWorldDirection(creatureDirection);
+                    totalDirection.add(creatureDirection);
+                    count++;
+                }
             }
         });
     
         if (count > 0) {
             totalDirection.divideScalar(count);
             totalDirection.normalize();
+        } else {
+            totalDirection.set(0, 0, 0);
         }
     
-        console.log(totalDirection)
         return totalDirection;
     }
 }

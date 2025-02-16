@@ -102,8 +102,10 @@ export class Boid implements IUpdatable, IGizmos
             const boxes: THREE.Box3[] = this._sceneManager.BOXES.map(object => new THREE.Box3().setFromObject(object));
             needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this.ViewDistance, boxes, this._limits);
 
-            if(needToAvoid) {
+            if (needToAvoid) {
                 direction = this.TryAvoidCollision(this.Mesh, this._directions, this.ViewDistance, boxes, this._limits);
+            } else {
+                direction = this.Avoid();
             }
         }
         
@@ -230,4 +232,32 @@ export class Boid implements IUpdatable, IGizmos
     
         return totalDirection;
     }
+
+    private Avoid(): THREE.Vector3 {
+        const creatures = this._sceneManager.GetPopulation();
+        const separationDistance = 20; // Distância mínima desejada entre os boids
+        let totalAvoidance = new THREE.Vector3(0, 0, 0);
+        let count = 0;
+    
+        creatures.forEach(creature => {
+            if (creature !== this) {
+                const distance = this.Mesh.position.distanceTo(creature.Mesh.position);
+                if (distance < separationDistance && distance > 0) {
+                    // Vetor que aponta do vizinho para este boid (fuga)
+                    const fleeDirection = new THREE.Vector3().subVectors(this.Mesh.position, creature.Mesh.position);
+                    fleeDirection.divideScalar(distance); // Evita influência exagerada dos mais distantes
+                    totalAvoidance.add(fleeDirection);
+                    count++;
+                }
+            }
+        });
+    
+        if (count > 0) {
+            totalAvoidance.divideScalar(count);
+            totalAvoidance.normalize();
+        }
+    
+        return totalAvoidance;
+    }
+    
 }

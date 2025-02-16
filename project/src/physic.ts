@@ -9,5 +9,9 @@ export class Collision {
             return true;
         }
         return false;
-    } 
+    }
+
+    public static PointIntersectionBox(pointA: THREE.Vector3, pointB: THREE.Vector3, bounds: THREE.Box3): THREE.Vector3 {
+        return new THREE.Vector3(0, 0, 0)
+    }
 }

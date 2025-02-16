@@ -1,6 +1,5 @@
 import { Boid } from "../boid";
 import { SceneManager } from "../managers/scene-manager";
-import { IUpdatable } from "../interfaces/IUpdate";
 import { DomainController } from "./domain-controller";
 import { SpawnerController } from "./spawner-controller";
 
@@ -26,7 +25,7 @@ export class SimulationController implements IUpdatable
         this._isRunning = true;
         this._isPaused = false;
 
-        this._spawnerController.Spawn(this._domainController.GetLimits(), 2000)
+        this._spawnerController.Spawn(this._domainController.GetLimits(), 10)
     }
 
     public Update(): void {

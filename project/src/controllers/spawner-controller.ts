@@ -1,8 +1,6 @@
 import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
 import { Boid } from "../boid";
-import { DomainController } from "./domain-controller";
-import { IVisible } from "../interfaces/IVisible";
 
 export class SpawnerController implements IVisible
 {

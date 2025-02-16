@@ -1,3 +1,3 @@
-export interface IVisible {
+interface IVisible {
     ToggleVisibility(): void;
 }

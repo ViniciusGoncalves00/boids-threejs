@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
-import { IVisible } from "../interfaces/IVisible";
 
 export class DomainController implements IVisible 
 {

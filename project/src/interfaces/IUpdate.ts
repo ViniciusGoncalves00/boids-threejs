@@ -1,3 +1,3 @@
-export interface IUpdatable {
+interface IUpdatable {
     Update(): void;
 }

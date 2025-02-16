@@ -1,5 +1,4 @@
 import { SpawnerController } from "../controllers/spawner-controller";
-import { IVisible } from "../interfaces/IVisible";
 
 export class UISpawnerHandler {
     private _spawnerController : SpawnerController;

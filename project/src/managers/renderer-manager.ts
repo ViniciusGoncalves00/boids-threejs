@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { CameraController, CameraControllerEventMap } from "../controllers/camera-controller";
-import { IUpdatable } from "../interfaces/IUpdate";
 
 export class RendererManager {
     private _canvas: HTMLCanvasElement;

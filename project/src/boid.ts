@@ -8,7 +8,7 @@ export class Boid implements IUpdatable, IGizmos
     public Mesh : THREE.Mesh;
     public ViewDistance : number = 50;
     public Speed : number = 1.2;
-    public AngularSpeed : number = 0.1;
+    public AngularSpeed : number = 0.05;
 
     private _limits : { min: [number, number, number], max: [number, number, number]};
     private _directions = [
@@ -141,68 +141,72 @@ export class Boid implements IUpdatable, IGizmos
         objects: THREE.Object3D[],
         limits: { min: [number, number, number], max: [number, number, number] }
     ): [boolean, THREE.Vector3] {
-        const boxes: THREE.Box3[] = objects.map(object => new THREE.Box3().setFromObject(object));
+        let thereIsAtLeastOneCollision: boolean = false;
+        let bestDirection = new THREE.Vector3();
+        let higherDistance = -Infinity;
     
         const forward = new THREE.Vector3();
         mesh.getWorldDirection(forward).normalize();
-    
-        const forwardVector = forward.clone().multiplyScalar(viewDistance);
-        const collisorPosition = mesh.position.clone().add(forwardVector);
-    
-        // Verifica se a posição está saindo dos limites (TRATADO COMO COLISÃO)
-        let isOutOfBounds =
-            collisorPosition.x < limits.min[0] || collisorPosition.x > limits.max[0] ||
-            collisorPosition.y < limits.min[1] || collisorPosition.y > limits.max[1] ||
-            collisorPosition.z < limits.min[2] || collisorPosition.z > limits.max[2];
-    
-        let isColliding = isOutOfBounds || boxes.some(box => Collision.PointInsideBounds(collisorPosition, box));
-    
-        // Se NÃO houver colisão, manter a direção atual
-        if (!isColliding) {
-            return [false, forward];
-        }
-    
-        // Buscar a melhor direção alternativa se houver colisão
-        let bestDirection = forward;
-        let maxClearDistance = -Infinity;
-    
-        const rotatedDirections = directions.map(direction =>
+
+        const localDirections = directions.map(direction =>
             direction.clone().applyQuaternion(mesh.quaternion).normalize()
         );
+
+        const boxes: THREE.Box3[] = objects.map(object => new THREE.Box3().setFromObject(object));
+
+        const forwardVector = forward.clone().multiplyScalar(viewDistance);
+        const forwardPosition = mesh.position.clone().add(forwardVector);
     
-        rotatedDirections.forEach(direction => {
-            const adjustedDirection = direction.clone().multiplyScalar(viewDistance);
-            const testPosition = mesh.position.clone().add(adjustedDirection);
+        let forwardColliding =
+            forwardPosition.x < limits.min[0] || forwardPosition.x > limits.max[0] ||
+            forwardPosition.y < limits.min[1] || forwardPosition.y > limits.max[1] ||
+            forwardPosition.z < limits.min[2] || forwardPosition.z > limits.max[2];
     
-            let isDirectionOutOfBounds =
-                testPosition.x < limits.min[0] || testPosition.x > limits.max[0] ||
-                testPosition.y < limits.min[1] || testPosition.y > limits.max[1] ||
-                testPosition.z < limits.min[2] || testPosition.z > limits.max[2];
+        let willCollide = forwardColliding || boxes.some(box => Collision.PointInsideBounds(forwardPosition, box));
     
-            let minDistance = viewDistance; // Define a distância livre inicial
+        if (!willCollide) {
+            return [false, new THREE.Vector3(0, 0, 0)];
+        }
+
+        localDirections.forEach(direction => {
+            const collisorVector = direction.clone().multiplyScalar(viewDistance);
+            const collisorPosition = mesh.position.clone().add(collisorVector);
+
+            let collidingDirection = false;
     
-            // Se já saiu dos limites, essa direção não é válida
-            if (isDirectionOutOfBounds) {
-                minDistance = 0;
-            } else {
-                for (const box of boxes) {
-                    if (Collision.PointInsideBounds(testPosition, box)) {
-                        const intersection = mesh.position.clone().add(adjustedDirection);
-                        const distanceToCollision = intersection.distanceTo(mesh.position);
+            collidingDirection =
+                collisorPosition.x < limits.min[0] || collisorPosition.x > limits.max[0] ||
+                collisorPosition.y < limits.min[1] || collisorPosition.y > limits.max[1] ||
+                collisorPosition.z < limits.min[2] || collisorPosition.z > limits.max[2];
     
-                        minDistance = Math.min(minDistance, distanceToCollision);
+            if (collidingDirection) {
+                thereIsAtLeastOneCollision = true;
+                const distance = mesh.position.distanceTo(collisorPosition);
+
+                if (distance > higherDistance) {
+                    higherDistance = distance;
+                    bestDirection = direction;
+                }
+            }
+            else {
+                higherDistance = mesh.position.distanceTo(collisorPosition);
+                bestDirection = direction;
+            }
+
+            for (const box of boxes) {
+                if (Collision.PointInsideBounds(collisorPosition, box)) {
+                    thereIsAtLeastOneCollision = true;
+                    const distance = mesh.position.distanceTo(collisorPosition);
+    
+                    if (distance > higherDistance) {
+                        higherDistance = distance;
+                        bestDirection = direction;
                     }
                 }
             }
-    
-            // Se essa direção tem maior espaço livre, ela é a melhor opção
-            if (minDistance > maxClearDistance) {
-                maxClearDistance = minDistance;
-                bestDirection = direction.clone();
-            }
         });
-    
-        return [true, bestDirection];
+
+        return [thereIsAtLeastOneCollision, bestDirection];
     }
     
     private Align(): THREE.Vector3 {

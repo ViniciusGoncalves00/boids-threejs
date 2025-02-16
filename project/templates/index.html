@@ -45,6 +45,7 @@
                  x-init="fetch('./components/visualization.html').then(res => res.text()).then(html => content = html)"
                  x-html="content">
             </div>
+            <div x-text="$store.UISceneHandler.CreaturesAlive" class="w-full h-6 flex items-center justify-center z-50">TEXT</div>
             <!-- END SUPERIOR MENU -->
 
             <div id="middle-center-middle" class="w-full grow"></div>

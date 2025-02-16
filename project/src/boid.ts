@@ -185,7 +185,7 @@ export class Boid implements IUpgradeable
     }
 
     public Destroy(): void {
-        this._sceneManager.RemoveObject(this.Mesh)
+        this._sceneManager.RemoveCreature(this)
     }
     
     private Move(distance: number): void {

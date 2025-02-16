@@ -10,6 +10,7 @@ import { SpawnerController } from "./controllers/spawner-controller";
 import { UISpawnerHandler } from "./handlers/ui-spawner-handler";
 import { SimulationController } from "./controllers/simulation-controller";
 import { UISimulationHandler } from "./handlers/ui-simulation-handler";
+import { UISceneHandler } from "./handlers/ui-scene-handler";
 
 declare global {
     interface Window {
@@ -19,6 +20,7 @@ declare global {
         UIDomainHandler: typeof UIDomainHandler;
         UISpawnerHandler: typeof UISpawnerHandler;
         UISimulationHandler: typeof UISimulationHandler;
+        UISceneHandler: typeof UISceneHandler;
     }
   }
 
@@ -71,7 +73,11 @@ export class ProgramManager {
         const canvas : HTMLCanvasElement = document.querySelector("canvas")!;
         
         this._rendererManagers[0] = new RendererManager(canvas);
+
+        Alpine.store("UISceneHandler", new UISceneHandler())
+
         this._sceneManagers[0] = new SceneManager();
+
         this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
 
         this._domainController[0] = new DomainController(this._sceneManagers[0]);

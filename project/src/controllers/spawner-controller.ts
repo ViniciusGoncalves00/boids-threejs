@@ -63,7 +63,7 @@ export class SpawnerController implements IVisible
         this.Update()
     }
 
-    public Spawn(domainSize: {min: [number, number, number], max: [number, number, number]} , amount: number): Boid[] {
+    public Spawn(domainSize: {min: [number, number, number], max: [number, number, number]} , amount: number): void {
         let boids: Boid[] = []
 
         const geometry = new THREE.ConeGeometry();
@@ -93,11 +93,9 @@ export class SpawnerController implements IVisible
 
             const boid = new Boid(this._sceneManager, boidMesh, domainSize);
             boids.push(boid);
-
-            this._sceneManager.AddObject(boidMesh);
         }
-
-        return boids;
+        
+        this._sceneManager.Populate(boids);
     }
 
     private Update()

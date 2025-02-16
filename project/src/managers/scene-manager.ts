@@ -1,9 +1,11 @@
 import * as THREE from "three";
+import { Boid } from "../boid";
 
 export class SceneManager
 {
     private _scene : THREE.Scene;
     private _objects : THREE.Object3D[] = []
+    private _creatures : Boid[] = [];
     public BOXES: THREE.Object3D[] = []
 
     public constructor() {
@@ -31,13 +33,13 @@ export class SceneManager
         return this._objects;
     }
 
-    public AddObject(object : THREE.Object3D) : void {
-        this._objects.push(object)
-        this._scene.add(object)
+    public GetPopulation(): Boid[] {
+        return this._creatures;
     }
-    
-    public AddObjects(objects : THREE.Object3D[]) : void {
-        this._scene.add(...objects)
+
+    public AddObject(object : THREE.Object3D) : void {
+        this._objects.push(object);
+        this._scene.add(object);
     }
     
     public RemoveObject(object : THREE.Object3D) : void {
@@ -45,7 +47,25 @@ export class SceneManager
         this._scene.remove(object);
     }
 
-    public RemoveObjects(objects : THREE.Object3D[]) : void {
-        this._scene.remove(...objects)
+    public AddCreature(creature : Boid) : void {
+        this._creatures.push(creature);
+        this._scene.add(creature.Mesh);
+        (window as any).Alpine.store("UISceneHandler").CreaturesAlive += 1;
+    }
+
+    public RemoveCreature(creature : Boid) : void {
+        this._creatures.splice(this._creatures.findIndex(obj => obj === creature), 1);
+        this._scene.remove(creature.Mesh);
+        (window as any).Alpine.store("UISceneHandler").CreaturesAlive -= 1;
+    }
+
+    public Populate(creatures: Boid[]): void {
+        creatures.forEach(creature => {
+            this.AddCreature(creature)
+        });
+    }
+
+    public CreaturesAlive(): number {
+        return this._creatures.length;
     }
 }

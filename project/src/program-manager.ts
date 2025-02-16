@@ -74,8 +74,6 @@ export class ProgramManager {
         
         this._rendererManagers[0] = new RendererManager(canvas);
 
-        Alpine.store("UISceneHandler", new UISceneHandler())
-
         this._sceneManagers[0] = new SceneManager();
 
         this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
@@ -125,6 +123,9 @@ export class ProgramManager {
         (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0]);
         (window.UISpawnerHandler as any) = new UISpawnerHandler(this._spawnerController[0]);
         (window.UISimulationHandler as any) = new UISimulationHandler(this._simulationController[0]);
+
+        Alpine.store("UISceneHandler", new UISceneHandler())
+        this._sceneManagers[0].Attach(Alpine.store("UISceneHandler") as UISceneHandler)
     }
 
     public static GetInstance() : ProgramManager {

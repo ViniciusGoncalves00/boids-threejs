@@ -1,12 +1,12 @@
 import * as THREE from "three";
 import { CameraController, CameraControllerEventMap } from "../controllers/camera-controller";
-import { IUpgradeable } from "../interfaces/IUpdate";
+import { IUpdatable } from "../interfaces/IUpdate";
 
 export class RendererManager {
     private _canvas: HTMLCanvasElement;
     private _renderer: THREE.Renderer;
     private _scene: THREE.Scene | null = null;
-    private _upgradeables: IUpgradeable[] = [];
+    private _upgradeables: IUpdatable[] = [];
     private _cameraController: CameraController | null = null;
 
     public constructor(canvas: HTMLCanvasElement) {
@@ -38,7 +38,7 @@ export class RendererManager {
         return this._renderer.domElement;
     }
 
-    public AddUpgradeable(upgradeable: IUpgradeable): void {
+    public AddUpgradeable(upgradeable: IUpdatable): void {
         this._upgradeables?.push(upgradeable)
     }
 

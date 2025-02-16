@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import { IUpgradeable } from "./interfaces/IUpdate";
+import { IUpdatable } from "./interfaces/IUpdate";
 import { Collision } from "./physic";
 import { SceneManager } from "./managers/scene-manager";
 
-export class Boid implements IUpgradeable
+export class Boid implements IUpdatable
 {
     private _sceneManager : SceneManager;
     public Mesh : THREE.Mesh;

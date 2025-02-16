@@ -1,10 +1,10 @@
 import { Boid } from "../boid";
 import { SceneManager } from "../managers/scene-manager";
-import { IUpgradeable } from "../interfaces/IUpdate";
+import { IUpdatable } from "../interfaces/IUpdate";
 import { DomainController } from "./domain-controller";
 import { SpawnerController } from "./spawner-controller";
 
-export class SimulationController implements IUpgradeable
+export class SimulationController implements IUpdatable
 {
     private _isRunning : boolean;
     private _isPaused : boolean;

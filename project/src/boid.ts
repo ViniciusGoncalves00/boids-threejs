@@ -235,7 +235,7 @@ export class Boid implements IUpdatable, IGizmos
 
     private Avoid(): THREE.Vector3 {
         const creatures = this._sceneManager.GetPopulation();
-        const separationDistance = 20; // Distância mínima desejada entre os boids
+        const separationDistance = 20;
         let totalAvoidance = new THREE.Vector3(0, 0, 0);
         let count = 0;
     
@@ -243,9 +243,8 @@ export class Boid implements IUpdatable, IGizmos
             if (creature !== this) {
                 const distance = this.Mesh.position.distanceTo(creature.Mesh.position);
                 if (distance < separationDistance && distance > 0) {
-                    // Vetor que aponta do vizinho para este boid (fuga)
                     const fleeDirection = new THREE.Vector3().subVectors(this.Mesh.position, creature.Mesh.position);
-                    fleeDirection.divideScalar(distance); // Evita influência exagerada dos mais distantes
+                    fleeDirection.divideScalar(distance);
                     totalAvoidance.add(fleeDirection);
                     count++;
                 }

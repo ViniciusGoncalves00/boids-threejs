@@ -9,6 +9,7 @@ module.exports =
       fontFamily: {
         Montserrat: ["Montserrat"],
         RobotoCondensed: ["Roboto Condensed"],
+        Roboto: ["Roboto"],
       },
       dropShadow:
       {

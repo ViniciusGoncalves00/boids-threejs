@@ -1,5 +1,5 @@
 <!-- <div class="flex-none max-h-full flex flex-col items-center justify-start">
-    <div id="menu-title-assets" class="text-title-1 w-full my-[4px] flex items-center justify-center text-center align-middle uppercase">assets</div>
+    <div id="menu-title-assets" class="text-title-1 w-full my-[4px] flex items-center justify-center text-center align-middle ">assets</div>
 
     <div class="w-full h-[16px] flex flex-col items-center justify-center">
         
@@ -15,46 +15,47 @@
 </div> -->
 
 <div class="flex-none max-h-full flex flex-col items-center justify-start">
-    <div id="menu-title-assets" class="text-title-1 w-full my-[4px] flex items-center justify-center text-center align-middle uppercase">domain</div>
-    <div class="w-full h-[16px] flex flex-col items-center justify-center">
-        
+    <div id="menu-title-assets" class="text-title-1 w-full flex items-center justify-start text-center align-middle ">domain</div>
+    <div class="text-content-1 w-full flex flex-col items-center justify-center">
+        <p>the domain is used to defines where creatures can go</p>
     </div>
 
     <div id="domain-limits" x-data="{open: true}" class="w-full flex flex-col">
-        <div x-show="open" x-data="{ limits: UIDomainHandler.GetLimits() }" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[4px]">
-
+        <div x-show="open" x-data="{ limits: UIDomainHandler.GetLimits() }" class="w-full flex flex-col items-start justify-start my-[8px] space-y-[8px]">
             <div x-data="{ minX: limits.min[0], minY: limits.min[1], minZ: limits.min[2], maxX: limits.max[0], maxY: limits.max[1], maxZ: limits.max[2] }" class="h-[24px] w-full flex flex-col items-center justify-start">
-                <div class="h-[24px] w-full flex items-center justify-between">
-                    <div class="h-full w-[64px] text-primary_text flex items-center justify-start">minimum</div>
-                    <div class="h-full w-[calc(100%-64px)] flex items-center justify-between">
-                        <div class="h-full w-[33%] flex items-center justify-between">
-                            <div class="h-full w-[24px] text-primary_text flex items-center justify-center">x</div>
-                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minX" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                <div class="h-[24px] w-full flex flex-col items-start justify-between">
+                    <div class="h-full w-[64px] text-primary_text flex items-center justify-start">min:</div>
+                    <div class="h-full w-full flex items-center justify-between gap-[4px]">
+                        <div class="h-full w-full flex items-center justify-between">
+                            <div class="h-full w-[20px] text-primary_text flex items-center justify-center">x</div>
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minX" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-full bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
                         </div>
-                        <div class="h-full w-[33%] flex items-center justify-between">
-                            <div class="h-full w-[24px] text-primary_text flex items-center justify-center">y</div>
-                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minY" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                        <div class="h-full w-full flex items-center justify-between">
+                            <div class="h-full w-[20px] text-primary_text flex items-center justify-center">y</div>
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minY" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-full bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
                         </div>
-                        <div class="h-full w-[33%] flex items-center justify-between">
-                            <div class="h-full w-[24px] text-primary_text flex items-center justify-center">z</div>
-                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minZ" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                        <div class="h-full w-full flex items-center justify-between">
+                            <div class="h-full w-[20px] text-primary_text flex items-center justify-center">z</div>
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minZ" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-full bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
                         </div>
                     </div>
                 </div>
-                <div class="h-[24px] w-full flex items-center justify-between">
-                    <div class="h-full w-[64px] text-primary_text flex items-center justify-start">maximum</div>
-                    <div class="h-full w-[calc(100%-64px)] flex items-center justify-between">
-                        <div class="h-full w-[33%] flex items-center justify-between">
+            </div>
+            <div x-data="{ minX: limits.min[0], minY: limits.min[1], minZ: limits.min[2], maxX: limits.max[0], maxY: limits.max[1], maxZ: limits.max[2] }" class="h-[24px] w-full flex flex-col items-center justify-start">
+                <div class="h-[24px] w-full flex flex-col items-start justify-between">
+                    <div class="h-full w-[64px] text-primary_text flex items-center justify-start">min:</div>
+                    <div class="h-full w-full flex items-center justify-between gap-[4px]">
+                        <div class="h-full w-full flex items-center justify-between">
                             <div class="h-full w-[24px] text-primary_text flex items-center justify-center">x</div>
-                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="maxX" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minX" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
                         </div>
-                        <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-full flex items-center justify-between">
                             <div class="h-full w-[24px] text-primary_text flex items-center justify-center">y</div>
-                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="maxY" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minY" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
                         </div>
-                        <div class="h-full w-[33%] flex items-center justify-between">
+                        <div class="h-full w-full flex items-center justify-between">
                             <div class="h-full w-[24px] text-primary_text flex items-center justify-center">z</div>
-                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="maxZ" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+                            <input type="number" min="-1000" max="1000" step="1" placeholder="..." x-model="minZ" @input="UIDomainHandler.SetLimits(parseFloat(minX), parseFloat(minY), parseFloat(minZ), parseFloat(maxX), parseFloat(maxY), parseFloat(maxZ))" class="h-full w-[calc(100%-24px)] bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
                         </div>
                     </div>
                 </div>
@@ -93,7 +94,7 @@
         <button @click="UIDomainHandler.ToggleVisibility()">VISIBLE</button>
     </div>
 
-    <div id="menu-title-assets" class="text-title-1 w-full my-[4px] flex items-center justify-center text-center align-middle uppercase">spawner</div>
+    <div id="menu-title-assets" class="text-title-1 w-full my-[4px] flex items-center justify-center text-center align-middle ">spawner</div>
     <div class="w-full h-[16px] flex flex-col items-center justify-center">
         
     </div>

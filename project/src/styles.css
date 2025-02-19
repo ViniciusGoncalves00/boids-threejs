@@ -56,6 +56,14 @@
   src: url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap") format("truetype");
 }
 
+@font-face {
+  font-family: "Roboto", serif;
+  font-optical-sizing: auto;
+  font-weight: 100 900;
+  font-style: normal;
+  src: url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap") format("truetype");
+}
+
 .button-menu
 {
   @apply h-full flex items-center justify-center text-primary_text text-sm font-RobotoCondensed bg-primary focus:bg-primary_highlight focus:drop-shadow-custom-shadow-1 hover:bg-primary_highlight hover:drop-shadow-custom-shadow-1
@@ -113,14 +121,14 @@
   /* MENUS */
   .text-title-1
   {
-      @apply text-gray-800 text-[18px] font-bold font-RobotoCondensed
+      @apply text-gray-800 text-[18px] capitalize font-medium
   }
   .text-title-2
   {
-      @apply text-gray-800 text-[14px] font-light font-mono
+      @apply text-gray-800 text-[14px] capitalize font-Roboto
   }
   .text-content-1
   {
-      @apply text-gray-800 font-light font-RobotoCondensed
+      @apply text-gray-600 text-[14px] lowercase
   }
 }

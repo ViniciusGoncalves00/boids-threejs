@@ -9,9 +9,6 @@ export class Boid implements IUpdatable, IGizmos
     private _boidsManager : BoidsManager;
 
     public Mesh : THREE.Mesh;
-    public ViewDistance : number = 100;
-    public Speed : number = 1.2;
-    public AngularSpeed : number = 0.1;
 
     private _limits : { min: [number, number, number], max: [number, number, number]};
     private _directions = [
@@ -52,7 +49,7 @@ export class Boid implements IUpdatable, IGizmos
         this._directions.forEach(direction => {
         const geometry = new THREE.BufferGeometry();
         const start = new THREE.Vector3(0, 0, 0);
-        const end = direction.clone().multiplyScalar(this.ViewDistance);
+        const end = direction.clone().multiplyScalar(this._boidsManager.GetViewDistance());
 
         geometry.setFromPoints([start, end]);
 
@@ -88,7 +85,7 @@ export class Boid implements IUpdatable, IGizmos
             }
         }
 
-        this.Move(this.Speed);
+        this.Move(this._boidsManager.GetSpeed());
     }
 
     public Destroy(): void {
@@ -104,10 +101,10 @@ export class Boid implements IUpdatable, IGizmos
 
         if(this._boidsManager.GetAvoidance()) {
             const boxes: THREE.Box3[] = this._sceneManager.BOXES.map(object => new THREE.Box3().setFromObject(object));
-            needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this.ViewDistance, boxes, this._limits);
+            needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this._boidsManager.GetViewDistance(), boxes, this._limits);
 
             if (needToAvoid) {
-                direction = this.TryAvoidCollision(this.Mesh, this._directions, this.ViewDistance, boxes, this._limits);
+                direction = this.TryAvoidCollision(this.Mesh, this._directions, this._boidsManager.GetViewDistance(), boxes, this._limits);
             } else {
                 direction = this.Avoid();
             }
@@ -118,11 +115,11 @@ export class Boid implements IUpdatable, IGizmos
         }
         
         // else if(this._boidsManager.GetCohesion()) {
-            //     direction = this.TryAvoidCollision(this.Mesh, this._directions, this.ViewDistance, this._sceneManager.BOXES, this._limits);
+            //     direction = this.TryAvoidCollision(this.Mesh, this._directions, this._boidsManager.GetViewDistance(), this._sceneManager.BOXES, this._limits);
             // }
             
         if(direction != new THREE.Vector3(0, 0, 0)) {
-            this.Rotate(this.Mesh, direction, this.AngularSpeed); 
+            this.Rotate(this.Mesh, direction, this._boidsManager.GetRotationSpeed()); 
         }
 
         this.Mesh.translateZ(distance);

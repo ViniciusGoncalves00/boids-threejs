@@ -22,4 +22,28 @@ export class UIBoidsHandler {
     public ToggleDeath(): void {
         this._boidsManager.ToggleDeath();
     }
+
+    public GetViewDistance(): number {
+        return this._boidsManager.GetViewDistance();
+    }
+
+    public GetSpeed(): number {
+        return this._boidsManager.GetSpeed();
+    }
+
+    public GetRotationSpeed(): number {
+        return this._boidsManager.GetRotationSpeed();
+    }
+
+    public SetViewDistance(value: number): void {
+        this._boidsManager.SetViewDistance(value);
+    }
+
+    public SetSpeed(value: number): void {
+        this._boidsManager.SetSpeed(value);
+    }
+
+    public SetRotationSpeed(value: number): void {
+        this._boidsManager.SetRotationSpeed(value);
+    }
 }

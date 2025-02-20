@@ -1,6 +1,6 @@
 import { DomainController } from "../controllers/domain-controller";
 
-export class UIDomainHandler {
+export class UIDomainHandler implements IVisible, IColorful {
     private _domainController : DomainController;
 
     public constructor(domainController: DomainController) {
@@ -9,6 +9,13 @@ export class UIDomainHandler {
 
     public ToggleVisibility(): void {
         this._domainController.ToggleVisibility();
+    }
+
+    public SetColor(r: number, g: number, b: number): void {
+        this._domainController.SetColor(r, g, b);
+    }
+    public GetColor(): string {
+        return this._domainController.GetColor();
     }
 
     public SetLimits(minX? : number, minY? : number, minZ? : number, maxX? : number, maxY? : number, maxZ? : number) : void {

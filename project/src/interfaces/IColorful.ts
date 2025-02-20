@@ -1,4 +1,4 @@
 interface IColorful {
-    SetColor(): void;
+    SetColor(r: number, g: number, b: number): void;
     GetColor(): string;
 }

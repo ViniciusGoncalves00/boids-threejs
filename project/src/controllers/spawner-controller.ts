@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
 import { Boid } from "../boid";
 
-export class SpawnerController implements IVisible
+export class SpawnerController implements IVisible, IColorful
 {
     private _sceneManager : SceneManager;
 
@@ -18,6 +18,26 @@ export class SpawnerController implements IVisible
     public constructor(sceneManager : SceneManager)
     {
         this._sceneManager = sceneManager;
+    }
+
+    public SetColor(r: number, g: number, b: number): void {
+        const color = new THREE.Color(r, g, b);
+        const material = new THREE.LineBasicMaterial({ color: color });
+
+        if (!this._spawn) {
+            return;
+        }
+
+        this._spawn.material = material;
+    }
+
+    public GetColor(): string {
+        const default_color = `#ffffff`;
+        if (!this._spawn || !this._spawn.material) {
+            return default_color;
+        }
+        const material = this._spawn.material as THREE.LineBasicMaterial;
+        return `#${material.color.getHexString()}`;
     }
 
     public ToggleVisibility(): void {

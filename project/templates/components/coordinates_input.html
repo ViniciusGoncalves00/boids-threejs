@@ -1,0 +1,6 @@
+<div class="h-full w-full flex items-center justify-between">
+    <div class="h-full w-[20px] text-primary_text flex items-center justify-center uppercase" x-text="label"></div>
+    <input type="number" :min="min" :max="max" step="1" placeholder="..." 
+        x-model="value" @input="onInput(value)" 
+        class="h-full w-full bg-primary_highlight text-primary_text text-center border-[1px] border-black/20">
+</div>

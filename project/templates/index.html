@@ -33,7 +33,7 @@
                      x-init="fetch('./components/left_buttons.html').then(res => res.text()).then(html => content = html)"
                      x-html="content">
                 </div>
-                <div id="left-menu" x-show="open" class="w-[256px] h-full bg-gray-50 p-[16px]" x-html="menuContent"></div>
+                <div id="left-menu" x-show="open" class="w-[384px] h-full bg-gray-50 p-[16px]" x-html="menuContent"></div>
             </div>
         </div>
         <!-- END LEFT MENU -->
@@ -62,7 +62,7 @@
         <!-- RIGHT MENU -->
         <div id="middle-right" class="h-full pointer-events-auto">
             <div x-data="{open: false, menuContent: ''}" class="h-full flex justify-end drop-shadow-[-2px_0_4px_rgba(1,1,1,.1)] outline outline-[1px] outline-black/10 rounded-[4px]">
-                <div id="right-menu" x-show="open" class="w-[256px] h-full bg-gray-50 p-[16px]" x-html="menuContent"></div>
+                <div id="right-menu" x-show="open" class="w-[384px] h-full bg-gray-50 p-[16px]" x-html="menuContent"></div>
                 <div class="w-[48px] h-full bg-gray-100 flex flex-col items-center justify-start"
                      x-data="{ content: '' }"
                      x-init="fetch('./components/right_buttons.html').then(res => res.text()).then(html => content = html)"

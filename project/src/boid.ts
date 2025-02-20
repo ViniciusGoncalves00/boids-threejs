@@ -1,10 +1,13 @@
 import * as THREE from "three";
 import { Collision } from "./physic";
 import { SceneManager } from "./managers/scene-manager";
+import { BoidsManager } from "./managers/boids-manager";
 
 export class Boid implements IUpdatable, IGizmos
 {
     private _sceneManager : SceneManager;
+    private _boidsManager : BoidsManager;
+
     public Mesh : THREE.Mesh;
     public ViewDistance : number = 100;
     public Speed : number = 1.2;
@@ -23,15 +26,12 @@ export class Boid implements IUpdatable, IGizmos
         new THREE.Vector3(-1, -1, 1).normalize(),
     ]
 
-    public Avoidance: boolean = true;
-    public Alignment: boolean = true;
-    public Cohesion: boolean = false;
-
     private _isGizmosVisible: boolean = false;
 
-    public constructor(sceneManager: SceneManager, mesh: THREE.Mesh, limits: { min: [number, number, number], max: [number, number, number]})
+    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, mesh: THREE.Mesh, limits: { min: [number, number, number], max: [number, number, number]})
     {
         this._sceneManager = sceneManager;
+        this._boidsManager = boidsManager;
 
         this.Mesh = mesh;
         this._limits = limits;
@@ -68,7 +68,9 @@ export class Boid implements IUpdatable, IGizmos
         this.Mesh.position.z < this._limits.min[2] || this.Mesh.position.z > this._limits.max[2];
 
         if(isColliding) {
-            this.Destroy();
+            if(this._boidsManager.GetDeath()) {
+                this.Destroy();
+            }
         }
 
         const boxes: THREE.Box3[] = this._sceneManager.BOXES.map(object => new THREE.Box3().setFromObject(object));
@@ -81,7 +83,9 @@ export class Boid implements IUpdatable, IGizmos
         }
 
         if(isColliding) {
-            this.Destroy();
+            if(this._boidsManager.GetDeath()) {
+                this.Destroy();
+            }
         }
 
         this.Move(this.Speed);
@@ -98,7 +102,7 @@ export class Boid implements IUpdatable, IGizmos
         let direction: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
         let needToAvoid: boolean = false;
 
-        if(this.Avoidance) {
+        if(this._boidsManager.GetAvoidance()) {
             const boxes: THREE.Box3[] = this._sceneManager.BOXES.map(object => new THREE.Box3().setFromObject(object));
             needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this.ViewDistance, boxes, this._limits);
 
@@ -109,11 +113,11 @@ export class Boid implements IUpdatable, IGizmos
             }
         }
         
-        if(this.Alignment && !needToAvoid) {
+        if(this._boidsManager.GetAlignment() && !needToAvoid) {
             direction = this.Align();
         }
         
-        // else if(this.Cohesion) {
+        // else if(this._boidsManager.GetCohesion()) {
             //     direction = this.TryAvoidCollision(this.Mesh, this._directions, this.ViewDistance, this._sceneManager.BOXES, this._limits);
             // }
             

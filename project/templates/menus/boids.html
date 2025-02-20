@@ -1,0 +1,25 @@
+<div class="flex-none max-h-full flex flex-col items-center justify-start space-y-[16px]">
+    <div id="boids" class="w-full">
+        <div class="text-title-1 w-full flex items-center justify-start text-center align-middle">boids</div>
+        <div class="text-content-1 w-full flex items-center justify-start mb-[8px]">
+            <p>The boids.</p>
+        </div>
+        <div class="h-full w-full flex items-center justify-start space-x-[4px]">
+            <div class="h-full w-[96px] text-primary_text flex-none flex items-center justify-start overflow-hidden whitespace-nowrap">avoidance:</div>
+            <input @click="UIBoidsHandler.ToggleAvoidance()" type="checkbox" checked>
+        </div>
+        <div class="h-full w-full flex items-center justify-start space-x-[4px]">
+            <div class="h-full w-[96px] text-primary_text flex-none flex items-center justify-start overflow-hidden whitespace-nowrap">alignment:</div>
+            <input @click="UIBoidsHandler.ToggleAlignment()" type="checkbox" checked>
+        </div>
+        <div class="h-full w-full flex items-center justify-start space-x-[4px]">
+            <div class="h-full w-[96px] text-primary_text flex-none flex items-center justify-start overflow-hidden whitespace-nowrap">cohesion:</div>
+            <input @click="UIBoidsHandler.ToggleCohesion()" type="checkbox" checked>
+        </div>
+        <div class="h-full w-full flex items-center justify-start space-x-[4px]">
+            <div class="h-full w-[96px] text-primary_text flex-none flex items-center justify-start overflow-hidden whitespace-nowrap">death:</div>
+            <input @click="UIBoidsHandler.ToggleDeath()" type="checkbox" checked>
+        </div>
+    </div>
+    <div class="w-full h-[1px] bg-black/20"></div>
+</div>

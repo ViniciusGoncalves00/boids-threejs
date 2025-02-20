@@ -1,10 +1,12 @@
 import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
 import { Boid } from "../boid";
+import { BoidsManager } from "../managers/boids-manager";
 
 export class SpawnerController implements IVisible, IColorful
 {
     private _sceneManager : SceneManager;
+    private _boidsManager : BoidsManager;
 
     private _minX: number = 0;
     private _minY: number = 0;
@@ -15,9 +17,10 @@ export class SpawnerController implements IVisible, IColorful
 
     public _spawn: (THREE.LineSegments | null) = null;
 
-    public constructor(sceneManager : SceneManager)
+    public constructor(sceneManager : SceneManager, boidsManager: BoidsManager)
     {
         this._sceneManager = sceneManager;
+        this._boidsManager = boidsManager;
     }
 
     public SetColor(r: number, g: number, b: number): void {
@@ -109,7 +112,7 @@ export class SpawnerController implements IVisible, IColorful
             boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
             boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
 
-            const boid = new Boid(this._sceneManager, boidMesh, domainSize);
+            const boid = new Boid(this._sceneManager,  this._boidsManager, boidMesh, domainSize);
             boids.push(boid);
         }
         

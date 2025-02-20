@@ -1,5 +1,5 @@
 <div class="flex-none max-h-full flex flex-col items-center justify-start space-y-[16px]">
-    <div id="domain" x-data="{ limits: UIDomainHandler.GetLimits(), divisions: UIDomainHandler.GetDivisions() }">
+    <div id="domain" class="w-full" x-data="{ limits: UIDomainHandler.GetLimits(), divisions: UIDomainHandler.GetDivisions() }">
         <div class="text-title-1 w-full flex items-center justify-start text-center align-middle">domain</div>
         <div class="text-content-1 w-full flex items-center justify-start mb-[8px]">
             <p>The domain is the space where creatures can move.</p>
@@ -65,7 +65,7 @@
         </div>
     </div>
     <div class="w-full h-[1px] bg-black/20"></div>
-    <div id="spawner" x-data="{ limits: UISpawnerHandler.GetLimits() }">
+    <div id="spawner" class="w-full" x-data="{ limits: UISpawnerHandler.GetLimits() }">
         <div class="text-title-1 w-full flex items-center justify-start text-center align-middle">spawner</div>
         <div class="text-content-1 w-full flex items-center justify-start mb-[8px]">
             <p>The spawner is the space from which creatures will be spawned.</p>

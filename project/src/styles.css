@@ -129,6 +129,6 @@
   }
   .text-content-1
   {
-      @apply text-gray-600 text-[14px] lowercase
+      @apply text-gray-600 text-[14px]
   }
 }

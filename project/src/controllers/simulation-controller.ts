@@ -25,7 +25,7 @@ export class SimulationController implements IUpdatable
         this._isRunning = true;
         this._isPaused = false;
 
-        this._spawnerController.Spawn(this._domainController.GetLimits(), 500)
+        this._spawnerController.Spawn(this._domainController.GetLimits())
     }
 
     public Update(): void {

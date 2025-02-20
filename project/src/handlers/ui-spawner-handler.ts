@@ -25,4 +25,12 @@ export class UISpawnerHandler implements IVisible, IColorful {
     public GetLimits() : {min: [number, number, number], max: [number, number, number]} {
         return this._spawnerController.GetLimits()
     }
+
+    public GetAmount(): number {
+        return this._spawnerController.GetAmount();
+    }
+
+    public SetAmount(amount: number): void {
+        this._spawnerController.SetAmount(amount);
+    }
 }

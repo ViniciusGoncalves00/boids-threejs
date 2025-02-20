@@ -14,6 +14,8 @@ export class SpawnerController implements IVisible, IColorful
     private _maxX: number = 0;
     private _maxY: number = 0;
     private _maxZ: number = 0;
+    
+    private _amount: number = 10;
 
     public _spawn: (THREE.LineSegments | null) = null;
 
@@ -84,7 +86,15 @@ export class SpawnerController implements IVisible, IColorful
         this.Update()
     }
 
-    public Spawn(domainSize: {min: [number, number, number], max: [number, number, number]} , amount: number): void {
+    public GetAmount(): number {
+        return this._amount;
+    }
+
+    public SetAmount(amount: number): void {
+        this._amount = amount;
+    }
+
+    public Spawn(domainSize: {min: [number, number, number], max: [number, number, number]} , amount: number = this._amount): void {
         let boids: Boid[] = []
 
         const geometry = new THREE.ConeGeometry();

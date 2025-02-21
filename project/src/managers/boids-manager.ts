@@ -8,8 +8,8 @@ export class BoidsManager
     private _viewDistance : number = 100;
     private _speed : number = 1.2;
     private _rotationSpeed : number = 0.1;
-    private separationDistance = 20;
-    private alignmentRadius: number = 30
+    private _separationDistance = 20;
+    private _alignmentRadius: number = 30
 
     public ToggleAvoidance(): void {
         this._avoidance = !this._avoidance;
@@ -55,6 +55,14 @@ export class BoidsManager
         return this._rotationSpeed;
     }
 
+    public GetSeparationDistance(): number {
+        return this._separationDistance;
+    }
+
+    public GetAlignmentRadius(): number {
+        return this._alignmentRadius;
+    }
+
     public SetViewDistance(value: number): void {
         this._viewDistance = value;
     }
@@ -65,5 +73,13 @@ export class BoidsManager
 
     public SetRotationSpeed(value: number): void {
         this._rotationSpeed = value;
+    }
+
+    public SetSeparationDistance(value: number): void {
+        this._separationDistance = value;
+    }
+
+    public SetAlignmentRadius(value: number): void {
+        this._alignmentRadius = value;
     }
 }

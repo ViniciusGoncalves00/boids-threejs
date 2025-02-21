@@ -111,7 +111,7 @@ export class Boid implements IUpdatable, IGizmos
         }
         
         if(this._boidsManager.GetAlignment() && !needToAvoid) {
-            direction = this.Align();
+            direction = this.Align(this._boidsManager.GetAlignmentRadius());
         }
         
         // else if(this._boidsManager.GetCohesion()) {
@@ -206,7 +206,7 @@ export class Boid implements IUpdatable, IGizmos
         );
     }
     
-    private Align(alignmentRadius: number = 30): THREE.Vector3 {
+    private Align(alignmentRadius: number): THREE.Vector3 {
         const creatures = this._sceneManager.GetPopulation();
         let totalDirection = new THREE.Vector3(0, 0, 0);
         let count = 0;
@@ -236,7 +236,7 @@ export class Boid implements IUpdatable, IGizmos
 
     private Avoid(): THREE.Vector3 {
         const creatures = this._sceneManager.GetPopulation();
-        const separationDistance = 20;
+        const separationDistance = this._boidsManager.GetSeparationDistance();
         let totalAvoidance = new THREE.Vector3(0, 0, 0);
         let count = 0;
     

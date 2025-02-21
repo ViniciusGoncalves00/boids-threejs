@@ -35,6 +35,14 @@ export class UIBoidsHandler {
         return this._boidsManager.GetRotationSpeed();
     }
 
+    public GetSeparationDistance(): number {
+        return this._boidsManager.GetSeparationDistance();
+    }
+
+    public GetAlignmentRadius(): number {
+        return this._boidsManager.GetAlignmentRadius();
+    }
+
     public SetViewDistance(value: number): void {
         this._boidsManager.SetViewDistance(value);
     }
@@ -45,5 +53,13 @@ export class UIBoidsHandler {
 
     public SetRotationSpeed(value: number): void {
         this._boidsManager.SetRotationSpeed(value);
+    }
+
+    public SetSeparationDistance(value: number): void {
+        this._boidsManager.SetSeparationDistance(value);
+    }
+
+    public SetAlignmentRadius(value: number): void {
+        this._boidsManager.SetAlignmentRadius(value);
     }
 }

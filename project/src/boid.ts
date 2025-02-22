@@ -104,21 +104,22 @@ export class Boid implements IUpdatable, IGizmos
             needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this._boidsManager.GetViewDistance(), boxes, this._limits);
 
             if (needToAvoid) {
-                direction = this.TryAvoidCollision(this.Mesh, this._directions, this._boidsManager.GetViewDistance(), boxes, this._limits);
+                direction.add(this.TryAvoidCollision(this.Mesh, this._directions, this._boidsManager.GetViewDistance(), boxes, this._limits)) 
             } else {
-                direction = this.Avoid();
+                direction.add(this.Avoid())
             }
         }
         
-        if(this._boidsManager.GetAlignment() && !needToAvoid) {
-            direction = this.Align(this._boidsManager.GetAlignmentRadius());
+        if(this._boidsManager.GetAlignment()) {
+            direction.add(this.Align(this._boidsManager.GetAlignmentRadius()));
         }
         
-        // else if(this._boidsManager.GetCohesion()) {
-            //     direction = this.TryAvoidCollision(this.Mesh, this._directions, this._boidsManager.GetViewDistance(), this._sceneManager.BOXES, this._limits);
-            // }
+        if(this._boidsManager.GetCohesion()) {
+            direction.add(this.Cohesion(this._boidsManager.GetCohesionRadius()));
+        }
             
         if(direction != new THREE.Vector3(0, 0, 0)) {
+            direction.normalize();
             this.Rotate(this.Mesh, direction, this._boidsManager.GetRotationSpeed()); 
         }
 
@@ -258,6 +259,34 @@ export class Boid implements IUpdatable, IGizmos
         }
     
         return totalAvoidance;
+    }
+    
+    private Cohesion(cohesionRadius: number): THREE.Vector3 {
+        const creatures = this._sceneManager.GetPopulation();
+        let sumPositions = new THREE.Vector3(0, 0, 0);
+        let count = 0;
+    
+        creatures.forEach(creature => {
+            if (creature !== this) {
+                const distance = this.Mesh.position.distanceTo(creature.Mesh.position);
+                
+                if (distance < cohesionRadius) {
+                    sumPositions.add(creature.Mesh.position);
+                    count++;
+                }
+            }
+        });
+    
+        if (count > 0) {
+            sumPositions.divideScalar(count);
+    
+            const cohesionVector = new THREE.Vector3().subVectors(sumPositions, this.Mesh.position);
+            cohesionVector.normalize();
+    
+            return cohesionVector;
+        } else {
+            return new THREE.Vector3(0, 0, 0);
+        }
     }
     
 }

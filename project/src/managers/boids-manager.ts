@@ -9,7 +9,8 @@ export class BoidsManager
     private _speed : number = 1.2;
     private _rotationSpeed : number = 0.1;
     private _separationDistance = 20;
-    private _alignmentRadius: number = 30
+    private _alignmentRadius: number = 50
+    private _cohesionRadius: number = 25
 
     public ToggleAvoidance(): void {
         this._avoidance = !this._avoidance;
@@ -63,6 +64,10 @@ export class BoidsManager
         return this._alignmentRadius;
     }
 
+    public GetCohesionRadius(): number {
+        return this._cohesionRadius;
+    }
+
     public SetViewDistance(value: number): void {
         this._viewDistance = value;
     }
@@ -81,5 +86,9 @@ export class BoidsManager
 
     public SetAlignmentRadius(value: number): void {
         this._alignmentRadius = value;
+    }
+
+    public SetCohesionRadius(value: number): void {
+        this._cohesionRadius = value;
     }
 }

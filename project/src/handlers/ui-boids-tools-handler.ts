@@ -42,6 +42,9 @@ export class UIBoidsHandler {
     public GetAlignmentRadius(): number {
         return this._boidsManager.GetAlignmentRadius();
     }
+    public GetCohesionRadius(): void {
+        this._boidsManager.GetCohesionRadius();
+    }
 
     public SetViewDistance(value: number): void {
         this._boidsManager.SetViewDistance(value);
@@ -61,5 +64,9 @@ export class UIBoidsHandler {
 
     public SetAlignmentRadius(value: number): void {
         this._boidsManager.SetAlignmentRadius(value);
+    }
+
+    public SetCohesionRadius(value: number): void {
+        this._boidsManager.SetCohesionRadius(value);
     }
 }

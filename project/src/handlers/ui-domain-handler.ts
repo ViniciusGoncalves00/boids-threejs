@@ -26,7 +26,7 @@ export class UIDomainHandler implements IVisible, IColorful {
         this._domainController.SetDivisions(x, y, z);
     }
 
-    public GetLimits() : {min: [number, number, number], max: [number, number, number]} {
+    public GetLimits() : {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} {
         return this._domainController.GetLimits()
     }
 

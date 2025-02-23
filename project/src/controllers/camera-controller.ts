@@ -148,7 +148,7 @@ export class CameraController {
         this._camera.updateProjectionMatrix();
     }
 
-    public ToggleView(view_size : { width: number, height: number}, view: string, bounds: { min: [number, number, number]; max: [number, number, number] }): void {
+    public ToggleView(view_size : { width: number, height: number}, view: string, bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}}): void {
         const face_mapping: Record<string, [number, number]> = {
             right: [2, 1],
             left: [2, 1],
@@ -202,21 +202,21 @@ export class CameraController {
     }
 
     private SetPerspectiveView(
-        bounds: { min: [number, number, number]; max: [number, number, number] },
+        bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}},
         face: [number, number],
         direction: [number, number, number]
     ) {
         const framing_buffer_multiplier: number = 2;
 
         const size = [
-            Math.abs(bounds.max[0] - bounds.min[0]),
-            Math.abs(bounds.max[1] - bounds.min[1]),
-            Math.abs(bounds.max[2] - bounds.min[2]),
+            Math.abs(bounds.max.x - bounds.min.x),
+            Math.abs(bounds.max.y - bounds.min.y),
+            Math.abs(bounds.max.z - bounds.min.z),
         ];
         const center = [
-            (bounds.min[0] + bounds.max[0]) / 2,
-            (bounds.min[1] + bounds.max[1]) / 2,
-            (bounds.min[2] + bounds.max[2]) / 2,
+            (bounds.min.x + bounds.max.x) / 2,
+            (bounds.min.y + bounds.max.y) / 2,
+            (bounds.min.z + bounds.max.z) / 2,
         ];
 
         const camera = this._camera as THREE.PerspectiveCamera;
@@ -250,21 +250,21 @@ export class CameraController {
 
     private SetOrthographicView(
         view_size : { width: number, height: number},
-        bounds: { min: [number, number, number]; max: [number, number, number] },
+        bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}},
         face: [number, number],
         direction: [number, number, number]
     ) {
         const framing_buffer_multiplier: number = 1.2;
 
         const size = [
-            Math.abs(bounds.max[0] - bounds.min[0]),
-            Math.abs(bounds.max[1] - bounds.min[1]),
-            Math.abs(bounds.max[2] - bounds.min[2]),
+            Math.abs(bounds.max.x - bounds.min.x),
+            Math.abs(bounds.max.y - bounds.min.y),
+            Math.abs(bounds.max.z - bounds.min.z),
         ];
         const center = [
-            (bounds.min[0] + bounds.max[0]) / 2,
-            (bounds.min[1] + bounds.max[1]) / 2,
-            (bounds.min[2] + bounds.max[2]) / 2,
+            (bounds.min.x + bounds.max.x) / 2,
+            (bounds.min.y + bounds.max.y) / 2,
+            (bounds.min.z + bounds.max.z) / 2,
         ];
 
         const camera = this._camera as THREE.OrthographicCamera;

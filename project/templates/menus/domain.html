@@ -1,5 +1,5 @@
 <div x-data="{ limits: UIDomainHandler.GetLimits(), divisions: UIDomainHandler.GetDivisions()}" class="flex-none max-h-full flex flex-col items-center justify-start space-y-[16px]">
-    <div id="domain" class="w-full" x-data="{ minX: limits.min[0], minY: limits.min[1], minZ: limits.min[2], maxX: limits.max[0], maxY: limits.max[1], maxZ: limits.max[2] }">
+    <div id="domain" class="w-full" x-data="{ minX: limits.min.x, minY: limits.min.y, minZ: limits.min.z, maxX: limits.max.x, maxY: limits.max.y, maxZ: limits.max.z }">
         <div class="text-title-1 w-full flex items-center justify-start text-center align-middle">domain</div>
         <div class="text-content-1 w-full flex items-center justify-start mb-[8px]">
             <p>The domain is the space where creatures can move.</p>

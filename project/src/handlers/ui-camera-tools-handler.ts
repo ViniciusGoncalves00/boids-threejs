@@ -20,7 +20,7 @@ export class UICameraToolsHandler {
 
     public ToggleView(view: string) : void {
         let bounds = this._domainController.GetLimits();
-        bounds = bounds == null ? { min: [-200, -200, -200], max: [200, 200, 200] } : bounds;
+        bounds = bounds == null ? { min: {x: -200, y: -200, z: -200}, max: {x: 200, y: 200, z: 200} } : bounds;
         this._cameraController.ToggleView({ width: window.innerWidth, height: window.innerHeight }, view, bounds);
     }
 }

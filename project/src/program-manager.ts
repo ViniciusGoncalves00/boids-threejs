@@ -13,6 +13,8 @@ import { UISimulationHandler } from "./handlers/ui-simulation-handler";
 import { UISceneHandler } from "./handlers/ui-scene-handler";
 import { BoidsManager } from "./managers/boids-manager";
 import { UIBoidsHandler } from "./handlers/ui-boids-tools-handler";
+import { SpatialPartioningController } from "./controllers/spatial-partioning-controller";
+import { UISpatialPartioningHandler } from "./handlers/ui-spatial-partitioning-handler";
 
 declare global {
     interface Window {
@@ -24,6 +26,7 @@ declare global {
         UISimulationHandler: typeof UISimulationHandler;
         UISceneHandler: typeof UISceneHandler;
         UIBoidsHandler: typeof UIBoidsHandler;
+        UISpatialPartioningHandler: typeof UISpatialPartioningHandler;
     }
   }
 
@@ -37,6 +40,7 @@ export class ProgramManager {
     private _domainController : DomainController[] = [];
     private _spawnerController : SpawnerController[] = [];
     private _simulationController : SimulationController[] = [];
+    private _spatialPartioningController : SpatialPartioningController[] = [];
 
     private constructor() {
         document.addEventListener("DOMContentLoaded", () => {
@@ -84,12 +88,14 @@ export class ProgramManager {
 
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
         this._domainController[0].SetLimits(-300, -300, -300, 300, 300, 300);
-        this._domainController[0].SetDivisions(1, 1, 1);
 
         this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0]);
         this._spawnerController[0].SetLimits(-100, 150, 150, 100, 250, 250);
 
         this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0], this._spawnerController[0]);
+        
+        this._spatialPartioningController[0] = new SpatialPartioningController(this._sceneManagers[0], this._domainController[0]);
+        this._spatialPartioningController[0].SetDivisions(1, 1, 1);
         
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
@@ -127,6 +133,7 @@ export class ProgramManager {
         (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0]);
         (window.UISpawnerHandler as any) = new UISpawnerHandler(this._spawnerController[0]);
         (window.UISimulationHandler as any) = new UISimulationHandler(this._simulationController[0]);
+        (window.UISpatialPartioningHandler as any) = new UISpatialPartioningHandler(this._spatialPartioningController[0]);
         (window.UIBoidsHandler as any) = new UIBoidsHandler(this._boidsManagers[0]);
 
         Alpine.store("UISceneHandler", new UISceneHandler())

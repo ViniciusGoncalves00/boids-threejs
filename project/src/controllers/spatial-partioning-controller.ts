@@ -5,7 +5,6 @@ import { SceneManager } from "../managers/scene-manager";
 export class SpatialPartioningController implements IVisible, IColorful
 {
     private _sceneManager : SceneManager;
-    private _partitionSystem : IPartitionSystem;
     private _domainController : DomainController;
 
     private _partitionsX : number = 1;
@@ -18,11 +17,10 @@ export class SpatialPartioningController implements IVisible, IColorful
     private _nodeDepth: number = 0;
     private _nodesView: (THREE.LineSegments | null)[][][] = [];
 
-    public constructor(sceneManager: SceneManager, domainController: DomainController, partitionSystem: IPartitionSystem)
+    public constructor(sceneManager: SceneManager, domainController: DomainController)
     {
         this._sceneManager = sceneManager;
         this._domainController = domainController;
-        this._partitionSystem = partitionSystem;
     }
 
     public SetColor(r: number, g: number, b: number): void {
@@ -88,7 +86,7 @@ export class SpatialPartioningController implements IVisible, IColorful
 
     private Update() {
         this.GenerateNodes(this._partitionsX, this._partitionsY, this._partitionsZ)
-        this.UpdateVisualization(this._domainController.GetLimits(), this._domainController.GetSize());
+        this.UpdateVisualization();
     }
 
     private GenerateNodes(amountX: number, amountY: number, amountZ: number): void {
@@ -112,18 +110,42 @@ export class SpatialPartioningController implements IVisible, IColorful
         }
     }
 
-    private UpdateVisualization(bounds: {min: {x: number, y: number, z: number}}, boundary_size: {x: number, y: number, z: number}): void {
-        this._nodeWidth = boundary_size.x / this._partitionsX;
-        this._nodeHeight = boundary_size.y / this._partitionsY;
-        this._nodeDepth = boundary_size.z / this._partitionsZ;
+    private UpdateVisualization(): void {
+        this._nodesView.flat(Infinity).forEach(node =>
+            {
+                if (node instanceof THREE.LineSegments)
+                    {
+                        this._sceneManager.RemoveObject(node)
+                    }
+            }
+        );
 
-        const geometry = new THREE.BoxGeometry(this._nodeWidth, this._nodeHeight, this._nodeDepth);
+        this._nodesView = []
+        this._nodesView = Array.from({ length: this._partitionsX }, () =>
+            Array.from({ length: this._partitionsY }, () =>
+                Array.from({ length: this._partitionsZ }, () => null)
+            )
+        );
+
+        const boundarySize = this._domainController.GetSize()
+
+        const nodeWidth = boundarySize.x / this._partitionsX;
+        const nodeHeight = boundarySize.y / this._partitionsY;
+        const nodeDepth = boundarySize.z / this._partitionsZ;
+
+        const geometry = new THREE.BoxGeometry( nodeWidth, nodeHeight, nodeDepth);
         const edges = new THREE.EdgesGeometry( geometry ); 
         const material = new THREE.LineBasicMaterial({ color: 0xffffff })
 
-        const halfNodeWidth = this._nodeWidth / 2;
-        const halfNodeHeight = this._nodeHeight / 2;
-        const halfNodeDepth = this._nodeDepth / 2;
+        const partitionCenterX = this._partitionsX / 2
+        const partitionCenterY = this._partitionsY / 2
+        const partitionCenterZ = this._partitionsZ / 2
+        
+        const nodeCenterX = nodeWidth / 2
+        const nodeCenterY = nodeHeight / 2
+        const nodeCenterZ = nodeDepth / 2
+
+        const center = this._domainController.GetCenter();
 
         for (let x = 0; x < this._partitionsX; x++)
         {
@@ -132,9 +154,9 @@ export class SpatialPartioningController implements IVisible, IColorful
                 for (let z = 0; z < this._partitionsZ; z++)
                 {
                     const line = new THREE.LineSegments(edges, material);
-                    line.position.x = bounds.min.x * x + halfNodeWidth;
-                    line.position.y = bounds.min.y * y + halfNodeHeight;
-                    line.position.z = bounds.min.z * z + halfNodeDepth;
+                    line.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center.x;
+                    line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center.y;
+                    line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center.z;
                     
                     this._sceneManager.AddObject(line);
                     this._nodesView[x][y][z] = line;

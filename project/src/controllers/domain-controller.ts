@@ -16,7 +16,7 @@ export class DomainController implements IVisible, IColorful
     private _divisionsY : number = 1;
     private _divisionsZ : number = 1;
 
-    public Nodes: (THREE.LineSegments | null)[][][] = [];
+    private _domain: THREE.LineSegments | null = null;
 
     public constructor(sceneManager : SceneManager)
     {
@@ -24,51 +24,27 @@ export class DomainController implements IVisible, IColorful
     }
 
     public SetColor(r: number, g: number, b: number): void {
+        if(this._domain === null) return;
+
         const color = new THREE.Color(r, g, b);
         const material = new THREE.LineBasicMaterial({ color: color });
 
-        if (this.Nodes !== null) {
-            for (let x = 0; x < this._divisionsX; x++)
-                {
-                    for (let y = 0; y < this._divisionsY; y++)
-                    {
-                        for (let z = 0; z < this._divisionsZ; z++)
-                        {
-                            const node = this.Nodes[x][y][z];
-                            if(node !== null) {
-                                node.material = material;
-                            }
-                        }
-                    }
-                }
-        }
+        this._domain.material = material;
     }
 
     public GetColor(): string {
         const default_color = `#ffffff`;
-        if (!this.Nodes || !this.Nodes[0][0][0] || !this.Nodes[0][0][0].material) {
+        if (!this._domain || !this._domain || !this._domain.material) {
             return default_color;
         }
-        const material = this.Nodes[0][0][0].material as THREE.LineBasicMaterial;
+        const material = this._domain.material as THREE.LineBasicMaterial;
         return `#${material.color.getHexString()}`;
     }
 
     public ToggleVisibility(): void {
-        if (this.Nodes !== null) {
-            for (let x = 0; x < this._divisionsX; x++)
-                {
-                    for (let y = 0; y < this._divisionsY; y++)
-                    {
-                        for (let z = 0; z < this._divisionsZ; z++)
-                        {
-                            const node = this.Nodes[x][y][z];
-                            if(node !== null) {
-                                node.visible = !node.visible;
-                            }
-                        }
-                    }
-                }
-        }
+        if(this._domain === null) return;
+        
+        this._domain.visible = !this._domain.visible;
     }
 
     public GetLimits() : {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} {
@@ -76,10 +52,6 @@ export class DomainController implements IVisible, IColorful
             min: {x: this._minX, y: this._minY, z: this._minZ},
             max: {x: this._maxX, y: this._maxY, z: this._maxZ},
         }
-    }
-
-    public GetDivisions() : {x: number, y: number, z: number} {
-        return { x: this._divisionsX, y: this._divisionsY, z: this._divisionsZ }
     }
 
     public GetCenter(): {x: number, y: number, z: number} {
@@ -106,71 +78,87 @@ export class DomainController implements IVisible, IColorful
         this.UpdateDomain()
     }
 
-    public SetDivisions(x? : number, y? : number, z? : number)
-    {
-        this._divisionsX = x == undefined ? this._divisionsX : x;
-        this._divisionsY = y == undefined ? this._divisionsY : y;
-        this._divisionsZ = z == undefined ? this._divisionsZ : z;
-
-        this.UpdateDomain()
-    }
-
     private UpdateDomain(): void {
-        this.Nodes.flat(Infinity).forEach(node =>
-            {
-                if (node instanceof THREE.LineSegments)
-                    {
-                        this._sceneManager.RemoveObject(node)
-                    }
-            }
-        );
-
-        this.Nodes = []
-        this.Nodes = Array.from({ length: this._divisionsX }, () =>
-            Array.from({ length: this._divisionsY }, () =>
-                Array.from({ length: this._divisionsZ }, () => null)
-            )
-        );
+        if(this._domain instanceof THREE.LineSegments) {
+            this._sceneManager.RemoveObject(this._domain)
+        }
 
         const width = Math.abs(this._maxX - this._minX)
         const height = Math.abs(this._maxY - this._minY)
         const depth = Math.abs(this._maxZ - this._minZ)
 
-        const nodeWidth = width / this._divisionsX;
-        const nodeHeight = height / this._divisionsY;
-        const nodeDepth = depth / this._divisionsZ;
-
-        const geometry = new THREE.BoxGeometry( nodeWidth, nodeHeight, nodeDepth);
+        const geometry = new THREE.BoxGeometry( width, height, depth);
         const edges = new THREE.EdgesGeometry( geometry ); 
         const material = new THREE.LineBasicMaterial({ color: 0xffffff })
 
-        const partitionCenterX = this._divisionsX / 2
-        const partitionCenterY = this._divisionsY / 2
-        const partitionCenterZ = this._divisionsZ / 2
-        
-        const nodeCenterX = nodeWidth / 2
-        const nodeCenterY = nodeHeight / 2
-        const nodeCenterZ = nodeDepth / 2
-
         const center = this.GetCenter();
 
-        for (let x = 0; x < this._divisionsX; x++)
-        {
-            for (let y = 0; y < this._divisionsY; y++)
-            {
-                for (let z = 0; z < this._divisionsZ; z++)
-                {
-                    const line = new THREE.LineSegments(edges, material);
-                    line.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center.x;
-                    line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center.y;
-                    line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center.z;
-                    
-                    this._sceneManager.AddObject(line);
-                    this.Nodes[x][y][z] = line;
-                }
-            }
-        }
+        const line = new THREE.LineSegments(edges, material);
+        line.position.x = center.x;
+        line.position.y = center.y;
+        line.position.z = center.z;
+
+        this._sceneManager.AddObject(line);
+        this._domain = line;
+
     }
+
+    // private UpdateDomain(): void {
+    //     this.Nodes.flat(Infinity).forEach(node =>
+    //         {
+    //             if (node instanceof THREE.LineSegments)
+    //                 {
+    //                     this._sceneManager.RemoveObject(node)
+    //                 }
+    //         }
+    //     );
+
+    //     this.Nodes = []
+    //     this.Nodes = Array.from({ length: this._divisionsX }, () =>
+    //         Array.from({ length: this._divisionsY }, () =>
+    //             Array.from({ length: this._divisionsZ }, () => null)
+    //         )
+    //     );
+
+    //     const width = Math.abs(this._maxX - this._minX)
+    //     const height = Math.abs(this._maxY - this._minY)
+    //     const depth = Math.abs(this._maxZ - this._minZ)
+
+    //     const nodeWidth = width / this._divisionsX;
+    //     const nodeHeight = height / this._divisionsY;
+    //     const nodeDepth = depth / this._divisionsZ;
+
+    //     const geometry = new THREE.BoxGeometry( nodeWidth, nodeHeight, nodeDepth);
+    //     const edges = new THREE.EdgesGeometry( geometry ); 
+    //     const material = new THREE.LineBasicMaterial({ color: 0xffffff })
+
+    //     const partitionCenterX = this._divisionsX / 2
+    //     const partitionCenterY = this._divisionsY / 2
+    //     const partitionCenterZ = this._divisionsZ / 2
+        
+    //     const nodeCenterX = nodeWidth / 2
+    //     const nodeCenterY = nodeHeight / 2
+    //     const nodeCenterZ = nodeDepth / 2
+
+    //     const center = this.GetCenter();
+
+    //     for (let x = 0; x < this._divisionsX; x++)
+    //     {
+    //         for (let y = 0; y < this._divisionsY; y++)
+    //         {
+    //             for (let z = 0; z < this._divisionsZ; z++)
+    //             {
+    //                 const line = new THREE.LineSegments(edges, material);
+    //                 line.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center.x;
+    //                 line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center.y;
+    //                 line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center.z;
+                    
+    //                 this._sceneManager.AddObject(line);
+    //                 this.Nodes[x][y][z] = line;
+    //             }
+    //         }
+    //     }
+    // }
 
     // private UpdateBoids = () =>
     // {

@@ -92,11 +92,11 @@ export class ProgramManager {
         this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0]);
         this._spawnerController[0].SetLimits(-100, 150, 150, 100, 250, 250);
 
-        this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0], this._spawnerController[0]);
-        
         this._spatialPartioningController[0] = new SpatialPartioningController(this._sceneManagers[0], this._domainController[0]);
         this._spatialPartioningController[0].SetDivisions(1, 1, 1);
         
+        this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0], this._spawnerController[0], this._spatialPartioningController[0]);
+
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
         this._rendererManagers[0].AddUpgradeable(this._simulationController[0]);

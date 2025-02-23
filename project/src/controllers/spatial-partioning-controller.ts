@@ -11,7 +11,7 @@ export class SpatialPartioningController implements IVisible, IColorful
     private _partitionsY : number = 1;
     private _partitionsZ : number = 1;
 
-    private _nodes: Map<[number, number, number], THREE.Object3D[]> = new Map<[number, number, number], THREE.Object3D[]>;
+    private _nodes: Map<string, THREE.Object3D[]> = new Map<string, THREE.Object3D[]>();
     private _nodeWidth: number = 0;
     private _nodeHeight: number = 0;
     private _nodeDepth: number = 0;
@@ -84,6 +84,56 @@ export class SpatialPartioningController implements IVisible, IColorful
         return { x: this._partitionsX, y: this._partitionsY, z: this._partitionsZ }
     }
 
+    public Populate(): void {
+        const objects = this._sceneManager.BOXES;
+    
+        objects.forEach(object => {
+            const boundingBox = new THREE.Box3().setFromObject(object);
+            const min = boundingBox.min;
+            const max = boundingBox.max;
+            const vertices = [
+                new THREE.Vector3(min.x, min.y, min.z),
+                new THREE.Vector3(min.x, min.y, max.z),
+                new THREE.Vector3(min.x, max.y, min.z),
+                new THREE.Vector3(min.x, max.y, max.z),
+                new THREE.Vector3(max.x, min.y, min.z),
+                new THREE.Vector3(max.x, min.y, max.z),
+                new THREE.Vector3(max.x, max.y, min.z),
+                new THREE.Vector3(max.x, max.y, max.z) 
+            ];
+    
+            vertices.forEach(vertex => {
+                const index = this.VertexPositionToMatrixIndex(vertex);
+                const key = `${index[0]},${index[1]},${index[2]}`;
+                const node = this._nodes.get(key);
+    
+                if (node !== undefined) {
+                    node.push(object);
+                    const nodeView = this._nodesView[index[0]]?.[index[1]]?.[index[2]];
+                    if (nodeView) {
+                        nodeView.material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+                    }
+                }
+            });
+        });
+
+        console.log(this._nodes.values())
+    }
+
+    private VertexPositionToMatrixIndex(vertex: THREE.Vector3): [number, number, number] {
+        const bounds = this._domainController.GetLimits();
+    
+        const normalizedX = (vertex.x - bounds.min.x) / (bounds.max.x - bounds.min.x);
+        const normalizedY = (vertex.y - bounds.min.y) / (bounds.max.y - bounds.min.y);
+        const normalizedZ = (vertex.z - bounds.min.z) / (bounds.max.z - bounds.min.z);
+    
+        const x = Math.min(Math.floor(normalizedX * this._partitionsX), this._partitionsX - 1);
+        const y = Math.min(Math.floor(normalizedY * this._partitionsY), this._partitionsY - 1);
+        const z = Math.min(Math.floor(normalizedZ * this._partitionsZ), this._partitionsZ - 1);
+    
+        return [x, y, z];
+    }
+
     private Update() {
         this.GenerateNodes(this._partitionsX, this._partitionsY, this._partitionsZ)
         this.UpdateVisualization();
@@ -92,21 +142,19 @@ export class SpatialPartioningController implements IVisible, IColorful
     private GenerateNodes(amountX: number, amountY: number, amountZ: number): void {
         this._nodes.forEach(node => {
             node.forEach(object => {
-                if (node instanceof THREE.Object3D)
-                    {
-                        this._sceneManager.RemoveObject(object)
-                    }
-            })
-        })
-
-        this._nodes = new Map<[number, number, number], THREE.Object3D[]>;
-
+                this._sceneManager.RemoveObject(object);
+            });
+        });
+    
+        this._nodes.clear();
+    
         for (let x = 0; x < amountX; x++) {
             for (let y = 0; y < amountY; y++) {
                 for (let z = 0; z < amountZ; z++) {
-                    this._nodes.set([x,y,z], [])
-                }                
-            }            
+                    const key = `${x},${y},${z}`;
+                    this._nodes.set(key, []);
+                }
+            }
         }
     }
 

@@ -10,7 +10,7 @@ export class Boid implements IUpdatable, IGizmos
 
     public Mesh : THREE.Mesh;
 
-    private _limits : { min: [number, number, number], max: [number, number, number]};
+    private _bounds : {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}};
     private _directions = [
         new THREE.Vector3(0, 0, 1),
         new THREE.Vector3(0, 1, 0),
@@ -25,13 +25,13 @@ export class Boid implements IUpdatable, IGizmos
 
     private _isGizmosVisible: boolean = false;
 
-    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, mesh: THREE.Mesh, limits: { min: [number, number, number], max: [number, number, number]})
+    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, mesh: THREE.Mesh, bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}})
     {
         this._sceneManager = sceneManager;
         this._boidsManager = boidsManager;
 
         this.Mesh = mesh;
-        this._limits = limits;
+        this._bounds = bounds;
 
         if(this._isGizmosVisible) {
             this.ShowGizmos();
@@ -60,9 +60,9 @@ export class Boid implements IUpdatable, IGizmos
 
     public Update(): void {
         let isColliding =
-        this.Mesh.position.x < this._limits.min[0] || this.Mesh.position.x > this._limits.max[0] ||
-        this.Mesh.position.y < this._limits.min[1] || this.Mesh.position.y > this._limits.max[1] ||
-        this.Mesh.position.z < this._limits.min[2] || this.Mesh.position.z > this._limits.max[2];
+        this.Mesh.position.x < this._bounds.min.x || this.Mesh.position.x > this._bounds.max.x ||
+        this.Mesh.position.y < this._bounds.min.y || this.Mesh.position.y > this._bounds.max.y ||
+        this.Mesh.position.z < this._bounds.min.z || this.Mesh.position.z > this._bounds.max.z;
 
         if(isColliding) {
             if(this._boidsManager.GetDeath()) {
@@ -101,10 +101,10 @@ export class Boid implements IUpdatable, IGizmos
 
         if(this._boidsManager.GetAvoidance()) {
             const boxes: THREE.Box3[] = this._sceneManager.BOXES.map(object => new THREE.Box3().setFromObject(object));
-            needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this._boidsManager.GetViewDistance(), boxes, this._limits);
+            needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this._boidsManager.GetViewDistance(), boxes, this._bounds);
 
             if (needToAvoid) {
-                direction.add(this.TryAvoidCollision(this.Mesh, this._directions, this._boidsManager.GetViewDistance(), boxes, this._limits)) 
+                direction.add(this.TryAvoidCollision(this.Mesh, this._directions, this._boidsManager.GetViewDistance(), boxes, this._bounds)) 
             } else {
                 direction.add(this.Avoid())
             }
@@ -144,7 +144,7 @@ export class Boid implements IUpdatable, IGizmos
         mesh: THREE.Mesh,
         viewDistance: number,
         boxes: THREE.Box3[],
-        limits: { min: [number, number, number], max: [number, number, number] },
+        bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}},
         collisionRadius: number = 3,
     ): boolean {
         const forward = new THREE.Vector3();
@@ -155,9 +155,9 @@ export class Boid implements IUpdatable, IGizmos
         const detectionSphere = new THREE.Sphere(forwardPosition, collisionRadius);
     
         let isForwardColliding =
-            forwardPosition.x - collisionRadius < limits.min[0] || forwardPosition.x + collisionRadius > limits.max[0] ||
-            forwardPosition.y - collisionRadius < limits.min[1] || forwardPosition.y + collisionRadius > limits.max[1] ||
-            forwardPosition.z - collisionRadius < limits.min[2] || forwardPosition.z + collisionRadius > limits.max[2];
+            forwardPosition.x - collisionRadius < bounds.min.x || forwardPosition.x + collisionRadius > bounds.max.x ||
+            forwardPosition.y - collisionRadius < bounds.min.y || forwardPosition.y + collisionRadius > bounds.max.y ||
+            forwardPosition.z - collisionRadius < bounds.min.z || forwardPosition.z + collisionRadius > bounds.max.z ;
     
         if (!isForwardColliding) {
             isForwardColliding = boxes.some(box => detectionSphere.intersectsBox(box));
@@ -172,7 +172,7 @@ export class Boid implements IUpdatable, IGizmos
         directions: THREE.Vector3[],
         viewDistance: number,
         boxes: THREE.Box3[],
-        limits: { min: [number, number, number], max: [number, number, number] }
+        bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}}
     ): THREE.Vector3 {
         let bestDirection = new THREE.Vector3();
         let maxDistance = -Infinity;
@@ -184,7 +184,7 @@ export class Boid implements IUpdatable, IGizmos
         for (const direction of localDirections) {
             const checkPosition = mesh.position.clone().addScaledVector(direction, viewDistance);
             
-            if (!this.IsColliding(checkPosition, boxes, limits)) {
+            if (!this.IsColliding(checkPosition, boxes, bounds)) {
                 return direction;
             }
     
@@ -198,11 +198,11 @@ export class Boid implements IUpdatable, IGizmos
         return bestDirection;
     }
 
-    private IsColliding(position: THREE.Vector3, boxes: THREE.Box3[], limits: { min: [number, number, number], max: [number, number, number] }): boolean {
+    private IsColliding(position: THREE.Vector3, boxes: THREE.Box3[], bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}}): boolean {
         return (
-            position.x < limits.min[0] || position.x > limits.max[0] ||
-            position.y < limits.min[1] || position.y > limits.max[1] ||
-            position.z < limits.min[2] || position.z > limits.max[2] ||
+            position.x < bounds.min.x || position.x > bounds.max.x ||
+            position.y < bounds.min.y || position.y > bounds.max.y ||
+            position.z < bounds.min.z || position.z > bounds.max.z ||
             boxes.some(box => Collision.PointInsideBounds(position, box))
         );
     }

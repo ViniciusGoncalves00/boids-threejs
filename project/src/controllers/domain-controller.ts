@@ -71,10 +71,10 @@ export class DomainController implements IVisible, IColorful
         }
     }
 
-    public GetLimits() : {min: [number, number, number], max: [number, number, number]} {
+    public GetLimits() : {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} {
         return {
-            min: [this._minX, this._minY, this._minZ],
-            max: [this._maxX, this._maxY, this._maxZ],
+            min: {x: this._minX, y: this._minY, z: this._minZ},
+            max: {x: this._maxX, y: this._maxY, z: this._maxZ},
         }
     }
 
@@ -82,20 +82,16 @@ export class DomainController implements IVisible, IColorful
         return { x: this._divisionsX, y: this._divisionsY, z: this._divisionsZ }
     }
 
-    public GetCenter() {
-        const x = (this._maxX + this._minX) / 2;
-        const y = (this._maxY + this._minY) / 2;
-        const z = (this._maxZ + this._minZ) / 2;
-
-        return [x, y, z];
+    public GetCenter(): {x: number, y: number, z: number} {
+        return {x: (this._maxX + this._minX) / 2,
+                y: (this._maxY + this._minY) / 2,
+                z: (this._maxZ + this._minZ) / 2};
     }
 
-    public GetSize() {
-        const x = this._maxX - this._minX;
-        const y = this._maxY - this._minY;
-        const z = this._maxZ - this._minZ;
-
-        return [x, y, z];
+    public GetSize(): {x: number, y: number, z: number} {
+        return {x: Math.abs(this._maxX - this._minX),
+                y: Math.abs(this._maxY - this._minY),
+                z: Math.abs(this._maxZ - this._minZ)};
     }
 
     public SetLimits(minX? : number, minY? : number, minZ? : number, maxX? : number, maxY? : number, maxZ? : number)
@@ -165,9 +161,9 @@ export class DomainController implements IVisible, IColorful
                 for (let z = 0; z < this._divisionsZ; z++)
                 {
                     const line = new THREE.LineSegments(edges, material);
-                    line.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center[0];
-                    line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center[1];
-                    line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center[2];
+                    line.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center.x;
+                    line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center.y;
+                    line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center.z;
                     
                     this._sceneManager.AddObject(line);
                     this.Nodes[x][y][z] = line;

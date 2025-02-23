@@ -94,7 +94,7 @@ export class SpawnerController implements IVisible, IColorful
         this._amount = amount;
     }
 
-    public Spawn(domainSize: {min: [number, number, number], max: [number, number, number]} , amount: number = this._amount): void {
+    public Spawn(domainSize: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} , amount: number = this._amount): void {
         let boids: Boid[] = []
 
         const geometry = new THREE.ConeGeometry();

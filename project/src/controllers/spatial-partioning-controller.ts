@@ -211,14 +211,14 @@ export class SpatialPartioningController extends SceneObject implements IVisible
             {
                 for (let z = 0; z < this._partitionsZ; z++)
                 {
-                    const line = objectBuilder.BuildWireframeCuboid(nodeWidth, nodeHeight, nodeDepth, LineBasicMaterial);
-                    // const line = new THREE.LineSegments(edges, material);
-                    line.Wireframe.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center.x;
-                    line.Wireframe.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center.y;
-                    line.Wireframe.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center.z;
+                    const cuboid = objectBuilder.BuildWireframeCuboid(nodeWidth, nodeHeight, nodeDepth, LineBasicMaterial);
                     
-                    this._sceneManager.AddObject(line);
-                    this._nodesView[x][y][z] = line;
+                    cuboid.Wireframe.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center.x;
+                    cuboid.Wireframe.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center.y;
+                    cuboid.Wireframe.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center.z;
+                    
+                    this._sceneManager.AddObject(cuboid);
+                    this._nodesView[x][y][z] = cuboid;
                 }
             }
         }

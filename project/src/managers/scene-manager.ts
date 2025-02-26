@@ -80,9 +80,13 @@ export class SceneManager implements ISubject
             
             if(InterfaceHelper.ImplementsInterface<IDynamic>(object, "IDynamic")){
                 if(object instanceof SolidObject) {
-                    this._staticColliders.push(object);
+                    this._dynamicColliders.push(object);
                 }
             }
+        }
+
+        if(object instanceof SolidObject) {
+            this._staticColliders.push(object);
         }
 
         if(object instanceof SolidObject) {
@@ -95,7 +99,7 @@ export class SceneManager implements ISubject
     
     public RemoveObject(object : BaseObject): void {
         this._objects.splice(this._objects.findIndex(obj => obj === object), 1)
-        
+
         if(object instanceof SolidObject) {
             this._scene.remove(object.Mesh);
         }

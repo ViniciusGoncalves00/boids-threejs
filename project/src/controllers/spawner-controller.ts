@@ -145,14 +145,9 @@ export class SpawnerController extends SceneObject implements IVisible, IColorfu
         const size = this.GetSize()
         const center = this.GetCenter()
 
-        // const geometry = new THREE.BoxGeometry( size[0], size[1], size[2]);
-        // const edges = new THREE.EdgesGeometry( geometry );
-        // const material = new THREE.LineBasicMaterial()
-        // material.color.setRGB(0, 0, 200);
 
         const objectBuilder = new ObjectsBuilder()
         this._spawn = objectBuilder.BuildWireframeCuboid(size[0], size[1], size[2], LineBasicMaterial);
-        // this._spawn = new THREE.LineSegments(edges, material)
         this._spawn.Wireframe.position.set(center[0], center[1], center[2])
 
         this._sceneManager.AddObject(this._spawn)

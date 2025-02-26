@@ -56,7 +56,7 @@ export class SimulationController implements IUpdatable
         }
 
         for (let index = 0; index < creatures.length; index++) {
-            // this._sceneManager.RemoveObject((creatures[index] as BaseObject));
+            this._sceneManager.RemoveObject(creatures[index]);
         }
     }
 

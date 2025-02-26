@@ -22,7 +22,7 @@ export class UISpawnerHandler implements IVisible, IColorful {
         this._spawnerController.SetLimits(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    public GetLimits() : {min: [number, number, number], max: [number, number, number]} {
+    public GetLimits() : {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} {
         return this._spawnerController.GetLimits()
     }
 

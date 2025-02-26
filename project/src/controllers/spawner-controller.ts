@@ -58,27 +58,23 @@ export class SpawnerController extends SceneObject implements IVisible, IColorfu
         }
     }
 
-    public GetLimits() : {min: [number, number, number], max: [number, number, number]} {
+    public GetLimits() : {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} {
         return {
-            min: [this._minX, this._minY, this._minZ],
-            max: [this._maxX, this._maxY, this._maxZ],
+            min: {x: this._minX, y: this._minY, z: this._minZ},
+            max: {x: this._maxX, y: this._maxY, z: this._maxZ},
         }
     }
 
-    public GetCenter() {
-        const x = (this._maxX + this._minX) / 2;
-        const y = (this._maxY + this._minY) / 2;
-        const z = (this._maxZ + this._minZ) / 2;
-
-        return [x, y, z];
+    public GetCenter(): {x: number, y: number, z: number} {
+        return {x: (this._maxX + this._minX) / 2,
+                y: (this._maxY + this._minY) / 2,
+                z: (this._maxZ + this._minZ) / 2};
     }
 
-    public GetSize() {
-        const x = Math.abs(this._maxX - this._minX);
-        const y = Math.abs(this._maxY - this._minY);
-        const z = Math.abs(this._maxZ - this._minZ);
-
-        return [x, y, z];
+    public GetSize(): {x: number, y: number, z: number} {
+        return {x: Math.abs(this._maxX - this._minX),
+                y: Math.abs(this._maxY - this._minY),
+                z: Math.abs(this._maxZ - this._minZ)};
     }
 
     public SetLimits(minX? : number, minY? : number, minZ? : number, maxX? : number, maxY? : number, maxZ? : number)
@@ -122,9 +118,9 @@ export class SpawnerController extends SceneObject implements IVisible, IColorfu
             const limits = this.GetLimits();
             const size = this.GetSize();
 
-            boidMesh.position.x = Math.random() * size[0] + limits.min[0];
-            boidMesh.position.y = Math.random() * size[1] + limits.min[1];
-            boidMesh.position.z = Math.random() * size[2] + limits.min[2];
+            boidMesh.position.x = Math.random() * size.x + limits.min.x;
+            boidMesh.position.y = Math.random() * size.y + limits.min.y;
+            boidMesh.position.z = Math.random() * size.z + limits.min.z;
             boidMesh.rotateX(Math.random() * 360 * Math.PI/180)
             boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
             boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
@@ -145,10 +141,9 @@ export class SpawnerController extends SceneObject implements IVisible, IColorfu
         const size = this.GetSize()
         const center = this.GetCenter()
 
-
         const objectBuilder = new ObjectsBuilder()
-        this._spawn = objectBuilder.BuildWireframeCuboid(size[0], size[1], size[2], LineBasicMaterial);
-        this._spawn.Wireframe.position.set(center[0], center[1], center[2])
+        this._spawn = objectBuilder.BuildWireframeCuboid(size.x, size.y, size.z, LineBasicMaterial);
+        this._spawn.Wireframe.position.set(center.x, center.y, center.z)
 
         this._sceneManager.AddObject(this._spawn)
     }

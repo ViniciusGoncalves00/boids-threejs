@@ -17,7 +17,7 @@ export class DomainController extends SceneObject implements IVisible, IColorful
     private _maxY: number = 0;
     private _maxZ: number = 0;
 
-    private _domain: WireframeObject | null = null;
+    private _domain: (WireframeObject | null) = null;
 
     public constructor(sceneManager : SceneManager)
     {
@@ -82,20 +82,17 @@ export class DomainController extends SceneObject implements IVisible, IColorful
     }
 
     private UpdateDomain(): void {
-        if(this._domain instanceof THREE.LineSegments) {
+        if(this._domain !== null) {
             this._sceneManager.RemoveObject(this._domain)
         }
 
         const size = this.GetSize();
-        const objectBuilder = new ObjectsBuilder();
-        const line = objectBuilder.BuildWireframeCuboid(size.x, size.y, size.z, LineBasicMaterial);
-        
         const center = this.GetCenter();
-        line.Wireframe.position.x = center.x;
-        line.Wireframe.position.y = center.y;
-        line.Wireframe.position.z = center.z;
 
-        this._sceneManager.AddObject(line.Wireframe);
-        this._domain = line;
+        const objectBuilder = new ObjectsBuilder()
+        this._domain = objectBuilder.BuildWireframeCuboid(size.x, size.y, size.z, LineBasicMaterial);
+        this._domain.Wireframe.position.set(center.x, center.y, center.z)
+
+        this._sceneManager.AddObject(this._domain);
     }
 }

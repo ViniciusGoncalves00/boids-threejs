@@ -18,5 +18,7 @@ export abstract class SolidObject extends BaseObject {
     public constructor(geometry: THREE.BufferGeometry, material: THREE.Material) {
         super();
         this._mesh = new THREE.Mesh(geometry, material)
+        this._mesh.castShadow = true;
+        this._mesh.receiveShadow = true;
     }
 }

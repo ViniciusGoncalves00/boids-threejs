@@ -3,14 +3,21 @@ import { CameraController, CameraControllerEventMap } from "../controllers/camer
 
 export class RendererManager {
     private _canvas: HTMLCanvasElement;
-    private _renderer: THREE.Renderer;
+    private _renderer: THREE.WebGLRenderer;
     private _scene: THREE.Scene | null = null;
     private _upgradeables: IUpdatable[] = [];
     private _cameraController: CameraController | null = null;
 
+    public get Renderer() : THREE.WebGLRenderer {
+        return this._renderer;
+    }
+    
+
     public constructor(canvas: HTMLCanvasElement) {
         this._canvas = canvas;
         this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, antialias: true });
+        this._renderer.shadowMap.enabled = true;
+        this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this._renderer.setSize(window.innerWidth, window.innerHeight);
 
         window.addEventListener("resize", () => this.Resize());

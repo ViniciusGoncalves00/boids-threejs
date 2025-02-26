@@ -35,10 +35,24 @@ export class SceneManager implements ISubject
 
         const color = 0xFFFFFF;
 
-        const intensity = 3;
+        const intensity = 1;
         const light = new THREE.DirectionalLight(color, intensity);
-        light.position.set(-1, 2, 4);
+        light.position.set(1000, 4000, 2000);
+        light.castShadow = true;
+        light.shadow.mapSize.width = 2048;
+        light.shadow.mapSize.height = 2048;
+        light.shadow.camera.near = 0.5; 
+        light.shadow.camera.far = 50000; 
+        
+        light.shadow.camera.left = -2000;
+        light.shadow.camera.right = 2000;
+        light.shadow.camera.top = 2000;
+        light.shadow.camera.bottom = -2000;
+        
         this._scene.add(light);
+
+        const hemisphereLight = new THREE.HemisphereLight(0xE1EEFF, 0xfefefe, 0.5); 
+        this._scene.add(hemisphereLight);
     }
 
     public Attach(observer: IObserver): void {

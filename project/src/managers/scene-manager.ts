@@ -51,7 +51,7 @@ export class SceneManager implements ISubject
         
         this._scene.add(light);
 
-        const hemisphereLight = new THREE.HemisphereLight(0xE1EEFF, 0xfefefe, 0.5); 
+        const hemisphereLight = new THREE.HemisphereLight(0xE1EEFF, 0xffffff, 1); 
         this._scene.add(hemisphereLight);
     }
 

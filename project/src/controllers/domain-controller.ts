@@ -16,10 +16,6 @@ export class DomainController extends SceneObject implements IVisible, IColorful
     private _maxX: number = 0;
     private _maxY: number = 0;
     private _maxZ: number = 0;
-    
-    private _divisionsX : number = 1;
-    private _divisionsY : number = 1;
-    private _divisionsZ : number = 1;
 
     private _domain: WireframeObject | null = null;
 
@@ -90,112 +86,16 @@ export class DomainController extends SceneObject implements IVisible, IColorful
             this._sceneManager.RemoveObject(this._domain)
         }
 
-        const width = Math.abs(this._maxX - this._minX)
-        const height = Math.abs(this._maxY - this._minY)
-        const depth = Math.abs(this._maxZ - this._minZ)
-
-        // const geometry = new THREE.BoxGeometry( width, height, depth);
-        // const edges = new THREE.EdgesGeometry( geometry ); 
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff })
-
+        const size = this.GetSize();
+        const objectBuilder = new ObjectsBuilder();
+        const line = objectBuilder.BuildWireframeCuboid(size.x, size.y, size.z, LineBasicMaterial);
+        
         const center = this.GetCenter();
-
-        const objectBuilder = new ObjectsBuilder()
-        const line = objectBuilder.BuildWireframeCuboid(width, height, depth, LineBasicMaterial);
-        // const line = new THREE.LineSegments(edges, material);
         line.Wireframe.position.x = center.x;
         line.Wireframe.position.y = center.y;
         line.Wireframe.position.z = center.z;
 
         this._sceneManager.AddObject(line.Wireframe);
         this._domain = line;
-
     }
-
-    // private UpdateDomain(): void {
-    //     this.Nodes.flat(Infinity).forEach(node =>
-    //         {
-    //             if (node instanceof THREE.LineSegments)
-    //                 {
-    //                     this._sceneManager.RemoveObject(node)
-    //                 }
-    //         }
-    //     );
-
-    //     this.Nodes = []
-    //     this.Nodes = Array.from({ length: this._divisionsX }, () =>
-    //         Array.from({ length: this._divisionsY }, () =>
-    //             Array.from({ length: this._divisionsZ }, () => null)
-    //         )
-    //     );
-
-    //     const width = Math.abs(this._maxX - this._minX)
-    //     const height = Math.abs(this._maxY - this._minY)
-    //     const depth = Math.abs(this._maxZ - this._minZ)
-
-    //     const nodeWidth = width / this._divisionsX;
-    //     const nodeHeight = height / this._divisionsY;
-    //     const nodeDepth = depth / this._divisionsZ;
-
-    //     const geometry = new THREE.BoxGeometry( nodeWidth, nodeHeight, nodeDepth);
-    //     const edges = new THREE.EdgesGeometry( geometry ); 
-    //     const material = new THREE.LineBasicMaterial({ color: 0xffffff })
-
-    //     const partitionCenterX = this._divisionsX / 2
-    //     const partitionCenterY = this._divisionsY / 2
-    //     const partitionCenterZ = this._divisionsZ / 2
-        
-    //     const nodeCenterX = nodeWidth / 2
-    //     const nodeCenterY = nodeHeight / 2
-    //     const nodeCenterZ = nodeDepth / 2
-
-    //     const center = this.GetCenter();
-
-    //     for (let x = 0; x < this._divisionsX; x++)
-    //     {
-    //         for (let y = 0; y < this._divisionsY; y++)
-    //         {
-    //             for (let z = 0; z < this._divisionsZ; z++)
-    //             {
-    //                 const line = new THREE.LineSegments(edges, material);
-    //                 line.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center.x;
-    //                 line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center.y;
-    //                 line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center.z;
-                    
-    //                 this._sceneManager.AddObject(line);
-    //                 this.Nodes[x][y][z] = line;
-    //             }
-    //         }
-    //     }
-    // }
-
-    // private UpdateBoids = () =>
-    // {
-    //     if(this.Boid == null)
-    //     {
-    //         const geometry = new THREE.ConeGeometry();
-    //         const boidMesh = new THREE.Mesh(geometry)
-    //         this.Boid = new Boid(boidMesh)
-    //         SceneManager.GetInstance().Scene.add(boidMesh)
-    //     }
-
-    //     requestAnimationFrame(this.UpdateBoids);
-        
-    //     const x = Math.floor(this.Boid.Mesh.position.x / this._partitionsX);
-    //     const y = Math.floor(this.Boid.Mesh.position.y / this._partitionsY);
-    //     const z = Math.floor(this.Boid.Mesh.position.z / this._partitionsZ);
-
-    //     const mesh = this.Nodes[x][y][z]
-
-    //     this.Nodes.flat(1).forEach(node =>
-    //         {
-    //             if (node instanceof THREE.LineSegments && node == mesh)
-    //                 {
-    //                     node.material = new THREE.LineBasicMaterial({ color: 0x001000 })
-    //                 }
-    //         }
-    //     );
-
-    //     this._sceneManager.Renderer.render(this._sceneManager.Scene, this._sceneManager.Camera);
-    // }
 }

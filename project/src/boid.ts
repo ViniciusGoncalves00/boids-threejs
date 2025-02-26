@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Collision } from "./physic";
+import { Collision } from "./physics/physic";
 import { SceneManager } from "./managers/scene-manager";
 import { BoidsManager } from "./managers/boids-manager";
 
@@ -70,7 +70,7 @@ export class Boid implements IUpdatable, IGizmos
             }
         }
 
-        const boxes: THREE.Box3[] = this._sceneManager.BOXES.map(object => new THREE.Box3().setFromObject(object));
+        const boxes: THREE.Box3[] = this._sceneManager.StaticColliders.map(object => new THREE.Box3().setFromObject(object.Mesh));
 
         for (const box of boxes) {
             if (Collision.PointInsideBounds(this.Mesh.position, box)) {
@@ -100,7 +100,7 @@ export class Boid implements IUpdatable, IGizmos
         let needToAvoid: boolean = false;
 
         if(this._boidsManager.GetAvoidance()) {
-            const boxes: THREE.Box3[] = this._sceneManager.BOXES.map(object => new THREE.Box3().setFromObject(object));
+            const boxes: THREE.Box3[] = this._sceneManager.StaticColliders.map(object => new THREE.Box3().setFromObject(object.Mesh));
             needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this._boidsManager.GetViewDistance(), boxes, this._bounds);
 
             if (needToAvoid) {

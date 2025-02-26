@@ -1,8 +1,14 @@
 import * as THREE from "three";
 import { DomainController } from "./domain-controller";
 import { SceneManager } from "../managers/scene-manager";
+import { SceneObject } from "../base";
+import { BaseObject } from "../objects/base-object";
+import { ObjectsBuilder } from "../managers/objects-builder";
+import { LineBasicMaterial } from "../objects/default-materials";
+import { WireframeObject } from "../objects/wireframe-object";
+import { SolidObject } from "../objects/solid-object";
 
-export class SpatialPartioningController implements IVisible, IColorful
+export class SpatialPartioningController extends SceneObject implements IVisible, IColorful
 {
     private _sceneManager : SceneManager;
     private _domainController : DomainController;
@@ -11,16 +17,18 @@ export class SpatialPartioningController implements IVisible, IColorful
     private _partitionsY : number = 1;
     private _partitionsZ : number = 1;
 
-    private _nodes: Map<string, THREE.Object3D[]> = new Map<string, THREE.Object3D[]>();
+    private _nodes: Map<string, SolidObject[]> = new Map<string, SolidObject[]>();
     private _nodeWidth: number = 0;
     private _nodeHeight: number = 0;
     private _nodeDepth: number = 0;
-    private _nodesView: (THREE.LineSegments | null)[][][] = [];
+    private _nodesView: (WireframeObject | null)[][][] = [];
 
     public constructor(sceneManager: SceneManager, domainController: DomainController)
     {
+        super();
         this._sceneManager = sceneManager;
         this._domainController = domainController;
+        this._interfaces.push("IVisible", "IColorful");
     }
 
     public SetColor(r: number, g: number, b: number): void {
@@ -36,7 +44,7 @@ export class SpatialPartioningController implements IVisible, IColorful
                         {
                             const node = this._nodesView[x][y][z];
                             if(node !== null) {
-                                node.material = material;
+                                node.Wireframe.material = material;
                             }
                         }
                     }
@@ -46,10 +54,10 @@ export class SpatialPartioningController implements IVisible, IColorful
 
     public GetColor(): string {
         const default_color = `#ffffff`;
-        if (!this._nodesView || !this._nodesView[0][0][0] || !this._nodesView[0][0][0].material) {
+        if (!this._nodesView || !this._nodesView[0][0][0] || !this._nodesView[0][0][0].Wireframe.material) {
             return default_color;
         }
-        const material = this._nodesView[0][0][0].material as THREE.LineBasicMaterial;
+        const material = this._nodesView[0][0][0].Wireframe.material as THREE.LineBasicMaterial;
         return `#${material.color.getHexString()}`;
     }
 
@@ -63,7 +71,7 @@ export class SpatialPartioningController implements IVisible, IColorful
                         {
                             const node = this._nodesView[x][y][z];
                             if(node !== null) {
-                                node.visible = !node.visible;
+                                node.Wireframe.visible = !node.Wireframe.visible;
                             }
                         }
                     }
@@ -85,10 +93,10 @@ export class SpatialPartioningController implements IVisible, IColorful
     }
 
     public Populate(): void {
-        const objects = this._sceneManager.BOXES;
+        const objects = this._sceneManager.StaticColliders;
     
         objects.forEach(object => {
-            const boundingBox = new THREE.Box3().setFromObject(object);
+            const boundingBox = new THREE.Box3().setFromObject(object.Mesh);
             const min = boundingBox.min;
             const max = boundingBox.max;
             const vertices = [
@@ -111,7 +119,7 @@ export class SpatialPartioningController implements IVisible, IColorful
                     node.push(object);
                     const nodeView = this._nodesView[index[0]]?.[index[1]]?.[index[2]];
                     if (nodeView) {
-                        nodeView.material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+                        nodeView.Wireframe.material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
                     }
                 }
             });
@@ -161,7 +169,7 @@ export class SpatialPartioningController implements IVisible, IColorful
     private UpdateVisualization(): void {
         this._nodesView.flat(Infinity).forEach(node =>
             {
-                if (node instanceof THREE.LineSegments)
+                if (node instanceof BaseObject)
                     {
                         this._sceneManager.RemoveObject(node)
                     }
@@ -195,16 +203,19 @@ export class SpatialPartioningController implements IVisible, IColorful
 
         const center = this._domainController.GetCenter();
 
+        const objectBuilder = new ObjectsBuilder()
+
         for (let x = 0; x < this._partitionsX; x++)
         {
             for (let y = 0; y < this._partitionsY; y++)
             {
                 for (let z = 0; z < this._partitionsZ; z++)
                 {
-                    const line = new THREE.LineSegments(edges, material);
-                    line.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center.x;
-                    line.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center.y;
-                    line.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center.z;
+                    const line = objectBuilder.BuildWireframeCuboid(nodeWidth, nodeHeight, nodeDepth, LineBasicMaterial);
+                    // const line = new THREE.LineSegments(edges, material);
+                    line.Wireframe.position.x = (x - partitionCenterX) * nodeWidth + nodeCenterX + center.x;
+                    line.Wireframe.position.y = (y - partitionCenterY) * nodeHeight + nodeCenterY + center.y;
+                    line.Wireframe.position.z = (z - partitionCenterZ) * nodeDepth + nodeCenterZ + center.z;
                     
                     this._sceneManager.AddObject(line);
                     this._nodesView[x][y][z] = line;

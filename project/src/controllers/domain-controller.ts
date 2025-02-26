@@ -1,7 +1,12 @@
 import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
+import { SceneObject } from "../base";
+import { BaseObject } from "../objects/base-object";
+import { ObjectsBuilder } from "../managers/objects-builder";
+import { LineBasicMaterial } from "../objects/default-materials";
+import { WireframeObject } from "../objects/wireframe-object";
 
-export class DomainController implements IVisible, IColorful
+export class DomainController extends SceneObject implements IVisible, IColorful
 {
     private _sceneManager : SceneManager;
 
@@ -16,10 +21,12 @@ export class DomainController implements IVisible, IColorful
     private _divisionsY : number = 1;
     private _divisionsZ : number = 1;
 
-    private _domain: THREE.LineSegments | null = null;
+    private _domain: WireframeObject | null = null;
 
     public constructor(sceneManager : SceneManager)
     {
+        super();
+        this._interfaces.push("IVisible", "IColorful");
         this._sceneManager = sceneManager;
     }
 
@@ -29,22 +36,22 @@ export class DomainController implements IVisible, IColorful
         const color = new THREE.Color(r, g, b);
         const material = new THREE.LineBasicMaterial({ color: color });
 
-        this._domain.material = material;
+        this._domain.Wireframe.material = material;
     }
 
     public GetColor(): string {
         const default_color = `#ffffff`;
-        if (!this._domain || !this._domain || !this._domain.material) {
+        if (!this._domain || !this._domain || !this._domain.Wireframe.material) {
             return default_color;
         }
-        const material = this._domain.material as THREE.LineBasicMaterial;
+        const material = this._domain.Wireframe.material as THREE.LineBasicMaterial;
         return `#${material.color.getHexString()}`;
     }
 
     public ToggleVisibility(): void {
         if(this._domain === null) return;
         
-        this._domain.visible = !this._domain.visible;
+        this._domain.Wireframe.visible = !this._domain.Wireframe.visible;
     }
 
     public GetLimits() : {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} {
@@ -87,18 +94,20 @@ export class DomainController implements IVisible, IColorful
         const height = Math.abs(this._maxY - this._minY)
         const depth = Math.abs(this._maxZ - this._minZ)
 
-        const geometry = new THREE.BoxGeometry( width, height, depth);
-        const edges = new THREE.EdgesGeometry( geometry ); 
+        // const geometry = new THREE.BoxGeometry( width, height, depth);
+        // const edges = new THREE.EdgesGeometry( geometry ); 
         const material = new THREE.LineBasicMaterial({ color: 0xffffff })
 
         const center = this.GetCenter();
 
-        const line = new THREE.LineSegments(edges, material);
-        line.position.x = center.x;
-        line.position.y = center.y;
-        line.position.z = center.z;
+        const objectBuilder = new ObjectsBuilder()
+        const line = objectBuilder.BuildWireframeCuboid(width, height, depth, LineBasicMaterial);
+        // const line = new THREE.LineSegments(edges, material);
+        line.Wireframe.position.x = center.x;
+        line.Wireframe.position.y = center.y;
+        line.Wireframe.position.z = center.z;
 
-        this._sceneManager.AddObject(line);
+        this._sceneManager.AddObject(line.Wireframe);
         this._domain = line;
 
     }

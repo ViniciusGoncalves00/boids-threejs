@@ -1,12 +1,26 @@
 import * as THREE from "three";
 import { Boid } from "../boid";
+import { InterfaceHelper } from "../interface-helper";
+import { IStatic } from "../interfaces/IStatic";
+import { IDynamic } from "../interfaces/IDynamic";
+import { BaseObject } from "../objects/base-object";
+import { SolidObject } from "../objects/solid-object";
+import { WireframeObject } from "../objects/wireframe-object";
 
 export class SceneManager implements ISubject
 {
     private _scene : THREE.Scene;
-    private _objects : THREE.Object3D[] = []
+    private _objects : BaseObject[] = []
+    public get Objects(): BaseObject[] { return this._objects; }
+
+    private _staticColliders : SolidObject[] = []
+    public get StaticColliders(): SolidObject[] { return this._staticColliders; }
+
+    private _dynamicColliders : SolidObject[] = []
+    public get DynamicColliders(): SolidObject[] { return this._dynamicColliders; }
+
     private _creatures : Boid[] = [];
-    public BOXES: THREE.Object3D[] = []
+    // public BOXES: THREE.Object3D[] = []
 
     private _observers: IObserver[] = [];
 
@@ -51,26 +65,43 @@ export class SceneManager implements ISubject
         }
     }
 
-    public GetScene() : THREE.Scene {
-        return this._scene;
-    }
+    public GetScene() : THREE.Scene {return this._scene; }
+    public GetPopulation(): Boid[] { return this._creatures; }
 
-    public GetObjects(): THREE.Object3D[] {
-        return this._objects;
-    }
-
-    public GetPopulation(): Boid[] {
-        return this._creatures;
-    }
-
-    public AddObject(object : THREE.Object3D): void {
+    public AddObject(object : BaseObject): void {
         this._objects.push(object);
-        this._scene.add(object);
+
+        if (InterfaceHelper.ImplementsInterface<ICollider>(object, "ICollider")) {
+            if(InterfaceHelper.ImplementsInterface<IStatic>(object, "IStatic")){
+                if(object instanceof SolidObject) {
+                    this._staticColliders.push(object);
+                }
+            }
+            
+            if(InterfaceHelper.ImplementsInterface<IDynamic>(object, "IDynamic")){
+                if(object instanceof SolidObject) {
+                    this._staticColliders.push(object);
+                }
+            }
+        }
+
+        if(object instanceof SolidObject) {
+            this._scene.add(object.Mesh);
+        }
+        else if (object instanceof WireframeObject) {
+            this._scene.add(object.Wireframe);
+        }
     }
     
-    public RemoveObject(object : THREE.Object3D): void {
-        this._objects.splice(this._objects.findIndex(obj => obj === object), 1);
-        this._scene.remove(object);
+    public RemoveObject(object : BaseObject): void {
+        this._objects.splice(this._objects.findIndex(obj => obj === object), 1)
+        
+        if(object instanceof SolidObject) {
+            this._scene.remove(object.Mesh);
+        }
+        else if (object instanceof WireframeObject) {
+            this._scene.remove(object.Wireframe);
+        }
     }
 
     public AddCreature(creature : Boid): void {
@@ -95,3 +126,4 @@ export class SceneManager implements ISubject
         return this._creatures.length;
     }
 }
+

@@ -2,8 +2,13 @@ import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
 import { Boid } from "../boid";
 import { BoidsManager } from "../managers/boids-manager";
+import { SceneObject } from "../base";
+import { BaseObject } from "../objects/base-object";
+import { ObjectsBuilder } from "../managers/objects-builder";
+import { LineBasicMaterial } from "../objects/default-materials";
+import { WireframeObject } from "../objects/wireframe-object";
 
-export class SpawnerController implements IVisible, IColorful
+export class SpawnerController extends SceneObject implements IVisible, IColorful
 {
     private _sceneManager : SceneManager;
     private _boidsManager : BoidsManager;
@@ -17,12 +22,14 @@ export class SpawnerController implements IVisible, IColorful
     
     private _amount: number = 10;
 
-    public _spawn: (THREE.LineSegments | null) = null;
+    public _spawn: (WireframeObject | null) = null;
 
     public constructor(sceneManager : SceneManager, boidsManager: BoidsManager)
     {
+        super();
         this._sceneManager = sceneManager;
         this._boidsManager = boidsManager;
+        this._interfaces.push("IVisible", "IColorful");
     }
 
     public SetColor(r: number, g: number, b: number): void {
@@ -33,21 +40,21 @@ export class SpawnerController implements IVisible, IColorful
             return;
         }
 
-        this._spawn.material = material;
+        this._spawn.Wireframe.material = material;
     }
 
     public GetColor(): string {
         const default_color = `#ffffff`;
-        if (!this._spawn || !this._spawn.material) {
+        if (!this._spawn || !this._spawn.Wireframe.material) {
             return default_color;
         }
-        const material = this._spawn.material as THREE.LineBasicMaterial;
+        const material = this._spawn.Wireframe.material as THREE.LineBasicMaterial;
         return `#${material.color.getHexString()}`;
     }
 
     public ToggleVisibility(): void {
         if (this._spawn !== null) {
-            this._spawn.visible = !this._spawn.visible;
+            this._spawn.Wireframe.visible = !this._spawn.Wireframe.visible;
         }
     }
 
@@ -138,13 +145,15 @@ export class SpawnerController implements IVisible, IColorful
         const size = this.GetSize()
         const center = this.GetCenter()
 
-        const geometry = new THREE.BoxGeometry( size[0], size[1], size[2]);
-        const edges = new THREE.EdgesGeometry( geometry );
-        const material = new THREE.LineBasicMaterial()
-        material.color.setRGB(0, 0, 200);
+        // const geometry = new THREE.BoxGeometry( size[0], size[1], size[2]);
+        // const edges = new THREE.EdgesGeometry( geometry );
+        // const material = new THREE.LineBasicMaterial()
+        // material.color.setRGB(0, 0, 200);
 
-        this._spawn = new THREE.LineSegments(edges, material)
-        this._spawn.position.set(center[0], center[1], center[2])
+        const objectBuilder = new ObjectsBuilder()
+        this._spawn = objectBuilder.BuildWireframeCuboid(size[0], size[1], size[2], LineBasicMaterial);
+        // this._spawn = new THREE.LineSegments(edges, material)
+        this._spawn.Wireframe.position.set(center[0], center[1], center[2])
 
         this._sceneManager.AddObject(this._spawn)
     }

@@ -1,5 +1,6 @@
 import { Boid } from "../boid";
 import { SceneManager } from "../managers/scene-manager";
+import { BaseObject } from "../objects/base-object";
 import { DomainController } from "./domain-controller";
 import { SpatialPartioningController } from "./spatial-partioning-controller";
 import { SpawnerController } from "./spawner-controller";
@@ -55,7 +56,7 @@ export class SimulationController implements IUpdatable
         }
 
         for (let index = 0; index < creatures.length; index++) {
-            this._sceneManager.RemoveObject(creatures[index].Mesh);
+            // this._sceneManager.RemoveObject((creatures[index] as BaseObject));
         }
     }
 

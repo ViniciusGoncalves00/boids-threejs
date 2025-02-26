@@ -15,6 +15,7 @@ import { BoidsManager } from "./managers/boids-manager";
 import { UIBoidsHandler } from "./handlers/ui-boids-tools-handler";
 import { SpatialPartioningController } from "./controllers/spatial-partioning-controller";
 import { UISpatialPartioningHandler } from "./handlers/ui-spatial-partitioning-handler";
+import { ObjectsBuilder } from "./managers/objects-builder";
 
 declare global {
     interface Window {
@@ -101,33 +102,41 @@ export class ProgramManager {
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
         this._rendererManagers[0].AddUpgradeable(this._simulationController[0]);
 
-        const geometry = new THREE.BoxGeometry( 200, 600, 200);
-        // const edges = new THREE.EdgesGeometry( geometry );
         const material = new THREE.MeshStandardMaterial()
+        const objectBuilder = new ObjectsBuilder();
+        const cuboid = objectBuilder.BuildCuboid(200, 600, 200, material);
+        cuboid.Mesh.position.set(200, 0, 0)
+
+        // const geometry = new THREE.BoxGeometry( 200, 600, 200);
+        // const edges = new THREE.EdgesGeometry( geometry );
         // material.color.setRGB(100, 0, 100);
 
-        const testCube = new THREE.Mesh(geometry, material)
-        testCube.position.set(200, 0, 0)
+        // const testCube = new THREE.Mesh(geometry, material)
+        // testCube.position.set(200, 0, 0)
 
-        this._sceneManagers[0].BOXES.push(testCube);
-        this._sceneManagers[0].AddObject(testCube);
+        // this._sceneManagers[0].BOXES.push(cuboid.Mesh);
+        this._sceneManagers[0].AddObject(cuboid);
 
-        const testCube2 = new THREE.Mesh(geometry, material)
-        testCube2.position.set(-200, 0, 0)
+        // const testCube2 = new THREE.Mesh(geometry, material)
+        // testCube2.position.set(-200, 0, 0)
 
-        this._sceneManagers[0].BOXES.push(testCube2);
-        this._sceneManagers[0].AddObject(testCube2);
+        const cuboid2 = objectBuilder.BuildCuboid(200, 600, 200, material);
+        cuboid2.Mesh.position.set(-200, 0, 0)
 
-        const geometry1 = new THREE.BoxGeometry( 200, 200, 200);
+        // this._sceneManagers[0].BOXES.push(cuboid2);
+        this._sceneManagers[0].AddObject(cuboid2);
+
+        // const geometry1 = new THREE.BoxGeometry( 200, 200, 200);
         // // const edges1 = new THREE.EdgesGeometry( geometry1 );
-        const material1 = new THREE.MeshStandardMaterial();
+        // const material1 = new THREE.MeshStandardMaterial();
         // // material1.color.setRGB(100, 0, 100);
 
-        const testCube1 = new THREE.Mesh(geometry1, material1);
-        testCube1.position.set(0, 0, 0);
+        // const testCube1 = new THREE.Mesh(geometry1, material1);
+        // testCube1.position.set(0, 0, 0);
 
-        this._sceneManagers[0].BOXES.push(testCube1);
-        this._sceneManagers[0].AddObject(testCube1);
+        // this._sceneManagers[0].BOXES.push(testCube1);
+        const cuboid3 = objectBuilder.BuildCuboid(200, 200, 200, material);
+        this._sceneManagers[0].AddObject(cuboid3);
         
         (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._domainController[0]);
         (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0]);

@@ -2,11 +2,13 @@ import * as THREE from "three";
 import { Collision } from "./physics/physic";
 import { SceneManager } from "./managers/scene-manager";
 import { BoidsManager } from "./managers/boids-manager";
+import { SpatialPartioningController } from "./controllers/spatial-partioning-controller";
 
 export class Boid implements IUpdatable, IGizmos
 {
     private _sceneManager : SceneManager;
     private _boidsManager : BoidsManager;
+    private _spatialPartioningController : SpatialPartioningController;
 
     public Mesh : THREE.Mesh;
 
@@ -25,10 +27,11 @@ export class Boid implements IUpdatable, IGizmos
 
     private _isGizmosVisible: boolean = false;
 
-    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, mesh: THREE.Mesh, bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}})
+    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, spatialPartioningController: SpatialPartioningController, mesh: THREE.Mesh, bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}})
     {
         this._sceneManager = sceneManager;
         this._boidsManager = boidsManager;
+        this._spatialPartioningController = spatialPartioningController;
 
         this.Mesh = mesh;
         this._bounds = bounds;
@@ -71,6 +74,7 @@ export class Boid implements IUpdatable, IGizmos
         }
 
         const boxes: THREE.Box3[] = this._sceneManager.StaticColliders.map(object => new THREE.Box3().setFromObject(object.Mesh));
+        // const boxes: THREE.Box3[] = this._spatialPartioningController.GetCloseObjects(this.Mesh.position).map(object => new THREE.Box3().setFromObject((object as THREE.Geometry).Mesh));
 
         for (const box of boxes) {
             if (Collision.PointInsideBounds(this.Mesh.position, box)) {

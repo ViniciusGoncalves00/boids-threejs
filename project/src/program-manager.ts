@@ -89,19 +89,20 @@ export class ProgramManager {
         this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
 
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
-        this._domainController[0].SetLimits(-300, -300, -300, 300, 300, 300);
+        this._domainController[0].SetLimits(-500, -500, -500, 500, 500, 500);
 
         this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0]);
         this._spawnerController[0].SetLimits(-100, 150, 150, 100, 250, 250);
 
         this._spatialPartioningController[0] = new SpatialPartioningController(this._sceneManagers[0], this._domainController[0]);
-        this._spatialPartioningController[0].SetDivisions(1, 1, 1);
+        this._spatialPartioningController[0].SetDivisions(17, 17, 17);
         
         this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0], this._spawnerController[0], this._spatialPartioningController[0]);
 
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
-        this._rendererManagers[0].AddUpgradeable(this._simulationController[0]);
+        this._rendererManagers[0].AddUpdatables(this._simulationController[0]);
+        this._rendererManagers[0].AddUpdatables(this._spatialPartioningController[0]);
 
         const objectBuilder = new ObjectsBuilder();
 

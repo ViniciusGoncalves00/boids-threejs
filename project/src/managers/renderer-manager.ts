@@ -5,7 +5,7 @@ export class RendererManager {
     private _canvas: HTMLCanvasElement;
     private _renderer: THREE.WebGLRenderer;
     private _scene: THREE.Scene | null = null;
-    private _upgradeables: IUpdatable[] = [];
+    private _updatables: IUpdatable[] = [];
     private _cameraController: CameraController | null = null;
 
     public get Renderer() : THREE.WebGLRenderer {
@@ -44,14 +44,14 @@ export class RendererManager {
         return this._renderer.domElement;
     }
 
-    public AddUpgradeable(upgradeable: IUpdatable): void {
-        this._upgradeables?.push(upgradeable)
+    public AddUpdatables(upgradeable: IUpdatable): void {
+        this._updatables?.push(upgradeable)
     }
 
     private Update = (): void =>
     {        
-        for (let index = 0; index < this._upgradeables.length; index++) {
-            this._upgradeables[index].Update();
+        for (let index = 0; index < this._updatables.length; index++) {
+            this._updatables[index].Update();
         }
 
         if(this._scene !== null && this._cameraController !== null) {

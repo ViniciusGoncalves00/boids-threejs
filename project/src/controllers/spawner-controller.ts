@@ -125,7 +125,7 @@ export class SpawnerController extends SceneObject implements IVisible, IColorfu
             boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
             boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
 
-            const boid = new Boid(this._sceneManager,  this._boidsManager, boidMesh, domainSize);
+            const boid = new Boid(this._sceneManager, this._boidsManager, boidMesh, domainSize);
             boids.push(boid);
         }
         

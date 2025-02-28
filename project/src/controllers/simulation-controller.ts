@@ -29,7 +29,7 @@ export class SimulationController implements IUpdatable
         this._isRunning = true;
         this._isPaused = false;
 
-        this._spatialPartioningController.Populate();
+        this._spatialPartioningController.PopulateStatic();
         this._spawnerController.Spawn(this._domainController.GetLimits())
     }
 

@@ -20,7 +20,6 @@ export class SceneManager implements ISubject
     public get DynamicColliders(): SolidObject[] { return this._dynamicColliders; }
 
     private _creatures : Boid[] = [];
-    // public BOXES: THREE.Object3D[] = []
 
     private _observers: IObserver[] = [];
 
@@ -122,12 +121,6 @@ export class SceneManager implements ISubject
         }
     }
 
-    public AddCreature(creature : Boid): void {
-        this._creatures.push(creature);
-        this._scene.add(creature.Mesh);
-        this.Notify();
-    }
-
     public RemoveCreature(creature : Boid): void {
         this._creatures.splice(this._creatures.findIndex(obj => obj === creature), 1);
         this._scene.remove(creature.Mesh);
@@ -136,8 +129,11 @@ export class SceneManager implements ISubject
 
     public Populate(creatures: Boid[]): void {
         creatures.forEach(creature => {
-            this.AddCreature(creature)
+            this._creatures.push(creature);
+            this._scene.add(creature.Mesh);
         });
+
+        this.Notify();
     }
 
     public CreaturesAlive(): number {

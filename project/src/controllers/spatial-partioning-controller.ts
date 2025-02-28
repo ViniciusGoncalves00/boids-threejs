@@ -8,7 +8,7 @@ import { LineBasicMaterial } from "../objects/default-materials";
 import { WireframeObject } from "../objects/wireframe-object";
 import { SolidObject } from "../objects/solid-object";
 
-export class SpatialPartioningController extends SceneObject implements IVisible, IColorful
+export class SpatialPartioningController extends SceneObject implements IVisible, IColorful, IUpdatable
 {
     private _sceneManager : SceneManager;
     private _domainController : DomainController;
@@ -17,7 +17,7 @@ export class SpatialPartioningController extends SceneObject implements IVisible
     private _partitionsY : number = 1;
     private _partitionsZ : number = 1;
 
-    private _nodes: Map<string, SolidObject[]> = new Map<string, SolidObject[]>();
+    private _nodes: Map<string, Object[]> = new Map<string, Object[]>();
     private _nodeWidth: number = 0;
     private _nodeHeight: number = 0;
     private _nodeDepth: number = 0;
@@ -29,6 +29,8 @@ export class SpatialPartioningController extends SceneObject implements IVisible
         this._sceneManager = sceneManager;
         this._domainController = domainController;
         this._interfaces.push("IVisible", "IColorful");
+
+        this.SoftUpdate();
     }
 
     public SetColor(r: number, g: number, b: number): void {
@@ -85,47 +87,62 @@ export class SpatialPartioningController extends SceneObject implements IVisible
         this._partitionsY = y == undefined ? this._partitionsY : y;
         this._partitionsZ = z == undefined ? this._partitionsZ : z;
 
-        this.Update()
+        this.SoftUpdate()
     }
 
     public GetDivisions() : {x: number, y: number, z: number} {
         return { x: this._partitionsX, y: this._partitionsY, z: this._partitionsZ }
     }
 
-    public Populate(): void {
+    public PopulateStatic(): void {
         const objects = this._sceneManager.StaticColliders;
     
         objects.forEach(object => {
             const boundingBox = new THREE.Box3().setFromObject(object.Mesh);
-            const min = boundingBox.min;
-            const max = boundingBox.max;
-            const vertices = [
-                new THREE.Vector3(min.x, min.y, min.z),
-                new THREE.Vector3(min.x, min.y, max.z),
-                new THREE.Vector3(min.x, max.y, min.z),
-                new THREE.Vector3(min.x, max.y, max.z),
-                new THREE.Vector3(max.x, min.y, min.z),
-                new THREE.Vector3(max.x, min.y, max.z),
-                new THREE.Vector3(max.x, max.y, min.z),
-                new THREE.Vector3(max.x, max.y, max.z) 
-            ];
     
-            vertices.forEach(vertex => {
-                const index = this.VertexPositionToMatrixIndex(vertex);
-                const key = `${index[0]},${index[1]},${index[2]}`;
-                const node = this._nodes.get(key);
+            const minIndex = this.VertexPositionToMatrixIndex(boundingBox.min);
+            const maxIndex = this.VertexPositionToMatrixIndex(boundingBox.max);
     
-                if (node !== undefined) {
-                    node.push(object);
-                    const nodeView = this._nodesView[index[0]]?.[index[1]]?.[index[2]];
-                    if (nodeView) {
-                        nodeView.Wireframe.material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+            for (let x = minIndex[0]; x <= maxIndex[0]; x++) {
+                for (let y = minIndex[1]; y <= maxIndex[1]; y++) {
+                    for (let z = minIndex[2]; z <= maxIndex[2]; z++) {
+                        const key = this.VertexToKey(x, y, z);
+                        const node = this._nodes.get(key);
+    
+                        if (node !== undefined) {
+                            node.push(object);
+    
+                            const nodeView = this._nodesView[x]?.[y]?.[z];
+                            if (nodeView) {
+                                nodeView.Wireframe.material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+                            }
+                        }
                     }
                 }
-            });
-        });
+            }
+        });    
+    }
 
-        console.log(this._nodes.values())
+    public GetCloseObjects(position: THREE.Vector3): Object[] {
+        const objects = [];
+
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                for (let k = -1; k <= 1; k++) {
+                    const key = this.VertexToKey(position.x + i, position.y + j, position.z + k)
+                    if (this._nodes.has(key)) {
+                        const object = this._nodes.get(key)
+                        objects.push(object as Object)
+                    }
+                }
+            }
+        }
+
+        return objects;
+    }
+
+    private VertexToKey(x: number, y: number, z: number): string {
+        return `${x},${y},${z}`
     }
 
     private VertexPositionToMatrixIndex(vertex: THREE.Vector3): [number, number, number] {
@@ -142,7 +159,25 @@ export class SpatialPartioningController extends SceneObject implements IVisible
         return [x, y, z];
     }
 
-    private Update() {
+    public Update(): void {
+        const objects = this._sceneManager.GetPopulation();
+        if(objects.length <= 0) return;
+
+        this._nodes.forEach(list => {list = []})
+
+        objects.forEach(object => {
+            const index = this.VertexPositionToMatrixIndex(object.Mesh.position);
+            const key = this.VertexToKey(index[0], index[1], index[2]);
+    
+            if (this._nodes.has(key)) {
+                this._nodes.get(key)?.push(object.Mesh);
+            }
+        })
+
+        console.log(this._nodes)
+    }
+
+    private SoftUpdate(): void {
         this.GenerateNodes(this._partitionsX, this._partitionsY, this._partitionsZ)
         this.UpdateVisualization();
     }
@@ -188,10 +223,6 @@ export class SpatialPartioningController extends SceneObject implements IVisible
         const nodeWidth = boundarySize.x / this._partitionsX;
         const nodeHeight = boundarySize.y / this._partitionsY;
         const nodeDepth = boundarySize.z / this._partitionsZ;
-
-        const geometry = new THREE.BoxGeometry( nodeWidth, nodeHeight, nodeDepth);
-        const edges = new THREE.EdgesGeometry( geometry ); 
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff })
 
         const partitionCenterX = this._partitionsX / 2
         const partitionCenterY = this._partitionsY / 2

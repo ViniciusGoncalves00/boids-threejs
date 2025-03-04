@@ -1,23 +1,15 @@
 import * as THREE from "three";
-import { Boid } from "../boid";
-import { InterfaceHelper } from "../interface-helper";
-import { IStatic } from "../interfaces/IStatic";
-import { IDynamic } from "../interfaces/IDynamic";
-import { BaseObject } from "../objects/base-object";
-import { SolidObject } from "../objects/solid-object";
-import { WireframeObject } from "../objects/wireframe-object";
+import { Boid } from "../entities/boid";
+import { Entity } from "../entities/entity";
 
 export class SceneManager implements ISubject
 {
     private _scene : THREE.Scene;
-    private _objects : BaseObject[] = []
-    public get Objects(): BaseObject[] { return this._objects; }
+    private _entities : Entity[] = []
+    public get Entities(): Entity[] { return this._entities; }
 
-    private _staticColliders : SolidObject[] = []
-    public get StaticColliders(): SolidObject[] { return this._staticColliders; }
-
-    private _dynamicColliders : SolidObject[] = []
-    public get DynamicColliders(): SolidObject[] { return this._dynamicColliders; }
+    private _colliders : Entity[] = []
+    public get Colliders(): Entity[] { return this._colliders; }
 
     private _creatures : Boid[] = [];
 
@@ -81,44 +73,24 @@ export class SceneManager implements ISubject
     public GetScene() : THREE.Scene {return this._scene; }
     public GetPopulation(): Boid[] { return this._creatures; }
 
-    public AddObject(object : BaseObject): void {
-        this._objects.push(object);
+    public AddObject(entity: Entity): void {
+        this._entities.push(entity);
 
-        if (InterfaceHelper.ImplementsInterface<ICollider>(object, "ICollider")) {
-            if(InterfaceHelper.ImplementsInterface<IStatic>(object, "IStatic")){
-                if(object instanceof SolidObject) {
-                    this._staticColliders.push(object);
-                }
-            }
-            
-            if(InterfaceHelper.ImplementsInterface<IDynamic>(object, "IDynamic")){
-                if(object instanceof SolidObject) {
-                    this._dynamicColliders.push(object);
-                }
-            }
+        if(entity.Components.get("collider") !== undefined) {
+            this._colliders.push(entity);
         }
 
-        if(object instanceof SolidObject) {
-            this._staticColliders.push(object);
-        }
-
-        if(object instanceof SolidObject) {
-            this._scene.add(object.Mesh);
-        }
-        else if (object instanceof WireframeObject) {
-            this._scene.add(object.Wireframe);
-        }
+        this._scene.add(entity.Object3D)
     }
     
-    public RemoveObject(object : BaseObject): void {
-        this._objects.splice(this._objects.findIndex(obj => obj === object), 1)
+    public RemoveObject(entity : Entity): void {
+        this._entities.splice(this._entities.findIndex(obj => obj === entity))
 
-        if(object instanceof SolidObject) {
-            this._scene.remove(object.Mesh);
+        if(entity.Components.get("collider") !== undefined) {
+            this._entities.splice(this._entities.findIndex(obj => obj === entity), 1)
         }
-        else if (object instanceof WireframeObject) {
-            this._scene.remove(object.Wireframe);
-        }
+
+        this._scene.remove(entity.Object3D);
     }
 
     public RemoveCreature(creature : Boid): void {

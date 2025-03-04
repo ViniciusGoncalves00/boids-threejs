@@ -1,20 +1,21 @@
 import * as THREE from "three";
-import { CameraController, CameraControllerEventMap } from "../controllers/camera-controller";
+import { CameraController } from "../controllers/camera-controller";
+import { Entity } from "../entities/entity";
 
 export class RendererManager {
     private _canvas: HTMLCanvasElement;
     private _renderer: THREE.WebGLRenderer;
     private _scene: THREE.Scene | null = null;
-    private _updatables: IUpdatable[] = [];
+    private _entities: Entity[];
     private _cameraController: CameraController | null = null;
 
     public get Renderer() : THREE.WebGLRenderer {
         return this._renderer;
     }
-    
 
-    public constructor(canvas: HTMLCanvasElement) {
+    public constructor(canvas: HTMLCanvasElement, entities: Entity[]) {
         this._canvas = canvas;
+        this._entities = entities;
         this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, antialias: true });
         this._renderer.shadowMap.enabled = true;
         this._renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -44,23 +45,23 @@ export class RendererManager {
         return this._renderer.domElement;
     }
 
-    public AddUpdatables(upgradeable: IUpdatable): void {
-        this._updatables?.push(upgradeable)
-    }
-
     private Update = (): void =>
-    {        
-        for (let index = 0; index < this._updatables.length; index++) {
-            this._updatables[index].Update();
-        }
-
-        if(this._scene !== null && this._cameraController !== null) {
-            this._cameraController.Update()
-            this._renderer.render(this._scene, this._cameraController.GetCamera());
-        }
-        
-        requestAnimationFrame(this.Update);
-    };
+        {
+            this._entities.forEach(entity => {
+                entity.Components.forEach(
+                    component => {
+                        if(component.Enabled) component.Update()
+                    })
+            })
+                
+    
+            if(this._scene !== null && this._cameraController !== null) {
+                this._cameraController.Update()
+                this._renderer.render(this._scene, this._cameraController.GetCamera());
+            }
+            
+            requestAnimationFrame(this.Update);
+        };
 
     private Resize(): void {
         if(this._canvas === null || this._cameraController === null) {

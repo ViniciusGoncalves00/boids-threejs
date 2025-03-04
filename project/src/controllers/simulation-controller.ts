@@ -1,8 +1,6 @@
-import { Boid } from "../boid";
 import { SceneManager } from "../managers/scene-manager";
-import { BaseObject } from "../objects/base-object";
 import { DomainController } from "./domain-controller";
-import { SpatialPartioningController } from "./spatial-partioning-controller";
+import { SpatialPartitioningController } from "./spatial-partitioning-controller";
 import { SpawnerController } from "./spawner-controller";
 
 export class SimulationController implements IUpdatable
@@ -13,13 +11,13 @@ export class SimulationController implements IUpdatable
     private _sceneManager : SceneManager;
     private _domainController : DomainController;
     private _spawnerController : SpawnerController;
-    private _spatialPartioningController : SpatialPartioningController;
+    private _spatialPartitioningController : SpatialPartitioningController;
 
-    public constructor(sceneManager : SceneManager, domainController: DomainController, spawnerController: SpawnerController, spatialPartioningController: SpatialPartioningController) {
+    public constructor(sceneManager : SceneManager, domainController: DomainController, spawnerController: SpawnerController, spatialPartitioningController: SpatialPartitioningController) {
         this._sceneManager = sceneManager;
         this._domainController = domainController;
         this._spawnerController = spawnerController;
-        this._spatialPartioningController = spatialPartioningController;
+        this._spatialPartitioningController = spatialPartitioningController;
 
         this._isRunning = false;
         this._isPaused = false;
@@ -29,7 +27,7 @@ export class SimulationController implements IUpdatable
         this._isRunning = true;
         this._isPaused = false;
 
-        this._spatialPartioningController.PopulateStatic();
+        this._spatialPartitioningController.PopulateStatic();
         this._spawnerController.Spawn(this._domainController.GetLimits())
     }
 

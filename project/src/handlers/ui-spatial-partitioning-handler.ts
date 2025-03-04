@@ -1,21 +1,29 @@
-import { SpatialPartioningController } from "../controllers/spatial-partioning-controller";
+import { RendererComponent } from "../components/renderer-component";
+import { SpatialPartitioningController } from "../controllers/spatial-partitioning-controller";
 
 export class UISpatialPartioningHandler implements IVisible, IColorful {
-    private _spatialPartioningController : SpatialPartioningController;
+    private _spatialPartioningController : SpatialPartitioningController;
 
-    public constructor(spatialPartioningController: SpatialPartioningController) {
+    public constructor(spatialPartioningController: SpatialPartitioningController) {
         this._spatialPartioningController = spatialPartioningController;
     }
 
     public ToggleVisibility(): void {
-        this._spatialPartioningController.ToggleVisibility();
+        const rendererComponent = this._spatialPartioningController.GetComponent("RendererComponent") as RendererComponent;
+        if (!rendererComponent) return;
+        
+        rendererComponent.SetVisibility(!rendererComponent.IsVisible());
     }
 
     public SetColor(r: number, g: number, b: number): void {
-        this._spatialPartioningController.SetColor(r, g, b);
+        const rendererComponent = this._spatialPartioningController.GetComponent("RendererComponent") as RendererComponent;
+        rendererComponent.SetColor(r, g, b);
     }
     public GetColor(): string {
-        return this._spatialPartioningController.GetColor();
+        const rendererComponent = this._spatialPartioningController.GetComponent("RendererComponent") as RendererComponent;
+        if (!rendererComponent) return "#000000";
+
+        return rendererComponent.GetHexColor()[0];
     }
 
     public SetDivisions(x?: number, y?: number, z?: number) : void {

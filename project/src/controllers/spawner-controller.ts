@@ -1,17 +1,16 @@
 import * as THREE from "three";
 import { SceneManager } from "../managers/scene-manager";
-import { Boid } from "../boid";
+import { Boid } from "../entities/boid";
 import { BoidsManager } from "../managers/boids-manager";
-import { SceneObject } from "../base";
-import { BaseObject } from "../objects/base-object";
-import { ObjectsBuilder } from "../managers/objects-builder";
-import { LineBasicMaterial } from "../objects/default-materials";
-import { WireframeObject } from "../objects/wireframe-object";
+import { Entity } from "../entities/entity";
+import { RendererComponent } from "../components/renderer-component";
+import { SpatialPartitioningController } from "./spatial-partitioning-controller";
 
-export class SpawnerController extends SceneObject implements IVisible, IColorful
+export class SpawnerController extends Entity
 {
     private _sceneManager : SceneManager;
     private _boidsManager : BoidsManager;
+    private _spatialPartitioningController : SpatialPartitioningController;
 
     private _minX: number = 0;
     private _minY: number = 0;
@@ -22,40 +21,12 @@ export class SpawnerController extends SceneObject implements IVisible, IColorfu
     
     private _amount: number = 10;
 
-    public _spawn: (WireframeObject | null) = null;
-
-    public constructor(sceneManager : SceneManager, boidsManager: BoidsManager)
+    public constructor(sceneManager : SceneManager, boidsManager: BoidsManager, spatialPartitioningController: SpatialPartitioningController)
     {
         super();
         this._sceneManager = sceneManager;
         this._boidsManager = boidsManager;
-        this._interfaces.push("IVisible", "IColorful");
-    }
-
-    public SetColor(r: number, g: number, b: number): void {
-        const color = new THREE.Color(r, g, b);
-        const material = new THREE.LineBasicMaterial({ color: color });
-
-        if (!this._spawn) {
-            return;
-        }
-
-        this._spawn.Wireframe.material = material;
-    }
-
-    public GetColor(): string {
-        const default_color = `#ffffff`;
-        if (!this._spawn || !this._spawn.Wireframe.material) {
-            return default_color;
-        }
-        const material = this._spawn.Wireframe.material as THREE.LineBasicMaterial;
-        return `#${material.color.getHexString()}`;
-    }
-
-    public ToggleVisibility(): void {
-        if (this._spawn !== null) {
-            this._spawn.Wireframe.visible = !this._spawn.Wireframe.visible;
-        }
+        this._spatialPartitioningController = spatialPartitioningController;
     }
 
     public GetLimits() : {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} {
@@ -71,10 +42,10 @@ export class SpawnerController extends SceneObject implements IVisible, IColorfu
                 z: (this._maxZ + this._minZ) / 2};
     }
 
-    public GetSize(): {x: number, y: number, z: number} {
-        return {x: Math.abs(this._maxX - this._minX),
-                y: Math.abs(this._maxY - this._minY),
-                z: Math.abs(this._maxZ - this._minZ)};
+    public GetSize(): {width: number, height: number, depth: number} {
+        return {width: Math.abs(this._maxX - this._minX),
+                height: Math.abs(this._maxY - this._minY),
+                depth: Math.abs(this._maxZ - this._minZ)};
     }
 
     public SetLimits(minX? : number, minY? : number, minZ? : number, maxX? : number, maxY? : number, maxZ? : number)
@@ -118,14 +89,14 @@ export class SpawnerController extends SceneObject implements IVisible, IColorfu
             const limits = this.GetLimits();
             const size = this.GetSize();
 
-            boidMesh.position.x = Math.random() * size.x + limits.min.x;
-            boidMesh.position.y = Math.random() * size.y + limits.min.y;
-            boidMesh.position.z = Math.random() * size.z + limits.min.z;
+            boidMesh.position.x = Math.random() * size.width + limits.min.x;
+            boidMesh.position.y = Math.random() * size.height + limits.min.y;
+            boidMesh.position.z = Math.random() * size.depth + limits.min.z;
             boidMesh.rotateX(Math.random() * 360 * Math.PI/180)
             boidMesh.rotateY(Math.random() * 360 * Math.PI/180)
             boidMesh.rotateZ(Math.random() * 360 * Math.PI/180)
 
-            const boid = new Boid(this._sceneManager, this._boidsManager, boidMesh, domainSize);
+            const boid = new Boid(this._sceneManager, this._boidsManager, this._spatialPartitioningController, boidMesh, domainSize);
             boids.push(boid);
         }
         
@@ -134,17 +105,16 @@ export class SpawnerController extends SceneObject implements IVisible, IColorfu
 
     private Update()
     {
-        if(this._spawn !== null){
-            this._sceneManager.RemoveObject(this._spawn)
-        }
+        const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
 
-        const size = this.GetSize()
-        const center = this.GetCenter()
+        this._sceneManager.RemoveObject(rendererComponent.Entity)
 
-        const objectBuilder = new ObjectsBuilder()
-        this._spawn = objectBuilder.BuildWireframeCuboid(size.x, size.y, size.z, LineBasicMaterial);
-        this._spawn.Wireframe.position.set(center.x, center.y, center.z)
+        rendererComponent.Mesh.geometry.dispose();
 
-        this._sceneManager.AddObject(this._spawn)
+        const size = this.GetSize();
+        rendererComponent.Mesh.geometry = new THREE.BoxGeometry(size.width, size.height, size.depth);
+        
+        const center = this.GetCenter();
+        rendererComponent.Mesh.position.set(center.x, center.y, center.z)
     }
 }

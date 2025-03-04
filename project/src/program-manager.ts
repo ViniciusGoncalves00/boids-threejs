@@ -13,10 +13,10 @@ import { UISimulationHandler } from "./handlers/ui-simulation-handler";
 import { UISceneHandler } from "./handlers/ui-scene-handler";
 import { BoidsManager } from "./managers/boids-manager";
 import { UIBoidsHandler } from "./handlers/ui-boids-tools-handler";
-import { SpatialPartioningController } from "./controllers/spatial-partioning-controller";
+import { SpatialPartitioningController } from "./controllers/spatial-partitioning-controller";
 import { UISpatialPartioningHandler } from "./handlers/ui-spatial-partitioning-handler";
-import { ObjectsBuilder } from "./managers/objects-builder";
-import { MeshPhysicalMaterial } from "./objects/default-materials";
+import { EntityBuilder } from "./builders/entity-builder";
+import { MeshStandardMaterial } from "./default-materials";
 
 declare global {
     interface Window {
@@ -42,7 +42,7 @@ export class ProgramManager {
     private _domainController : DomainController[] = [];
     private _spawnerController : SpawnerController[] = [];
     private _simulationController : SimulationController[] = [];
-    private _spatialPartioningController : SpatialPartioningController[] = [];
+    private _spatialPartitioningController : SpatialPartitioningController[] = [];
 
     private constructor() {
         document.addEventListener("DOMContentLoaded", () => {
@@ -82,7 +82,7 @@ export class ProgramManager {
 
         const canvas : HTMLCanvasElement = document.querySelector("canvas")!;
         
-        this._rendererManagers[0] = new RendererManager(canvas);
+        this._rendererManagers[0] = new RendererManager(canvas, this._sceneManagers[0].Entities);
         this._sceneManagers[0] = new SceneManager();
         this._boidsManagers[0] = new BoidsManager();
 
@@ -91,37 +91,37 @@ export class ProgramManager {
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
         this._domainController[0].SetLimits(-500, -500, -500, 500, 500, 500);
 
-        this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0]);
-        this._spawnerController[0].SetLimits(-100, 150, 150, 100, 250, 250);
+        this._spatialPartitioningController[0] = new SpatialPartitioningController(this._sceneManagers[0], this._domainController[0]);
+        this._spatialPartitioningController[0].SetDivisions(17, 17, 17);
 
-        this._spatialPartioningController[0] = new SpatialPartioningController(this._sceneManagers[0], this._domainController[0]);
-        this._spatialPartioningController[0].SetDivisions(17, 17, 17);
+        this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0], this._spatialPartitioningController[0]);
+        this._spawnerController[0].SetLimits(-100, 150, 150, 100, 250, 250);
         
-        this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0], this._spawnerController[0], this._spatialPartioningController[0]);
+        this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0], this._spawnerController[0], this._spatialPartitioningController[0]);
 
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
-        this._rendererManagers[0].AddUpdatables(this._simulationController[0]);
-        this._rendererManagers[0].AddUpdatables(this._spatialPartioningController[0]);
+        // this._rendererManagers[0].AddUpdatables(this._simulationController[0]);
+        // this._rendererManagers[0].AddUpdatables(this._spatialPartitioningController[0]);
 
-        const objectBuilder = new ObjectsBuilder();
+        const objectBuilder = new EntityBuilder();
 
-        const cuboid = objectBuilder.BuildCuboid(200, 600, 200, MeshPhysicalMaterial);
-        cuboid.Mesh.position.set(200, 0, 0)
+        const cuboid = objectBuilder.BuildCuboid(200, 600, 200, MeshStandardMaterial);
+        cuboid.Object3D.position.set(200, 0, 0)
         this._sceneManagers[0].AddObject(cuboid);
 
-        const cuboid2 = objectBuilder.BuildCuboid(200, 600, 200, MeshPhysicalMaterial);
-        cuboid2.Mesh.position.set(-200, 0, 0)
+        const cuboid2 = objectBuilder.BuildCuboid(200, 600, 200, MeshStandardMaterial);
+        cuboid2.Object3D.position.set(-200, 0, 0)
         this._sceneManagers[0].AddObject(cuboid2);
 
-        const cuboid3 = objectBuilder.BuildCuboid(200, 200, 200, MeshPhysicalMaterial);
+        const cuboid3 = objectBuilder.BuildCuboid(200, 200, 200, MeshStandardMaterial);
         this._sceneManagers[0].AddObject(cuboid3);
         
         (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._domainController[0]);
         (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0]);
         (window.UISpawnerHandler as any) = new UISpawnerHandler(this._spawnerController[0]);
         (window.UISimulationHandler as any) = new UISimulationHandler(this._simulationController[0]);
-        (window.UISpatialPartioningHandler as any) = new UISpatialPartioningHandler(this._spatialPartioningController[0]);
+        (window.UISpatialPartioningHandler as any) = new UISpatialPartioningHandler(this._spatialPartitioningController[0]);
         (window.UIBoidsHandler as any) = new UIBoidsHandler(this._boidsManagers[0]);
 
         Alpine.store("UISceneHandler", new UISceneHandler())

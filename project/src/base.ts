@@ -1,7 +1,12 @@
-export abstract class SceneObject {
-    protected _interfaces: string[] = [];
-
-    public GetInterfaces(): string[] {
-        return this._interfaces;
+export class Base {
+    id: number;
+  
+    constructor() {
+      this.id = Math.random();
     }
-}
+  
+    public GetInstanceID(): number
+    {
+      return this.id;
+    }
+  }

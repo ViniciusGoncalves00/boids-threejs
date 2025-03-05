@@ -18,6 +18,7 @@ export class SpatialPartitioningController extends Entity {
         super("SpatialPartitioningController");
         this._sceneManager = sceneManager;
         this._domainController = domainController;
+
         this.AddComponent(new RendererComponent(this, this._nodesView.flat(2).filter(node => node !== null)));
         this.SoftUpdate();
     }
@@ -90,12 +91,16 @@ export class SpatialPartitioningController extends Entity {
         const nodeHeight = boundarySize.height / this._partitionsY;
         const nodeDepth = boundarySize.depth / this._partitionsZ;
         const center = this._domainController.GetCenter();
+
+        const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
     
         for (let x = 0; x < this._partitionsX; x++) {
             for (let y = 0; y < this._partitionsY; y++) {
                 for (let z = 0; z < this._partitionsZ; z++) {
                     const box = new THREE.BoxGeometry(nodeWidth, nodeHeight, nodeDepth);
-                    const mesh = new THREE.Mesh(box);
+                    const edgesGeometry = new THREE.EdgesGeometry(box);
+                    const material = new THREE.LineBasicMaterial({ color: 0xffffff });
+                    const mesh = new THREE.LineSegments(edgesGeometry, material);
 
                     mesh.position.set(
                         (x - this._partitionsX / 2) * nodeWidth + nodeWidth / 2 + center.x,
@@ -103,8 +108,10 @@ export class SpatialPartitioningController extends Entity {
                         (z - this._partitionsZ / 2) * nodeDepth + nodeDepth / 2 + center.z
                     );
     
+                    rendererComponent.Mesh = mesh;
                     this.Object3D.add(mesh);
-                    this._nodesView[x][y][z] = mesh;
+                    this._nodesView[x][y][z] = mesh as unknown as THREE.Mesh;
+                    this._sceneManager.AddObject(this);
                 }
             }
         }

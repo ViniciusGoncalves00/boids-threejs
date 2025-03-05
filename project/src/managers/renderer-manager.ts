@@ -56,8 +56,6 @@ export class RendererManager {
             if (entity instanceof Boid) {
                 entity.Update();
             }
-            console.log(entity.constructor.name);
-
         })
         
         if (this._scene !== null && this._cameraController !== null) {

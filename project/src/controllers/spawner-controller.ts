@@ -28,7 +28,7 @@ export class SpawnerController extends Entity {
 
         this._object3D = new THREE.Object3D();
         
-                const box = new THREE.BoxGeometry();
+        const box = new THREE.BoxGeometry();
         const edgesGeometry = new THREE.EdgesGeometry(box);
         const material = new THREE.LineBasicMaterial({ color: 0xffffff });
         const mesh = new THREE.LineSegments(edgesGeometry, material);

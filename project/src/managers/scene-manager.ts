@@ -95,7 +95,7 @@ export class SceneManager implements ISubject
     public AddObject(entity: Entity): void {
         this._entities.push(entity);
 
-        if(entity.Components.get("collider") !== undefined) {
+        if(entity.Components.get("ColliderComponent") !== undefined) {
             this._colliders.push(entity);
         }
 
@@ -107,14 +107,27 @@ export class SceneManager implements ISubject
         this.Notify();
     }
     
-    public RemoveObject(entity : Entity): void {
-        this._entities.splice(this._entities.findIndex(obj => obj === entity))
-
-        if(entity.Components.get("collider") !== undefined) {
-            this._entities.splice(this._entities.findIndex(obj => obj === entity), 1)
+    public RemoveObject(entity: Entity): void {
+        const index = this._entities.findIndex(obj => obj === entity);
+        if (index !== -1) this._entities.splice(index, 1);
+            
+        if (entity.Components.get("ColliderComponent") !== undefined) {
+            const colliderIndex = this._colliders.findIndex(obj => obj === entity);
+            if (colliderIndex !== -1) this._colliders.splice(colliderIndex, 1);
         }
-
+    
+        if (entity.Components.get("RendererComponent") !== undefined) {
+            const rendererIndex = this._renderers.findIndex(obj => obj === entity);
+            if (rendererIndex !== -1) this._renderers.splice(rendererIndex, 1);
+        }
+    
+        entity.Object3D.children.forEach(child => {
+            this._scene.remove(child);
+        });
+    
         this._scene.remove(entity.Object3D);
+    
         this.Notify();
     }
+    
 }

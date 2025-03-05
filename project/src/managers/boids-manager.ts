@@ -32,8 +32,8 @@ export class BoidsManager implements IObserver
             }
     
             for (let index = 0; index < creatures.length; index++) {
-                this._sceneManager.RemoveObject(creatures[index]);
                 creatures[index].Destroy();
+                this._sceneManager.RemoveObject(creatures[index]);
             }
         }
     }

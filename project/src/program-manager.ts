@@ -26,6 +26,8 @@ import { SpatialPartitioningController } from "./controllers/spatial-partitionin
 import { UISpatialPartioningHandler } from "./handlers/ui-spatial-partitioning-handler";
 
 import { UIRendererComponentHandler } from "./handlers/ui-renderer-component-handler";
+import { ColliderComponent } from "./components/collider-component";
+import { Collision } from "./physics/physic";
 
 declare global {
     interface Window {
@@ -119,13 +121,16 @@ export class ProgramManager {
 
         const cuboid = objectBuilder.BuildCuboid(200, 600, 200, MeshStandardMaterial);
         cuboid.Object3D.position.set(200, 0, 0)
+        cuboid.AddComponent(new ColliderComponent())
         this._sceneManagers[0].AddObject(cuboid);
 
         const cuboid2 = objectBuilder.BuildCuboid(200, 600, 200, MeshStandardMaterial);
         cuboid2.Object3D.position.set(-200, 0, 0)
+        cuboid2.AddComponent(new ColliderComponent())
         this._sceneManagers[0].AddObject(cuboid2);
 
         const cuboid3 = objectBuilder.BuildCuboid(200, 200, 200, MeshStandardMaterial);
+        cuboid3.AddComponent(new ColliderComponent())
         this._sceneManagers[0].AddObject(cuboid3);
         
         (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._domainController[0]);

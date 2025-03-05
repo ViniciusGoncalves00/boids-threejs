@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { CameraController } from "../controllers/camera-controller";
 import { Entity } from "../entities/entity";
+import { Boid } from "../entities/boid";
 
 export class RendererManager {
     private _canvas: HTMLCanvasElement;
@@ -45,23 +46,28 @@ export class RendererManager {
         return this._renderer.domElement;
     }
 
-    private Update = (): void =>
-        {
-            this._entities.forEach(entity => {
-                entity.Components.forEach(
-                    component => {
-                        if(component.Enabled) component.Update()
-                    })
-            })
-                
-    
-            if(this._scene !== null && this._cameraController !== null) {
-                this._cameraController.Update()
-                this._renderer.render(this._scene, this._cameraController.GetCamera());
-            }
+    private Update = (): void => {
+        this._entities.forEach(entity => {
+            entity.Components.forEach(
+                component => {
+                    if(component.Enabled) component.Update()
+                })
             
-            requestAnimationFrame(this.Update);
-        };
+            if (entity instanceof Boid) {
+                entity.Update();
+            }
+            console.log(entity.constructor.name);
+
+        })
+        
+        if (this._scene !== null && this._cameraController !== null) {
+            this._cameraController.Update();
+            this._renderer.render(this._scene, this._cameraController.GetCamera());
+        }
+   
+        requestAnimationFrame(this.Update);
+    };
+   
 
     private Resize(): void {
         if(this._canvas === null || this._cameraController === null) {

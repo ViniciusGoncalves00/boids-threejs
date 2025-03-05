@@ -81,11 +81,9 @@ export class SpatialPartitioningController extends Entity {
         this._renderer.Destroy();
         this.Object3D.clear();
     
-        // this._nodesView = Array.from({ length: this._partitionsX }, () =>
-        //     Array.from({ length: this._partitionsY }, () =>
-        //         Array.from({ length: this._partitionsZ }, () => null)
-        //     )
-        // );
+        this._nodesView = Array.from({ length: this._partitionsX }, () =>
+            Array.from({ length: this._partitionsY }, () => [])
+        );            
     
         const boundarySize = this._domainController.GetSize();
         const nodeWidth = boundarySize.width / this._partitionsX;

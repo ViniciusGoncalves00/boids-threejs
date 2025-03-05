@@ -1,10 +1,18 @@
 import { RendererComponent } from "../components/renderer-component";
+import { Entity } from "../entities/entity";
 
-export class UIRendererHandler {
+export class UIRendererComponentHandler {
     private _renderers: Map<string, RendererComponent>;
 
-    public constructor(renderers: { key: string, component: RendererComponent }[]) {
-        this._renderers = new Map(renderers.map(item => [item.key, item.component]));
+    public constructor(entities: Entity[]) {
+        this._renderers = new Map(
+            entities
+                .map(entity => {
+                    const renderer = entity.GetComponent("RendererComponent") as RendererComponent | undefined;
+                    return renderer ? [entity.constructor.name, renderer] : null;
+                })
+                .filter((entry): entry is [string, RendererComponent] => entry !== null)
+        );
     }
 
     public ToggleVisibility(name: string): void {
@@ -23,7 +31,7 @@ export class UIRendererHandler {
 
     public GetColor(name: string): string {
         const renderer = this._renderers.get(name);
-        if (!renderer) return "#000000"; 
+        if (!renderer) return "#000000";
 
         return renderer.GetHexColor()[0];
     }

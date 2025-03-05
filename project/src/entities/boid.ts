@@ -4,6 +4,7 @@ import { Collision } from "../physics/physic";
 import { SceneManager } from "../managers/scene-manager";
 import { BoidsManager } from "../managers/boids-manager";
 import { SpatialPartitioningController } from "../controllers/spatial-partitioning-controller";
+import { RendererComponent } from "../components/renderer-component";
 
 export class Boid extends Entity implements IUpdatable, IGizmos
 {
@@ -38,6 +39,12 @@ export class Boid extends Entity implements IUpdatable, IGizmos
         this.Mesh = mesh;
         this._bounds = bounds;
 
+        this.AddComponent(new RendererComponent(this));
+
+        const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
+        rendererComponent.Mesh = mesh;
+        this._object3D.add(mesh);
+        
         if(this._isGizmosVisible) {
             this.ShowGizmos();
         }
@@ -95,7 +102,7 @@ export class Boid extends Entity implements IUpdatable, IGizmos
     }
 
     public Destroy(): void {
-        this._sceneManager.RemoveCreature(this)
+        this._sceneManager.RemoveObject(this)
     }
     
     private Move(distance: number): void {

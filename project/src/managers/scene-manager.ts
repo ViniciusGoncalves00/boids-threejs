@@ -11,7 +11,8 @@ export class SceneManager implements ISubject
     private _colliders : Entity[] = []
     public get Colliders(): Entity[] { return this._colliders; }
 
-    private _creatures : Boid[] = [];
+    private _renderers : Entity[] = []
+    public get Renderers(): Entity[] { return this._renderers; }
 
     private _observers: IObserver[] = [];
 
@@ -71,7 +72,25 @@ export class SceneManager implements ISubject
     }
 
     public GetScene() : THREE.Scene {return this._scene; }
-    public GetPopulation(): Boid[] { return this._creatures; }
+    public GetPopulation(): Boid[] {
+        let population: Boid[] = []
+        this._entities.forEach(entity => {
+            if(entity.constructor.name === "Boid") {
+                population.push(entity as Boid)
+            }
+        })
+        return population;
+    }
+
+    public CreaturesAlive(): number {
+        let population: Entity[] = []
+        this._entities.forEach(entity => {
+            if(entity.constructor.name === "Boid") {
+                population.push(entity)
+            }
+        })
+        return population.length;
+    }
 
     public AddObject(entity: Entity): void {
         this._entities.push(entity);
@@ -80,7 +99,12 @@ export class SceneManager implements ISubject
             this._colliders.push(entity);
         }
 
+        if(entity.Components.get("RendererComponent") !== undefined) {
+            this._renderers.push(entity);
+        }
+
         this._scene.add(entity.Object3D)
+        this.Notify();
     }
     
     public RemoveObject(entity : Entity): void {
@@ -91,25 +115,6 @@ export class SceneManager implements ISubject
         }
 
         this._scene.remove(entity.Object3D);
-    }
-
-    public RemoveCreature(creature : Boid): void {
-        this._creatures.splice(this._creatures.findIndex(obj => obj === creature), 1);
-        this._scene.remove(creature.Mesh);
         this.Notify();
-    }
-
-    public Populate(creatures: Boid[]): void {
-        creatures.forEach(creature => {
-            this._creatures.push(creature);
-            this._scene.add(creature.Mesh);
-        });
-
-        this.Notify();
-    }
-
-    public CreaturesAlive(): number {
-        return this._creatures.length;
     }
 }
-

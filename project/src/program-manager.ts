@@ -2,21 +2,30 @@ import Alpine from "alpinejs";
 import * as THREE from "three";
 import { RendererManager } from "./managers/renderer-manager";
 import { SceneManager } from "./managers/scene-manager";
-import { CameraController } from "./controllers/camera-controller";
-import { UICameraToolsHandler } from "./handlers/ui-camera-tools-handler";
-import { DomainController } from "./controllers/domain-controller";
-import { UIDomainHandler } from "./handlers/ui-domain-handler";
-import { SpawnerController } from "./controllers/spawner-controller";
-import { UISpawnerHandler } from "./handlers/ui-spawner-handler";
-import { SimulationController } from "./controllers/simulation-controller";
-import { UISimulationHandler } from "./handlers/ui-simulation-handler";
-import { UISceneHandler } from "./handlers/ui-scene-handler";
-import { BoidsManager } from "./managers/boids-manager";
-import { UIBoidsHandler } from "./handlers/ui-boids-tools-handler";
-import { SpatialPartitioningController } from "./controllers/spatial-partitioning-controller";
-import { UISpatialPartioningHandler } from "./handlers/ui-spatial-partitioning-handler";
 import { EntityBuilder } from "./builders/entity-builder";
 import { MeshStandardMaterial } from "./default-materials";
+
+import { CameraController } from "./controllers/camera-controller";
+import { UICameraToolsHandler } from "./handlers/ui-camera-tools-handler";
+
+import { DomainController } from "./controllers/domain-controller";
+import { UIDomainHandler } from "./handlers/ui-domain-handler";
+
+import { SpawnerController } from "./controllers/spawner-controller";
+import { UISpawnerHandler } from "./handlers/ui-spawner-handler";
+
+import { SimulationController } from "./controllers/simulation-controller";
+import { UISimulationHandler } from "./handlers/ui-simulation-handler";
+
+import { UISceneHandler } from "./handlers/ui-scene-handler";
+
+import { BoidsManager } from "./managers/boids-manager";
+import { UIBoidsHandler } from "./handlers/ui-boids-tools-handler";
+
+import { SpatialPartitioningController } from "./controllers/spatial-partitioning-controller";
+import { UISpatialPartioningHandler } from "./handlers/ui-spatial-partitioning-handler";
+
+import { UIRendererComponentHandler } from "./handlers/ui-renderer-component-handler";
 
 declare global {
     interface Window {
@@ -29,6 +38,7 @@ declare global {
         UISceneHandler: typeof UISceneHandler;
         UIBoidsHandler: typeof UIBoidsHandler;
         UISpatialPartioningHandler: typeof UISpatialPartioningHandler;
+        UIRendererComponentHandler: typeof UIRendererComponentHandler;
     }
   }
 
@@ -82,9 +92,9 @@ export class ProgramManager {
 
         const canvas : HTMLCanvasElement = document.querySelector("canvas")!;
         
-        this._rendererManagers[0] = new RendererManager(canvas, this._sceneManagers[0].Entities);
         this._sceneManagers[0] = new SceneManager();
         this._boidsManagers[0] = new BoidsManager();
+        this._rendererManagers[0] = new RendererManager(canvas, this._sceneManagers[0].Renderers);
 
         this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
 
@@ -123,6 +133,7 @@ export class ProgramManager {
         (window.UISimulationHandler as any) = new UISimulationHandler(this._simulationController[0]);
         (window.UISpatialPartioningHandler as any) = new UISpatialPartioningHandler(this._spatialPartitioningController[0]);
         (window.UIBoidsHandler as any) = new UIBoidsHandler(this._boidsManagers[0]);
+        (window.UIRendererComponentHandler as any) = new UIRendererComponentHandler([this._domainController[0], this._spawnerController[0]]);
 
         Alpine.store("UISceneHandler", new UISceneHandler())
         this._sceneManagers[0].Attach(Alpine.store("UISceneHandler") as UISceneHandler)

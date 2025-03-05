@@ -17,12 +17,15 @@ export class DomainController extends Entity {
         super();
         this._object3D = new THREE.Object3D();
 
-        const wireframe = this.CreateWireframe(new THREE.BoxGeometry());
+        const box = new THREE.BoxGeometry();
+        const edgesGeometry = new THREE.EdgesGeometry(box);
+        const material = new THREE.LineBasicMaterial({ color: 0xffffff });
+        const mesh = new THREE.LineSegments(edgesGeometry, material);
         this.AddComponent(new RendererComponent(this));
 
         const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
-        rendererComponent.Mesh = wireframe;
-        this._object3D.add(wireframe);
+        rendererComponent.Mesh = mesh;
+        this._object3D.add(mesh);
 
         this._sceneManager = sceneManager;
         this._sceneManager.AddObject(this);
@@ -76,20 +79,16 @@ export class DomainController extends Entity {
 
         const size = this.GetSize();
         const box = new THREE.BoxGeometry(size.width, size.height, size.depth);
-        const newMesh = this.CreateWireframe(box);
+        const edgesGeometry = new THREE.EdgesGeometry(box);
+        const material = new THREE.LineBasicMaterial({ color: 0xffffff });
+        const mesh = new THREE.LineSegments(edgesGeometry, material);
 
         const center = this.GetCenter();
-        newMesh.position.set(center.x, center.y, center.z);
+        mesh.position.set(center.x, center.y, center.z);
 
-        this._object3D.add(newMesh);
-        rendererComponent.Mesh = newMesh;
+        this._object3D.add(mesh);
+        rendererComponent.Mesh = mesh;
 
         this._sceneManager.AddObject(this);
-    }
-
-    private CreateWireframe(geometry: THREE.BoxGeometry): THREE.LineSegments {
-        const wireframeGeometry = new THREE.WireframeGeometry(geometry);
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff });
-        return new THREE.LineSegments(wireframeGeometry, material);
     }
 }

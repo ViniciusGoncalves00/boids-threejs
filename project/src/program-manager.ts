@@ -94,9 +94,6 @@ export class ProgramManager {
         
         this._sceneManagers[0] = new SceneManager();
         this._boidsManagers[0] = new BoidsManager(this._sceneManagers[0]);
-        this._rendererManagers[0] = new RendererManager(canvas, this._sceneManagers[0].Renderers);
-
-        this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
 
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
         this._domainController[0].SetLimits(-500, -500, -500, 500, 500, 500);
@@ -108,7 +105,10 @@ export class ProgramManager {
         
         this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0], this._domainController[0], this._simulationController[0], this._spatialPartitioningController[0]);
         this._spawnerController[0].SetLimits(-100, 150, 150, 100, 250, 250);
-        
+
+        this._rendererManagers[0] = new RendererManager(canvas, this._simulationController[0], this._sceneManagers[0].Renderers);
+
+        this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
 
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());

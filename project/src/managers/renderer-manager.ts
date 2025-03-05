@@ -2,20 +2,23 @@ import * as THREE from "three";
 import { CameraController } from "../controllers/camera-controller";
 import { Entity } from "../entities/entity";
 import { Boid } from "../entities/boid";
+import { SimulationController } from "../controllers/simulation-controller";
 
 export class RendererManager {
     private _canvas: HTMLCanvasElement;
     private _renderer: THREE.WebGLRenderer;
     private _scene: THREE.Scene | null = null;
     private _entities: Entity[];
+    private _simulationController: SimulationController;
     private _cameraController: CameraController | null = null;
 
     public get Renderer() : THREE.WebGLRenderer {
         return this._renderer;
     }
 
-    public constructor(canvas: HTMLCanvasElement, entities: Entity[]) {
+    public constructor(canvas: HTMLCanvasElement, simulationController: SimulationController, entities: Entity[]) {
         this._canvas = canvas;
+        this._simulationController = simulationController;
         this._entities = entities;
         this._renderer = new THREE.WebGLRenderer({ canvas: this._canvas, antialias: true });
         this._renderer.shadowMap.enabled = true;
@@ -47,16 +50,19 @@ export class RendererManager {
     }
 
     private Update = (): void => {
-        this._entities.forEach(entity => {
-            entity.Components.forEach(
-                component => {
-                    if(component.Enabled) component.Update()
-                })
-            
-            if (entity instanceof Boid) {
-                entity.Update();
-            }
-        })
+
+        if(this._simulationController.IsRunning()) {
+            this._entities.forEach(entity => {
+                entity.Components.forEach(
+                    component => {
+                        if(component.Enabled) component.Update()
+                    })
+                
+                if (entity instanceof Boid) {
+                    entity.Update();
+                }
+            })
+        }
         
         if (this._scene !== null && this._cameraController !== null) {
             this._cameraController.Update();

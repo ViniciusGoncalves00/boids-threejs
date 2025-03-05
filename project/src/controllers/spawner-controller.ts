@@ -119,7 +119,7 @@ export class SpawnerController extends Entity implements IObserver {
             boidMesh.rotateY(Math.random() * 360 * Math.PI/180);
             boidMesh.rotateZ(Math.random() * 360 * Math.PI/180);
 
-            const boid = new Boid(this._sceneManager, this._boidsManager, this._simulationController, this._spatialPartitioningController, boidMesh, bounds);
+            const boid = new Boid(this._sceneManager, this._boidsManager, this._spatialPartitioningController, boidMesh, bounds);
             boids.push(boid);
             this._sceneManager.AddObject(boid);
         }

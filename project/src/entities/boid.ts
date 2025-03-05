@@ -14,7 +14,6 @@ export class Boid extends Entity implements IUpdatable, IGizmos
 
     public Mesh : THREE.Mesh;
 
-    private _bounds : {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}};
     private _directions = [
         new THREE.Vector3(0, 0, 1),
         new THREE.Vector3(0, 1, 0),
@@ -29,7 +28,7 @@ export class Boid extends Entity implements IUpdatable, IGizmos
 
     private _isGizmosVisible: boolean = false;
 
-    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, spatialPartitioningController: SpatialPartitioningController, mesh: THREE.Mesh, bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}})
+    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, spatialPartitioningController: SpatialPartitioningController, mesh: THREE.Mesh)
     {
         super();
         this._sceneManager = sceneManager;
@@ -37,12 +36,11 @@ export class Boid extends Entity implements IUpdatable, IGizmos
         this._spatialPartitioningController = spatialPartitioningController;
 
         this.Mesh = mesh;
-        this._bounds = bounds;
 
         this.AddComponent(new RendererComponent(this));
 
         const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
-        rendererComponent.Mesh = mesh;
+        rendererComponent.AddMesh(mesh);
         this._object3D.add(mesh);
         
         if(this._isGizmosVisible) {
@@ -70,11 +68,13 @@ export class Boid extends Entity implements IUpdatable, IGizmos
         })
     }
 
-    public Update(): void {        
+    public Update(): void { 
+        const bounds = this._boidsManager.GetBounds();
+        
         let isColliding =
-        this.Mesh.position.x < this._bounds.min.x || this.Mesh.position.x > this._bounds.max.x ||
-        this.Mesh.position.y < this._bounds.min.y || this.Mesh.position.y > this._bounds.max.y ||
-        this.Mesh.position.z < this._bounds.min.z || this.Mesh.position.z > this._bounds.max.z;
+        this.Mesh.position.x < bounds.min.x || this.Mesh.position.x > bounds.max.x ||
+        this.Mesh.position.y < bounds.min.y || this.Mesh.position.y > bounds.max.y ||
+        this.Mesh.position.z < bounds.min.z || this.Mesh.position.z > bounds.max.z;
 
         if(isColliding) {
             if(this._boidsManager.GetDeath()) {
@@ -107,10 +107,16 @@ export class Boid extends Entity implements IUpdatable, IGizmos
 
         this._sceneManager.RemoveObject(this);
 
-        if (rendererComponent.Mesh) {
-            this._object3D.remove(rendererComponent.Mesh);
-            if (rendererComponent.Mesh.geometry) rendererComponent.Mesh.geometry.dispose();
-            if (rendererComponent.Mesh.material) rendererComponent.Mesh.material.dispose();
+        const meshes = rendererComponent.GetMeshes();
+
+        if (meshes[0]) {
+            this._object3D.remove(meshes[0]);
+            if (meshes[0].geometry) meshes[0].geometry.dispose();
+            // if (Array.isArray(meshes[0].material)) {
+            //     meshes[0].material.forEach(mat => mat.dispose());
+            // } else {
+            //     meshes[0].material.dispose();
+            // }
         }
     }
     
@@ -123,10 +129,11 @@ export class Boid extends Entity implements IUpdatable, IGizmos
 
         if(this._boidsManager.GetAvoidance()) {
             const boxes: THREE.Box3[] = this._sceneManager.Colliders.map(entity => new THREE.Box3().setFromObject(entity.Object3D));
-            needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this._boidsManager.GetViewDistance(), boxes, this._bounds);
+            const bounds = this._boidsManager.GetBounds();
+            needToAvoid = this.TryAvoidForwardCollision(this.Mesh, this._boidsManager.GetViewDistance(), boxes, bounds);
 
             if (needToAvoid) {
-                direction.add(this.TryAvoidCollision(this.Mesh, this._directions, this._boidsManager.GetViewDistance(), boxes, this._bounds)) 
+                direction.add(this.TryAvoidCollision(this.Mesh, this._directions, this._boidsManager.GetViewDistance(), boxes, bounds)) 
             } else {
                 direction.add(this.Avoid())
             }

@@ -1,11 +1,14 @@
 import { RendererComponent } from "../components/renderer-component";
 import { DomainController } from "../controllers/domain-controller";
+import { BoidsManager } from "../managers/boids-manager";
 
 export class UIDomainHandler {
     private _domainController: DomainController;
+    private _boidsManager: BoidsManager;
 
-    public constructor(domainController: DomainController) {
+    public constructor(domainController: DomainController, boidsManager: BoidsManager) {
         this._domainController = domainController;
+        this._boidsManager = boidsManager;
     }
 
     // public ToggleVisibility(): void {
@@ -31,6 +34,7 @@ export class UIDomainHandler {
 
     public SetLimits(minX?: number, minY?: number, minZ?: number, maxX?: number, maxY?: number, maxZ?: number): void {
         this._domainController.SetLimits(minX, minY, minZ, maxX, maxY, maxZ);
+        this._boidsManager.SetBounds(minX, minY, minZ, maxX, maxY, maxZ)
     }
 
     public GetLimits(): { min: { x: number, y: number, z: number }, max: { x: number, y: number, z: number } } {

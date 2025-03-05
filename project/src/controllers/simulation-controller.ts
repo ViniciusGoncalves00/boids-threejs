@@ -1,5 +1,3 @@
-import { SceneManager } from "../managers/scene-manager";
-
 export class SimulationController implements ISubject
 {
     private _observers: IObserver[] = [];
@@ -7,11 +5,7 @@ export class SimulationController implements ISubject
     private _isRunning : boolean;
     private _isPaused : boolean;
 
-    private _sceneManager : SceneManager;
-
-    public constructor(sceneManager : SceneManager) {
-        this._sceneManager = sceneManager;
-
+    public constructor() {
         this._isRunning = false;
         this._isPaused = false;
     }
@@ -50,16 +44,6 @@ export class SimulationController implements ISubject
     public Stop(): void {
         this._isRunning = false;
         this._isPaused = false;
-
-        // const creatures = this._sceneManager.GetPopulation()
-
-        // if(creatures === null) {
-        //     return;
-        // }
-
-        // for (let index = 0; index < creatures.length; index++) {
-        //     this._sceneManager.RemoveObject(creatures[index]);
-        // }
 
         this.Notify(["Stop"]);
     }

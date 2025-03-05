@@ -11,8 +11,6 @@ import { DomainController } from "./domain-controller";
 export class SpawnerController extends Entity implements IObserver {
     private _sceneManager: SceneManager;
     private _boidsManager: BoidsManager;
-    private _domainController : DomainController;
-    private _simulationController : SimulationController;
     private _spatialPartitioningController: SpatialPartitioningController;
 
     private _minX: number = 0;
@@ -24,24 +22,26 @@ export class SpawnerController extends Entity implements IObserver {
     
     private _amount: number = 10;
 
-    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, domainController: DomainController, simulationController: SimulationController, spatialPartitioningController: SpatialPartitioningController) {
+    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, spatialPartitioningController: SpatialPartitioningController) {
         super();
         this._sceneManager = sceneManager;
         this._boidsManager = boidsManager;
-        this._domainController = domainController;
-        this._simulationController = simulationController;
         this._spatialPartitioningController = spatialPartitioningController;
 
         this._object3D = new THREE.Object3D();
         
         const box = new THREE.BoxGeometry();
-        const edgesGeometry = new THREE.EdgesGeometry(box);
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff });
-        const mesh = new THREE.LineSegments(edgesGeometry, material);
+        // const edgesGeometry = new THREE.EdgesGeometry(box);
+        const material = new THREE.LineBasicMaterial({
+            color: 0xffffff, 
+            transparent: true, 
+            opacity: 0.1
+        });
+        const mesh = new THREE.Mesh(box, material);
         this.AddComponent(new RendererComponent(this));
         
         const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
-        rendererComponent.Mesh = mesh;
+        rendererComponent.AddMesh(mesh);
         this._object3D.add(mesh);
 
         this._sceneManager.AddObject(this);
@@ -50,7 +50,7 @@ export class SpawnerController extends Entity implements IObserver {
     public Update(subject: ISubject, args?: string[]) {
         if(subject instanceof SimulationController && args?.includes("Start")) {
             this._spatialPartitioningController.PopulateStatic();
-            this.Spawn(this._domainController.GetLimits())
+            this.Spawn()
         }
     }
 
@@ -96,7 +96,7 @@ export class SpawnerController extends Entity implements IObserver {
         this._amount = amount;
     }
 
-    public Spawn(bounds: { min: { x: number, y: number, z: number }, max: { x: number, y: number, z: number } }, amount: number = this._amount): void {
+    public Spawn(amount: number = this._amount): void {
         let boids: Boid[] = [];
 
         const geometry = new THREE.ConeGeometry();
@@ -119,36 +119,46 @@ export class SpawnerController extends Entity implements IObserver {
             boidMesh.rotateY(Math.random() * 360 * Math.PI/180);
             boidMesh.rotateZ(Math.random() * 360 * Math.PI/180);
 
-            const boid = new Boid(this._sceneManager, this._boidsManager, this._spatialPartitioningController, boidMesh, bounds);
+            const boid = new Boid(this._sceneManager, this._boidsManager, this._spatialPartitioningController, boidMesh);
             boids.push(boid);
             this._sceneManager.AddObject(boid);
         }
     }
 
     private UpdateVisualization(): void {
-        const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
+         const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
         if (!rendererComponent) return;
-
+    
         this._sceneManager.RemoveObject(this);
-
-        if (rendererComponent.Mesh) {
-            this._object3D.remove(rendererComponent.Mesh);
-            if (rendererComponent.Mesh.geometry) rendererComponent.Mesh.geometry.dispose();
-            if (rendererComponent.Mesh.material) rendererComponent.Mesh.material.dispose();
+    
+        const meshes = rendererComponent.GetMeshes();
+        if (meshes.length > 0) {
+            const firstMesh = meshes[0];
+            rendererComponent.RemoveMesh(firstMesh);
+            
+            if (firstMesh.geometry) firstMesh.geometry.dispose();
+            // if (Array.isArray(meshes[0].material)) {
+            //     meshes[0].material.forEach(mat => mat.dispose());
+            // } else {
+            //     meshes[0].material.dispose();
+            // }
+            
         }
-
+    
         const size = this.GetSize();
         const box = new THREE.BoxGeometry(size.width, size.height, size.depth);
-        const edgesGeometry = new THREE.EdgesGeometry(box);
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff });
-        const mesh = new THREE.LineSegments(edgesGeometry, material);
-        
+        // const edgesGeometry = new THREE.EdgesGeometry(box);
+        const material = new THREE.LineBasicMaterial({
+            color: 0xffffff, 
+            transparent: true, 
+            opacity: 0.1
+        });
+        const mesh = new THREE.Mesh(box, material);
+    
         const center = this.GetCenter();
         mesh.position.set(center.x, center.y, center.z);
-        
-        this._object3D.add(mesh);
-        rendererComponent.Mesh = mesh;
-
+    
+        rendererComponent.AddMesh(mesh);
         this._sceneManager.AddObject(this);
     }
 }

@@ -6,7 +6,7 @@ export class BoidsManager implements IObserver
     private _avoidance: boolean = true;
     private _alignment: boolean = true;
     private _cohesion: boolean = true;
-    private _death: boolean = true;
+    private _death: boolean = false;
 
     private _viewDistance : number = 100;
     private _speed : number = 1.2;
@@ -14,6 +14,8 @@ export class BoidsManager implements IObserver
     private _separationDistance = 20;
     private _alignmentRadius: number = 50
     private _cohesionRadius: number = 25
+
+    private _bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} = {min: {x: 0, y: 0, z: 0}, max: {x: 0, y: 0, z: 0}}
 
     private _sceneManager: SceneManager;
 
@@ -31,9 +33,9 @@ export class BoidsManager implements IObserver
     
             for (let index = 0; index < creatures.length; index++) {
                 this._sceneManager.RemoveObject(creatures[index]);
+                creatures[index].Destroy();
             }
         }
-
     }
 
     public ToggleAvoidance(): void {
@@ -92,6 +94,10 @@ export class BoidsManager implements IObserver
         return this._cohesionRadius;
     }
 
+    public GetBounds(): {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}} {
+        return this._bounds;
+    }
+
     public SetViewDistance(value: number): void {
         this._viewDistance = value;
     }
@@ -114,5 +120,14 @@ export class BoidsManager implements IObserver
 
     public SetCohesionRadius(value: number): void {
         this._cohesionRadius = value;
+    }
+
+    public SetBounds(minX?: number, minY?: number, minZ?: number, maxX?: number, maxY?: number, maxZ?: number): void {
+        this._bounds.min.x = minX == undefined ? this._bounds.min.x : minX;
+        this._bounds.min.y = minY == undefined ? this._bounds.min.y : minY;
+        this._bounds.min.z = minZ == undefined ? this._bounds.min.z : minZ;
+        this._bounds.max.x = maxX == undefined ? this._bounds.max.x : maxX;
+        this._bounds.max.y = maxY == undefined ? this._bounds.max.y : maxY;
+        this._bounds.max.z = maxZ == undefined ? this._bounds.max.z : maxZ;
     }
 }

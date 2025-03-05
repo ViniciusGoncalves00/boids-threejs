@@ -98,9 +98,13 @@ export class SpatialPartitioningController extends Entity {
             for (let y = 0; y < this._partitionsY; y++) {
                 for (let z = 0; z < this._partitionsZ; z++) {
                     const box = new THREE.BoxGeometry(nodeWidth, nodeHeight, nodeDepth);
-                    const edgesGeometry = new THREE.EdgesGeometry(box);
-                    const material = new THREE.LineBasicMaterial({ color: 0xffffff });
-                    const mesh = new THREE.LineSegments(edgesGeometry, material);
+                    // const edgesGeometry = new THREE.EdgesGeometry(box);
+                    const material = new THREE.LineBasicMaterial({
+                        color: 0xffffff, 
+                        transparent: true, 
+                        opacity: 0.1
+                    });
+                    const mesh = new THREE.Mesh(box, material);
 
                     mesh.position.set(
                         (x - this._partitionsX / 2) * nodeWidth + nodeWidth / 2 + center.x,
@@ -108,7 +112,7 @@ export class SpatialPartitioningController extends Entity {
                         (z - this._partitionsZ / 2) * nodeDepth + nodeDepth / 2 + center.z
                     );
     
-                    rendererComponent.Mesh = mesh;
+                    rendererComponent.AddMesh(mesh);
                     this.Object3D.add(mesh);
                     this._nodesView[x][y][z] = mesh as unknown as THREE.Mesh;
                     this._sceneManager.AddObject(this);

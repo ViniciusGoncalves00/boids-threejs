@@ -93,17 +93,19 @@ export class ProgramManager {
         const canvas : HTMLCanvasElement = document.querySelector("canvas")!;
         
         this._sceneManagers[0] = new SceneManager();
-        this._boidsManagers[0] = new BoidsManager(this._sceneManagers[0]);
 
         this._domainController[0] = new DomainController(this._sceneManagers[0]);
         this._domainController[0].SetLimits(-500, -500, -500, 500, 500, 500);
 
+        this._boidsManagers[0] = new BoidsManager(this._sceneManagers[0]);
+        this._boidsManagers[0].SetBounds(-500, -500, -500, 500, 500, 500)
+
         this._spatialPartitioningController[0] = new SpatialPartitioningController(this._sceneManagers[0], this._domainController[0]);
         this._spatialPartitioningController[0].SetDivisions(3, 3, 3);
         
-        this._simulationController[0] = new SimulationController(this._sceneManagers[0]);
+        this._simulationController[0] = new SimulationController();
         
-        this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0], this._domainController[0], this._simulationController[0], this._spatialPartitioningController[0]);
+        this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0], this._spatialPartitioningController[0]);
         this._spawnerController[0].SetLimits(-100, 150, 150, 100, 250, 250);
 
         this._rendererManagers[0] = new RendererManager(canvas, this._simulationController[0], this._sceneManagers[0].Renderers);
@@ -112,8 +114,6 @@ export class ProgramManager {
 
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
-        // this._rendererManagers[0].AddUpdatables(this._simulationController[0]);
-        // this._rendererManagers[0].AddUpdatables(this._spatialPartitioningController[0]);
 
         const objectBuilder = new EntityBuilder();
 
@@ -129,7 +129,7 @@ export class ProgramManager {
         this._sceneManagers[0].AddObject(cuboid3);
         
         (window.UICameraToolsHandler as any) = new UICameraToolsHandler(this._cameraControllers[0], this._domainController[0]);
-        (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0]);
+        (window.UIDomainHandler as any) = new UIDomainHandler(this._domainController[0], this._boidsManagers[0]);
         (window.UISpawnerHandler as any) = new UISpawnerHandler(this._spawnerController[0]);
         (window.UISimulationHandler as any) = new UISimulationHandler(this._simulationController[0]);
         (window.UISpatialPartioningHandler as any) = new UISpatialPartioningHandler(this._spatialPartitioningController[0]);
@@ -138,6 +138,7 @@ export class ProgramManager {
 
         Alpine.store("UISceneHandler", new UISceneHandler())
         this._sceneManagers[0].Attach(Alpine.store("UISceneHandler") as UISceneHandler)
+
         this._simulationController[0].Attach(this._spawnerController[0])
         this._simulationController[0].Attach(this._boidsManagers[0])
     }

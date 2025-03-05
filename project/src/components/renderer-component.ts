@@ -5,7 +5,6 @@ import { Entity } from "../entities/entity";
 export class RendererComponent extends Component {
     private _entity: Entity;
     private _meshes: THREE.Mesh[] = [];
-    Mesh: any;
 
     constructor(entity: Entity, meshes: THREE.Mesh[] = []) {
         super();

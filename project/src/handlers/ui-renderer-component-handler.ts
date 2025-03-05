@@ -19,7 +19,16 @@ export class UIRendererComponentHandler {
         const renderer = this._renderers.get(name);
         if (!renderer) return;
 
-        renderer.SetVisibility(!renderer.IsVisible());
+        console.log(name)
+        console.log(renderer)
+        console.log(renderer.IsVisible())
+        if(renderer.IsVisible()) {
+            renderer.SetVisibility(false);
+        }
+        else {
+            renderer.SetVisibility(true);
+        }
+        // renderer.SetVisibility(renderer.IsVisible());
     }
 
     public SetColor(name: string, r: number, g: number, b: number): void {

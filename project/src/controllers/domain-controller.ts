@@ -18,13 +18,17 @@ export class DomainController extends Entity {
         this._object3D = new THREE.Object3D();
 
         const box = new THREE.BoxGeometry();
-        const edgesGeometry = new THREE.EdgesGeometry(box);
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff });
-        const mesh = new THREE.LineSegments(edgesGeometry, material);
+        // const edgesGeometry = new THREE.WireframeGeometry(box);
+        const material = new THREE.LineBasicMaterial({
+            color: 0xffffff, 
+            transparent: true, 
+            opacity: 0.1
+        });
+        const mesh = new THREE.Mesh(box, material);
         this.AddComponent(new RendererComponent(this));
 
         const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
-        rendererComponent.Mesh = mesh;
+        rendererComponent.AddMesh(mesh);
         this._object3D.add(mesh);
 
         this._sceneManager = sceneManager;
@@ -68,27 +72,37 @@ export class DomainController extends Entity {
     private UpdateDomain(): void {
         const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
         if (!rendererComponent) return;
-
+    
         this._sceneManager.RemoveObject(this);
-
-        if (rendererComponent.Mesh) {
-            this._object3D.remove(rendererComponent.Mesh);
-            if (rendererComponent.Mesh.geometry) rendererComponent.Mesh.geometry.dispose();
-            if (rendererComponent.Mesh.material) rendererComponent.Mesh.material.dispose();
+    
+        const meshes = rendererComponent.GetMeshes();
+        if (meshes.length > 0) {
+            const firstMesh = meshes[0];
+            rendererComponent.RemoveMesh(firstMesh);
+            
+            if (firstMesh.geometry) firstMesh.geometry.dispose();
+            // if (Array.isArray(meshes[0].material)) {
+            //     meshes[0].material.forEach(mat => mat.dispose());
+            // } else {
+            //     meshes[0].material.dispose();
+            // }
+            
         }
-
+    
         const size = this.GetSize();
         const box = new THREE.BoxGeometry(size.width, size.height, size.depth);
-        const edgesGeometry = new THREE.EdgesGeometry(box);
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff });
-        const mesh = new THREE.LineSegments(edgesGeometry, material);
-
+        // const edgesGeometry = new THREE.WireframeGeometry(box);
+        const material = new THREE.LineBasicMaterial({
+            color: 0xffffff, 
+            transparent: true, 
+            opacity: 0.1
+        });
+        const mesh = new THREE.Mesh(box, material);
+    
         const center = this.GetCenter();
         mesh.position.set(center.x, center.y, center.z);
-
-        this._object3D.add(mesh);
-        rendererComponent.Mesh = mesh;
-
+    
+        rendererComponent.AddMesh(mesh);
         this._sceneManager.AddObject(this);
     }
 }

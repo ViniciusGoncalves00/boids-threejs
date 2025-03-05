@@ -102,12 +102,13 @@ export class ProgramManager {
         this._domainController[0].SetLimits(-500, -500, -500, 500, 500, 500);
 
         this._spatialPartitioningController[0] = new SpatialPartitioningController(this._sceneManagers[0], this._domainController[0]);
-        this._spatialPartitioningController[0].SetDivisions(17, 17, 17);
-
-        this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0], this._spatialPartitioningController[0]);
+        this._spatialPartitioningController[0].SetDivisions(3, 3, 3);
+        
+        this._simulationController[0] = new SimulationController(this._sceneManagers[0]);
+        
+        this._spawnerController[0] = new SpawnerController(this._sceneManagers[0], this._boidsManagers[0], this._domainController[0], this._simulationController[0], this._spatialPartitioningController[0]);
         this._spawnerController[0].SetLimits(-100, 150, 150, 100, 250, 250);
         
-        this._simulationController[0] = new SimulationController(this._sceneManagers[0], this._domainController[0], this._spawnerController[0], this._spatialPartitioningController[0]);
 
         this._rendererManagers[0].SetCameraController(this._cameraControllers[0]);
         this._rendererManagers[0].SetScene(this._sceneManagers[0].GetScene());
@@ -137,6 +138,7 @@ export class ProgramManager {
 
         Alpine.store("UISceneHandler", new UISceneHandler())
         this._sceneManagers[0].Attach(Alpine.store("UISceneHandler") as UISceneHandler)
+        this._simulationController[0].Attach(this._spawnerController[0])
     }
 
     public static GetInstance() : ProgramManager {

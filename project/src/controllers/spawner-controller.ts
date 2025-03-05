@@ -5,10 +5,14 @@ import { BoidsManager } from "../managers/boids-manager";
 import { Entity } from "../entities/entity";
 import { RendererComponent } from "../components/renderer-component";
 import { SpatialPartitioningController } from "./spatial-partitioning-controller";
+import { SimulationController } from "./simulation-controller";
+import { DomainController } from "./domain-controller";
 
-export class SpawnerController extends Entity {
+export class SpawnerController extends Entity implements IObserver {
     private _sceneManager: SceneManager;
     private _boidsManager: BoidsManager;
+    private _domainController : DomainController;
+    private _simulationController : SimulationController;
     private _spatialPartitioningController: SpatialPartitioningController;
 
     private _minX: number = 0;
@@ -20,10 +24,12 @@ export class SpawnerController extends Entity {
     
     private _amount: number = 10;
 
-    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, spatialPartitioningController: SpatialPartitioningController) {
+    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, domainController: DomainController, simulationController: SimulationController, spatialPartitioningController: SpatialPartitioningController) {
         super();
         this._sceneManager = sceneManager;
         this._boidsManager = boidsManager;
+        this._domainController = domainController;
+        this._simulationController = simulationController;
         this._spatialPartitioningController = spatialPartitioningController;
 
         this._object3D = new THREE.Object3D();
@@ -39,6 +45,13 @@ export class SpawnerController extends Entity {
         this._object3D.add(mesh);
 
         this._sceneManager.AddObject(this);
+    }
+
+    public Update(subject: ISubject) {
+        if(subject instanceof SimulationController) {
+            this._spatialPartitioningController.PopulateStatic();
+            this.Spawn(this._domainController.GetLimits())
+        }
     }
 
     public GetLimits(): { min: { x: number, y: number, z: number }, max: { x: number, y: number, z: number } } {
@@ -72,7 +85,7 @@ export class SpawnerController extends Entity {
         this._maxY = maxY == undefined ? this._maxY : maxY;
         this._maxZ = maxZ == undefined ? this._maxZ : maxZ;
 
-        this.Update();
+        this.UpdateVisualization();
     }
 
     public GetAmount(): number {
@@ -83,7 +96,7 @@ export class SpawnerController extends Entity {
         this._amount = amount;
     }
 
-    public Spawn(domainSize: { min: { x: number, y: number, z: number }, max: { x: number, y: number, z: number } }, amount: number = this._amount): void {
+    public Spawn(bounds: { min: { x: number, y: number, z: number }, max: { x: number, y: number, z: number } }, amount: number = this._amount): void {
         let boids: Boid[] = [];
 
         const geometry = new THREE.ConeGeometry();
@@ -106,13 +119,13 @@ export class SpawnerController extends Entity {
             boidMesh.rotateY(Math.random() * 360 * Math.PI/180);
             boidMesh.rotateZ(Math.random() * 360 * Math.PI/180);
 
-            const boid = new Boid(this._sceneManager, this._boidsManager, this._spatialPartitioningController, boidMesh, domainSize);
+            const boid = new Boid(this._sceneManager, this._boidsManager, this._simulationController, this._spatialPartitioningController, boidMesh, bounds);
             boids.push(boid);
             this._sceneManager.AddObject(boid);
         }
     }
 
-    private Update(): void {
+    private UpdateVisualization(): void {
         const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
         if (!rendererComponent) return;
 

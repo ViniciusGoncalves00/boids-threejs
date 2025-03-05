@@ -5,11 +5,13 @@ import { SceneManager } from "../managers/scene-manager";
 import { BoidsManager } from "../managers/boids-manager";
 import { SpatialPartitioningController } from "../controllers/spatial-partitioning-controller";
 import { RendererComponent } from "../components/renderer-component";
+import { SimulationController } from "../controllers/simulation-controller";
 
 export class Boid extends Entity implements IUpdatable, IGizmos
 {
     private _sceneManager : SceneManager;
     private _boidsManager : BoidsManager;
+    private _simulationController : SimulationController;
     private _spatialPartitioningController : SpatialPartitioningController;
 
     public Mesh : THREE.Mesh;
@@ -29,11 +31,12 @@ export class Boid extends Entity implements IUpdatable, IGizmos
 
     private _isGizmosVisible: boolean = false;
 
-    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, spatialPartitioningController: SpatialPartitioningController, mesh: THREE.Mesh, bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}})
+    public constructor(sceneManager: SceneManager, boidsManager: BoidsManager, simulationController: SimulationController, spatialPartitioningController: SpatialPartitioningController, mesh: THREE.Mesh, bounds: {min: {x: number, y: number, z: number}, max: {x: number, y: number, z: number}})
     {
         super();
         this._sceneManager = sceneManager;
         this._boidsManager = boidsManager;
+        this._simulationController = simulationController;
         this._spatialPartitioningController = spatialPartitioningController;
 
         this.Mesh = mesh;
@@ -71,6 +74,8 @@ export class Boid extends Entity implements IUpdatable, IGizmos
     }
 
     public Update(): void {
+        if(!this._simulationController.IsRunning()) return
+        
         let isColliding =
         this.Mesh.position.x < this._bounds.min.x || this.Mesh.position.x > this._bounds.max.x ||
         this.Mesh.position.y < this._bounds.min.y || this.Mesh.position.y > this._bounds.max.y ||

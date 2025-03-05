@@ -1,47 +1,63 @@
 import { SceneManager } from "../managers/scene-manager";
-import { DomainController } from "./domain-controller";
-import { SpatialPartitioningController } from "./spatial-partitioning-controller";
-import { SpawnerController } from "./spawner-controller";
 
-export class SimulationController implements IUpdatable
+export class SimulationController implements ISubject
 {
+    private _observers: IObserver[] = [];
+
     private _isRunning : boolean;
     private _isPaused : boolean;
 
     private _sceneManager : SceneManager;
-    private _domainController : DomainController;
-    private _spawnerController : SpawnerController;
-    private _spatialPartitioningController : SpatialPartitioningController;
 
-    public constructor(sceneManager : SceneManager, domainController: DomainController, spawnerController: SpawnerController, spatialPartitioningController: SpatialPartitioningController) {
+    public constructor(sceneManager : SceneManager) {
         this._sceneManager = sceneManager;
-        this._domainController = domainController;
-        this._spawnerController = spawnerController;
-        this._spatialPartitioningController = spatialPartitioningController;
 
         this._isRunning = false;
         this._isPaused = false;
+    }
+
+    public Attach(observer: IObserver): void {
+        const isExist = this._observers.includes(observer);
+        if (isExist) {
+            return console.log('Subject: Observer has been attached already.');
+        }
+
+        this._observers.push(observer);
+    }
+
+    public Dettach(observer: IObserver): void {
+        const observerIndex = this._observers.indexOf(observer);
+        if (observerIndex === -1) {
+            return console.log('Subject: Nonexistent observer.');
+        }
+
+        this._observers.splice(observerIndex, 1);
+    }
+
+    public Notify(): void {
+        for (const observer of this._observers) {
+            observer.Update(this);
+        }
     }
 
     public Start(): void {
         this._isRunning = true;
         this._isPaused = false;
 
-        this._spatialPartitioningController.PopulateStatic();
-        this._spawnerController.Spawn(this._domainController.GetLimits())
+        this.Notify();
     }
 
-    public Update(): void {
-        if(!this._isRunning) {
-            return;
-        }
+    // public Update(): void {
+    //     if(!this._isRunning) {
+    //         return;
+    //     }
         
-        const creatures = this._sceneManager.GetPopulation()
+    //     const creatures = this._sceneManager.GetPopulation()
 
-        for (let index = 0; index < creatures.length; index++) {
-            creatures[index].Update()
-        }
-    }
+    //     for (let index = 0; index < creatures.length; index++) {
+    //         creatures[index].Update()
+    //     }
+    // }
 
     public Stop(): void {
         this._isRunning = false;
@@ -68,11 +84,11 @@ export class SimulationController implements IUpdatable
         this._isPaused = false;
     }
 
-    public IsRunning() {
+    public IsRunning(): boolean {
         return this._isRunning;
     }
 
-    public IsPaused() {
+    public IsPaused(): boolean {
         return this._isPaused;
     }
 }

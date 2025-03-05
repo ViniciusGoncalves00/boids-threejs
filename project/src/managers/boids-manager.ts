@@ -1,4 +1,7 @@
-export class BoidsManager
+import { SimulationController } from "../controllers/simulation-controller";
+import { SceneManager } from "./scene-manager";
+
+export class BoidsManager implements IObserver
 {
     private _avoidance: boolean = true;
     private _alignment: boolean = true;
@@ -11,6 +14,27 @@ export class BoidsManager
     private _separationDistance = 20;
     private _alignmentRadius: number = 50
     private _cohesionRadius: number = 25
+
+    private _sceneManager: SceneManager;
+
+    public constructor(sceneManager: SceneManager) {
+        this._sceneManager = sceneManager;
+    }
+
+    public Update(subject: ISubject, args?: string[]) {
+        if(subject instanceof SimulationController && args?.includes("Stop")) {
+            const creatures = this._sceneManager.GetPopulation()
+
+            if(creatures === null) {
+                return;
+            }
+    
+            for (let index = 0; index < creatures.length; index++) {
+                this._sceneManager.RemoveObject(creatures[index]);
+            }
+        }
+
+    }
 
     public ToggleAvoidance(): void {
         this._avoidance = !this._avoidance;

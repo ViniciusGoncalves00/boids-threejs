@@ -34,9 +34,9 @@ export class SimulationController implements ISubject
         this._observers.splice(observerIndex, 1);
     }
 
-    public Notify(): void {
+    public Notify(args?: string[]): void {
         for (const observer of this._observers) {
-            observer.Update(this);
+            observer.Update(this, args);
         }
     }
 
@@ -44,34 +44,24 @@ export class SimulationController implements ISubject
         this._isRunning = true;
         this._isPaused = false;
 
-        this.Notify();
+        this.Notify(["Start"]);
     }
-
-    // public Update(): void {
-    //     if(!this._isRunning) {
-    //         return;
-    //     }
-        
-    //     const creatures = this._sceneManager.GetPopulation()
-
-    //     for (let index = 0; index < creatures.length; index++) {
-    //         creatures[index].Update()
-    //     }
-    // }
 
     public Stop(): void {
         this._isRunning = false;
         this._isPaused = false;
 
-        const creatures = this._sceneManager.GetPopulation()
+        // const creatures = this._sceneManager.GetPopulation()
 
-        if(creatures === null) {
-            return;
-        }
+        // if(creatures === null) {
+        //     return;
+        // }
 
-        for (let index = 0; index < creatures.length; index++) {
-            this._sceneManager.RemoveObject(creatures[index]);
-        }
+        // for (let index = 0; index < creatures.length; index++) {
+        //     this._sceneManager.RemoveObject(creatures[index]);
+        // }
+
+        this.Notify(["Stop"]);
     }
 
     public Pause(): void {

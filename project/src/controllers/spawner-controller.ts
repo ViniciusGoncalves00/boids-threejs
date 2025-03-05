@@ -47,8 +47,8 @@ export class SpawnerController extends Entity implements IObserver {
         this._sceneManager.AddObject(this);
     }
 
-    public Update(subject: ISubject) {
-        if(subject instanceof SimulationController) {
+    public Update(subject: ISubject, args?: string[]) {
+        if(subject instanceof SimulationController && args?.includes("Start")) {
             this._spatialPartitioningController.PopulateStatic();
             this.Spawn(this._domainController.GetLimits())
         }

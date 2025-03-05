@@ -93,7 +93,7 @@ export class ProgramManager {
         const canvas : HTMLCanvasElement = document.querySelector("canvas")!;
         
         this._sceneManagers[0] = new SceneManager();
-        this._boidsManagers[0] = new BoidsManager();
+        this._boidsManagers[0] = new BoidsManager(this._sceneManagers[0]);
         this._rendererManagers[0] = new RendererManager(canvas, this._sceneManagers[0].Renderers);
 
         this._cameraControllers[0] = new CameraController("Perspective", this._rendererManagers[0].GetCanvas());
@@ -139,6 +139,7 @@ export class ProgramManager {
         Alpine.store("UISceneHandler", new UISceneHandler())
         this._sceneManagers[0].Attach(Alpine.store("UISceneHandler") as UISceneHandler)
         this._simulationController[0].Attach(this._spawnerController[0])
+        this._simulationController[0].Attach(this._boidsManagers[0])
     }
 
     public static GetInstance() : ProgramManager {

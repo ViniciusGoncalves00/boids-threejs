@@ -1,3 +1,3 @@
 interface IObserver {
-    Update(subject: ISubject): any;
+    Update(subject: ISubject, args?: string[]): any;
 }

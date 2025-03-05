@@ -107,7 +107,16 @@ export class Boid extends Entity implements IUpdatable, IGizmos
     }
 
     public Destroy(): void {
-        this._sceneManager.RemoveObject(this)
+        const rendererComponent = this.GetComponent("RendererComponent") as RendererComponent;
+        if (!rendererComponent) return;
+
+        this._sceneManager.RemoveObject(this);
+
+        if (rendererComponent.Mesh) {
+            this._object3D.remove(rendererComponent.Mesh);
+            if (rendererComponent.Mesh.geometry) rendererComponent.Mesh.geometry.dispose();
+            if (rendererComponent.Mesh.material) rendererComponent.Mesh.material.dispose();
+        }
     }
     
     private Move(distance: number): void {
